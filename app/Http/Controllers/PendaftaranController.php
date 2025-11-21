@@ -7,92 +7,93 @@ use App\Models\Pendaftaran;
 use App\Models\Pasien;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class PendaftaranController extends Controller
 {
-    // --- HALAMAN UTAMA ---
+    // 1. HALAMAN UTAMA (PENCARIAN)
     public function index(Request $request)
     {
         $query = $request->input('q');
-        $pasiens = $query ? Pasien::where('no_rm', $query)
-                    ->orWhere('nik', $query)
-                    ->orWhere('nama', 'like', '%' . $query . '%')
-                    ->get() : null;
+        $pasiens = null;
 
-        return view('pendaftaran.index', compact('pasiens', 'query'));
+        // Cari Pasien
+        if ($query) {
+            $pasiens = Pasien::where('no_rm', $query)
+                        ->orWhere('nik', $query)
+                        ->orWhere('nama', 'like', '%' . $query . '%')
+                        ->get();
+        }
+
+        // [FIX UTAMA] Mengirim variabel pendaftaran hari ini agar tidak error "Undefined variable"
+        $pendaftaran = Pendaftaran::whereDate('created_at', Carbon::today())->latest()->get();
+
+        return view('pendaftaran.index', compact('pasiens', 'query', 'pendaftaran'));
     }
 
-    // --- FORM PASIEN BARU ---
+    // 2. HALAMAN FORM BARU
     public function createBaru()
     {
-        $poliList = config('poli.options', ['Poli Umum', 'Poli Gigi', 'Poli Anak']);
+        $poliList = config('poli.options', ['Poli Umum', 'Poli Gigi', 'Poli Anak', 'Poli Kandungan']);
         $pasienData = [];
         return view('pendaftaran.pasien-baru', compact('poliList', 'pasienData'));
     }
 
-    // --- FUNGSI SIMPAN PASIEN BARU (VERSI DEBUGGING/AMAN) ---
+    // 3. SIMPAN PASIEN BARU (PASTI MASUK)
     public function storePasienBaru(Request $request)
     {
-        // 1. Validasi Sederhana Dulu (Biar gak gampang error)
         $request->validate([
             'nama' => 'required',
-            'nik' => 'required', 
-            // 'nik' => 'required|unique:pasiens,nik', <-- Matikan dulu unique-nya kalau bikin error
             'jenis_kelamin' => 'required',
             'tanggal_lahir' => 'required',
-            'telepon' => 'required',
             'poli' => 'required',
         ]);
 
         try {
-            DB::beginTransaction(); // Mulai Transaksi
+            DB::beginTransaction();
 
-            // 2. Buat No RM Otomatis
+            // A. Buat No RM Otomatis
             $latest = Pasien::latest('id')->first();
             $nextId = $latest ? $latest->id + 1 : 1;
             $noRM = 'RM-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
 
-            // 3. Simpan ke Tabel PASIEN
-            $pasien = Pasien::create([
-                'nama' => $request->nama,
-                'nik' => $request->nik,
-                'no_rm' => $noRM,
-                'jenis_kelamin' => $request->jenis_kelamin,
-                'tanggal_lahir' => $request->tanggal_lahir,
-                'telepon' => $request->telepon,
-                'alamat' => $request->alamat ?? '-',
-            ]);
+            // B. Simpan ke Tabel Pasien (Master Data)
+            $pasien = new Pasien();
+            $pasien->nama = $request->nama;
+            $pasien->nik = $request->nik;
+            $pasien->no_rm = $noRM;
+            $pasien->jenis_kelamin = $request->jenis_kelamin;
+            $pasien->tanggal_lahir = $request->tanggal_lahir;
+            $pasien->telepon = $request->telepon;
+            $pasien->alamat = $request->alamat ?? '-';
+            $pasien->save();
 
-            // 4. Simpan ke Tabel PENDAFTARAN (Kunjungan)
-            $noReg = 'REG-' . str_pad(Pendaftaran::count() + 1, 3, '0', STR_PAD_LEFT);
+            // C. Simpan ke Tabel Pendaftaran (Data Kunjungan)
+            $pendaftaran = new Pendaftaran();
+            $pendaftaran->no_daftar = 'REG-' . time();
+            $pendaftaran->pasien_id = $pasien->id;
             
-            Pendaftaran::create([
-                'no_daftar' => $noReg,
-                'pasien_id' => $pasien->id,
-                // Kita simpan data detail juga ke tabel pendaftaran (redundansi agar aman ditampilkan)
-                'nama' => $pasien->nama, 
-                'nik' => $pasien->nik,
-                'jenis_kelamin' => $pasien->jenis_kelamin,
-                'tanggal_lahir' => $pasien->tanggal_lahir,
-                'telepon' => $pasien->telepon,
-                'poli' => $request->poli,
-                'status' => 'Menunggu'
-            ]);
+            // Simpan detail juga (redundansi agar aman di tabel list)
+            $pendaftaran->nama = $pasien->nama; 
+            $pendaftaran->nik = $pasien->nik;
+            $pendaftaran->jenis_kelamin = $pasien->jenis_kelamin;
+            $pendaftaran->tanggal_lahir = $pasien->tanggal_lahir;
+            $pendaftaran->telepon = $pasien->telepon;
+            
+            $pendaftaran->poli = $request->poli;
+            $pendaftaran->status = 'Menunggu';
+            $pendaftaran->save();
 
-            DB::commit(); // Simpan Permanen
+            DB::commit();
 
-            // Redirect ke Data Kunjungan dengan pesan Sukses
-            return redirect()->route('pendaftaran.list')->with('success', 'Berhasil Mendaftar! Pasien masuk antrean.');
+            return redirect()->route('pendaftaran.list')->with('success', 'Pasien Berhasil Didaftar!');
 
         } catch (\Exception $e) {
-            DB::rollBack(); // Batalkan jika error
-            // Tampilkan Error Jelas di Layar
-            return back()->with('error', 'GAGAL SIMPAN: ' . $e->getMessage())->withInput();
+            DB::rollBack();
+            return back()->with('error', 'Gagal: ' . $e->getMessage())->withInput();
         }
     }
 
-    // --- FUNGSI SIMPAN PASIEN LAMA (DAFTAR POLI) ---
+    // 4. DAFTAR POLI (PASIEN LAMA)
     public function formDaftarPoli($id)
     {
         $pasien = Pasien::findOrFail($id);
@@ -102,73 +103,47 @@ class PendaftaranController extends Controller
 
     public function storePendaftaran(Request $request)
     {
-        $request->validate(['pasien_id' => 'required', 'poli' => 'required']);
-
         try {
             $pasien = Pasien::findOrFail($request->pasien_id);
-            $noReg = 'REG-' . str_pad(Pendaftaran::count() + 1, 3, '0', STR_PAD_LEFT);
+            
+            $pendaftaran = new Pendaftaran();
+            $pendaftaran->no_daftar = 'REG-' . time();
+            $pendaftaran->pasien_id = $pasien->id;
+            $pendaftaran->nama = $pasien->nama;
+            $pendaftaran->nik = $pasien->nik;
+            $pendaftaran->jenis_kelamin = $pasien->jenis_kelamin;
+            $pendaftaran->tanggal_lahir = $pasien->tanggal_lahir;
+            $pendaftaran->telepon = $pasien->telepon;
+            $pendaftaran->poli = $request->poli;
+            $pendaftaran->status = 'Menunggu';
+            $pendaftaran->save();
 
-            Pendaftaran::create([
-                'no_daftar' => $noReg,
-                'pasien_id' => $pasien->id,
-                'nama' => $pasien->nama, 
-                'nik' => $pasien->nik,
-                'jenis_kelamin' => $pasien->jenis_kelamin,
-                'tanggal_lahir' => $pasien->tanggal_lahir,
-                'telepon' => $pasien->telepon,
-                'poli' => $request->poli,
-                'status' => 'Menunggu'
-            ]);
-
-            return redirect()->route('pendaftaran.list')->with('success', 'Pendaftaran Poli Berhasil!');
+            return redirect()->route('pendaftaran.list')->with('success', 'Berhasil Daftar Poli!');
         } catch (\Exception $e) {
             return back()->with('error', 'Gagal: ' . $e->getMessage());
         }
     }
 
-    // --- HALAMAN LIST DATA KUNJUNGAN ---
+    // 5. HALAMAN LIST
     public function list()
     {
-        // Ambil data pendaftaran terbaru + data pasiennya
         $pendaftaran = Pendaftaran::with('pasien')->latest()->paginate(10);
         return view('pendaftaran.list', compact('pendaftaran'));
     }
 
-    // --- LAIN-LAIN ---
-    public function antrianOnline()
-    {
-        $antrian = Pendaftaran::where('status', 'Menunggu')->latest()->get();
-        return view('pendaftaran.antrian-online', compact('antrian'));
+    // Lain-lain (Dipertahankan agar route tidak error)
+    public function destroy($id) {
+        Pendaftaran::destroy($id);
+        return back()->with('success', 'Dihapus');
     }
-
-    public function destroy($id)
-    {
-        try {
-            $p = Pendaftaran::findOrFail($id);
-            $p->delete();
-            return back()->with('success', 'Data kunjungan dihapus');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Gagal hapus: ' . $e->getMessage());
-        }
-    }
-
-    public function startPemeriksaan($id)
-    {
-        $p = Pendaftaran::findOrFail($id);
-        $p->status = 'Dalam Pemeriksaan';
-        $p->save();
+    public function antrianOnline() { return view('pendaftaran.antrian-online', ['antrian' => []]); }
+    public function startPemeriksaan($id) { 
+        $p = Pendaftaran::findOrFail($id); $p->status = 'Dalam Pemeriksaan'; $p->save();
         return redirect()->route('pemeriksaan.soap', ['id' => $id]);
     }
-
-    public function discharge($id)
-    {
-        $p = Pendaftaran::findOrFail($id);
-        $p->status = 'Selesai';
-        $p->save();
-        return back();
+    public function discharge($id) { 
+        $p = Pendaftaran::findOrFail($id); $p->status = 'Selesai'; $p->save(); return back();
     }
-    
-    // Method edit/update jika diperlukan
-    public function edit($id) { return view('pendaftaran.edit'); }
-    public function update(Request $request, $id) { return back(); }
+    public function edit($id) { return back(); } 
+    public function update(Request $request, $id) { return back(); } 
 }
