@@ -59,7 +59,7 @@
                                             <td>{{ $p->nik }}</td>
                                             <td>{{ $p->alamat }}</td>
                                             <td class="text-center">
-                                                {{-- TOMBOL DAFTAR BEROBAT (Route ini harus ada di web.php) --}}
+                                                {{-- TOMBOL DAFTAR BEROBAT --}}
                                                 <a href="{{ route('pendaftaran.daftar-poli', $p->id) }}" class="btn btn-success">
                                                     <i class="bi-clipboard-plus"></i> Daftar Berobat
                                                 </a>
