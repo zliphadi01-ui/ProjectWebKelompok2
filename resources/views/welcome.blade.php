@@ -101,7 +101,7 @@
                     <div class="card feature-card h-100 p-4 text-center">
                         <div class="feature-icon"><i class="bi-speedometer2"></i></div>
                         <div class="feature-title">Akses Cepat</div>
-                        <div class="feature-desc">Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh.</div>
+                        <div class="feature-desc">Proses pencarian dan pembaruan data berlangsung secara real-time. Tenaga medis dapat memperoleh informasi pasien hanya dalam hitungan detik, sehingga pelayanan dapat diberikan lebih cepat dan tepat.</div>
                     </div>
                 </div>
 
