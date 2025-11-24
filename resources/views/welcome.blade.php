@@ -184,7 +184,7 @@
                 </div>
             </div>
             <hr>
-            <p class="text-center text-muted mb-0">&copy; 2025 Divisi IT RS Polije. All Rights Reserved.</p>
+            <p class="text-center text-muted mb-0">&copy; 2025 Divisi IT Klinik Polije. All Rights Reserved.</p>
         </div>
     </footer>
 
