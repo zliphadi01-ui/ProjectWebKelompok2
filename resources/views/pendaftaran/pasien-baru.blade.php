@@ -35,7 +35,7 @@
         <form action="{{ route('pendaftaran.store-baru') }}" method="POST">
             @csrf
             <div class="mb-3">
-                <label>Link ke Pasien yang Sudah Ada (opsional)</label>
+                <label>Link ke Pasien yang Sudah Ada</label>
                 <div class="d-flex gap-2">
                     <input type="search" id="pasien_search" class="form-control" placeholder="Cari pasien (nama atau No. RM)...">
                     <button type="button" id="pasien_clear" class="btn btn-outline-secondary">Clear</button>

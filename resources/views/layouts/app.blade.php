@@ -20,7 +20,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #bbe7dcff;
+            background-color: #f5f9f8;
         }
         .sidebar {
             position: fixed;
@@ -122,6 +122,56 @@
         }
 
         .stat-card:hover{ transform: translateY(-8px); box-shadow: 0 18px 50px rgba(11,179,168,0.12); }
+
+        /* --- CSS TAMBAHAN UNTUK PROFIL (FIX) --- */
+        .avatar-profile {
+            width: 40px;        /* Ukuran fix */
+            height: 40px;       /* Ukuran fix */
+            object-fit: cover;  /* Agar gambar tidak gepeng */
+            border-radius: 50%; /* Bulat sempurna */
+            flex-shrink: 0;     /* Agar tidak tergencet */
+            border: 2px solid rgba(255,255,255,0.2);
+            background-color: #fff;
+        }
+        
+        /* Mempercantik Dropdown Menu */
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 8px;
+            margin-top: 10px !important; /* Jarak dari tombol */
+            background-color: #fff !important; /* Pastikan putih bersih */
+        }
+
+        .dropdown-item {
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-weight: 500;
+            color: #4b5563; /* Abu tua */
+            transition: all 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background-color: #eff6ff !important; /* Biru muda soft */
+            color: #0d6efd !important; /* Biru */
+            transform: translateX(5px); /* Efek geser */
+        }
+        
+        /* Icon di dalam dropdown */
+        .dropdown-item i {
+            margin-right: 10px;
+            color: #9ca3af;
+            transition: color 0.2s;
+        }
+        .dropdown-item:hover i {
+            color: #0d6efd;
+        }
+        
+        /* Hapus panah dropdown default yg kadang mengganggu */
+        .dropdown-toggle::after {
+            vertical-align: middle;
+        }
     </style>
     @stack('styles')
 </head>
@@ -139,8 +189,8 @@
                 </a>
             </li>
 
-            {{-- Pendaftaran Dropdown (keep existing routes) --}}
-                        <li class="nav-item">
+            {{-- Pendaftaran Dropdown --}}
+            <li class="nav-item">
                 <a href="#pendaftaranMenu" class="nav-link d-flex justify-content-between align-items-center {{ request()->is('pendaftaran*') ? 'active' : '' }}"
                 data-bs-toggle="collapse" role="button" aria-expanded="{{ request()->is('pendaftaran*') ? 'true' : 'false' }}">
                     <span><i class="bi-clipboard-plus me-2"></i> Pendaftaran</span>
@@ -157,7 +207,7 @@
                             </a>
                         </li>
 
-                        {{-- 2. MENU MONITORING (Tetap dibutuhkan petugas) --}}
+                        {{-- 2. MENU MONITORING --}}
                         <li>
                             <a href="{{ route('pendaftaran.list') }}" class="nav-link nav-link-sm {{ request()->routeIs('pendaftaran.list') ? 'active' : '' }}">
                                 <i class="bi-list-ul me-1"></i> Data Kunjungan
@@ -168,7 +218,7 @@
                 </div>
             </li>
 
-            {{-- Pasien Dropdown (keep existing) --}}
+            {{-- Pasien Dropdown --}}
             <li class="nav-item">
                 <a href="#pasienMenu" class="nav-link d-flex justify-content-between align-items-center {{ request()->is('pasien*') ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ request()->is('pasien*') ? 'true' : 'false' }}">
                     <span><i class="bi-people-fill me-2"></i> Pasien</span>
@@ -203,8 +253,6 @@
 
             {{-- Poliklinik Dropdown --}}
             @php
-                // Prefer route name checks for pemeriksaan when available; fall back to path check.
-                // This avoids accidental matches when other paths look similar.
                 $isPemeriksaan = request()->routeIs('pemeriksaan.*') || request()->is('pemeriksaan*');
                 $isPoli = (request()->is('poli*') || request()->is('kunjungan*')) && !$isPemeriksaan;
             @endphp
@@ -225,7 +273,6 @@
 
             {{-- Pemeriksaan (direct link) --}}
             <li class="nav-item">
-                {{-- direct link to SOAP entry; active when on pemeriksaan routes --}}
                 <a href="{{ route('pemeriksaan.index') }}" class="nav-link {{ $isPemeriksaan ? 'active' : '' }}">
                     <i class="bi-file-medical me-2"></i> Pemeriksaan
                 </a>
@@ -254,7 +301,7 @@
                 </a>
             </li>
 
-            {{-- Master Data (existing menu kept) --}}
+            {{-- Master Data --}}
             @php $isMaster = request()->is('master-data*'); @endphp
             <li class="nav-item">
                 <a href="#masterDataMenu" class="nav-link d-flex justify-content-between align-items-center {{ $isMaster ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ $isMaster ? 'true' : 'false' }}">
@@ -300,7 +347,7 @@
                 </div>
             </li>
 
-            {{-- Laboratorium, Rawat Inap, PONED, Settings, Others --}}
+            {{-- Lainnya --}}
             <li class="nav-item"><a href="{{ url('/laboratorium') }}" class="nav-link {{ request()->is('laboratorium*') ? 'active' : '' }}"><i class="bi-microscope me-2"></i> Laboratorium</a></li>
             <li class="nav-item"><a href="{{ url('/rawat-inap') }}" class="nav-link {{ request()->is('rawat-inap*') ? 'active' : '' }}"><i class="bi-house-fill me-2"></i> Rawat Inap</a></li>
             <li class="nav-item"><a href="{{ url('/poned') }}" class="nav-link {{ request()->is('poned*') ? 'active' : '' }}"><i class="bi-activity me-2"></i> PONED</a></li>
@@ -312,19 +359,21 @@
             <li class="nav-item"><a href="{{ url('/billing') }}" class="nav-link {{ request()->is('billing*') ? 'active' : '' }}"><i class="bi-receipt me-2"></i> Billing</a></li>
         </ul>
         <hr>
-        <div class="dropdown">
+
+        {{-- PROFILE SIDEBAR (FIXED) --}}
+        <div class="dropdown mt-auto">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="{{ 
                     (Auth::check() && Auth::user()->profile_photo_url) ? Auth::user()->profile_photo_url : 
                     (Auth::check() && isset(Auth::user()->avatar) ? asset('storage/' . Auth::user()->avatar) : (session('user_photo') ?? 'https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg'))
-                }}" alt="" width="32" height="32" class="rounded-circle me-2 object-fit-cover">
-                <strong>{{ Auth::check() ? Auth::user()->name : (session('user') ?? 'Petugas') }}</strong>
+                }}" alt="" class="avatar-profile me-2">
+                <strong class="text-truncate" style="max-width: 130px;">{{ Auth::check() ? Auth::user()->name : (session('user') ?? 'Petugas') }}</strong>
             </a>
-            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                <li><a class="dropdown-item" href="{{ url('/profile') }}"><i class="bi-person-fill me-2"></i> Profil</a></li>
-                <li><a class="dropdown-item" href="{{ url('/pengaturan') }}"><i class="bi-gear-fill me-2"></i> Pengaturan</a></li>
+            <ul class="dropdown-menu text-small shadow">
+                <li><a class="dropdown-item" href="{{ url('/profile') }}"><i class="bi-person-fill"></i> Profil Saya</a></li>
+                <li><a class="dropdown-item" href="{{ url('/pengaturan') }}"><i class="bi-gear-fill"></i> Pengaturan</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{{ url('/logout') }}"><i class="bi-box-arrow-right me-2"></i> Logout</a></li>
+                <li><a class="dropdown-item text-danger" href="{{ url('/logout') }}"><i class="bi-box-arrow-right"></i> Logout</a></li>
             </ul>
         </div>
     </nav>
@@ -337,19 +386,20 @@
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item dropdown no-arrow">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                        <span class="me-2 d-none d-lg-inline text-gray-600 small">{{ Auth::check() ? Auth::user()->name : (session('user') ?? 'Petugas') }}</span>
-                        <img class="img-profile rounded-circle" src="{{ 
+                        <span class="me-2 d-none d-lg-inline text-gray-600 small fw-bold">{{ Auth::check() ? Auth::user()->name : (session('user') ?? 'Petugas') }}</span>
+                        {{-- PROFILE TOPBAR (FIXED) --}}
+                        <img class="avatar-profile" src="{{ 
                             (Auth::check() && Auth::user()->profile_photo_url) ? Auth::user()->profile_photo_url : 
                             (Auth::check() && isset(Auth::user()->avatar) ? asset('storage/' . Auth::user()->avatar) : 'https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg')
-                        }}" width="30">
+                        }}">
                     </a>
                     <div class="dropdown-menu dropdown-menu-end shadow">
-                        <a class="dropdown-item" href="#">
-                            <i class="bi-person-fill me-2 text-gray-400"></i> Profil
+                        <a class="dropdown-item" href="{{ url('/profile') }}">
+                            <i class="bi-person-fill me-2"></i> Profil Saya
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{{ url('/') }}">
-                            <i class="bi-box-arrow-right me-2 text-gray-400"></i> Logout
+                        <a class="dropdown-item text-danger" href="{{ url('/logout') }}">
+                            <i class="bi-box-arrow-right me-2"></i> Logout
                         </a>
                     </div>
                 </li>
@@ -363,7 +413,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Toggle sidebar untuk mobile
         const sidebarToggle = document.getElementById('sidebarToggle');
         if (sidebarToggle) {
             sidebarToggle.addEventListener('click', event => {
@@ -371,8 +420,6 @@
                 document.body.classList.toggle('sidebar-toggled');
             });
         }
-
-        // Auto close sidebar on mobile when clicking nav link
         document.querySelectorAll('.sidebar-nav .nav-link').forEach(link => {
             link.addEventListener('click', function() {
                 if (window.innerWidth < 768) {

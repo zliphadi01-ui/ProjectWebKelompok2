@@ -122,22 +122,23 @@ Route::get('/billing', [PageController::class, 'billing'])->name('billing');
 // Rawat Inap resource (CRUD) - connected to DB
 Route::resource('rawat-inap', RawatInapController::class);
 
-// Pendaftaran dengan Controller
+// Pendaftaran dengan Controller (Satu Pintu FIX)
 Route::prefix('pendaftaran')->name('pendaftaran.')->group(function () {
     
-    // === INI YANG KURANG (Route Utama / Satu Pintu) ===
+    // 1. ROUTE UTAMA (Satu Pintu / Pencarian)
     Route::get('/', [PendaftaranController::class, 'index'])->name('index');
-    // ==================================================
 
-    // Route untuk Form Buat Pasien Baru (Hanya diakses lewat tombol, bukan menu)
-    Route::get('/buat-baru', [PendaftaranController::class, 'createBaru'])->name('create-baru');
-    Route::post('/simpan-baru', [PendaftaranController::class, 'storePasienBaru'])->name('store-baru');
+    // 2. FORM PASIEN BARU
+    Route::get('/create-baru', [PendaftaranController::class, 'createBaru'])->name('create-baru'); 
+    Route::post('/store-baru', [PendaftaranController::class, 'storePasienBaru'])->name('store-baru');
 
-    // Route lama lainnya BIARKAN SAJA (jangan dihapus dulu agar aman)
+    // 3. DAFTAR POLI (PASIEN LAMA)
+    Route::get('/daftar-poli/{id}', [PendaftaranController::class, 'formDaftarPoli'])->name('daftar-poli'); // FIX DARI ERROR FOTO ANDA
+    Route::post('/store-poli', [PendaftaranController::class, 'storePendaftaran'])->name('store-poli');
+
+    // 4. LIST & ACTION
     Route::get('/list', [PendaftaranController::class, 'list'])->name('list');
     Route::get('/antrian-online', [PendaftaranController::class, 'antrianOnline'])->name('antrian-online');
-    
-    // Route edit, update, delete, dll tetap dipertahankan...
     Route::get('/edit/{id}', [PendaftaranController::class, 'edit'])->name('edit');
     Route::put('/update/{id}', [PendaftaranController::class, 'update'])->name('update');
     Route::delete('/delete/{id}', [PendaftaranController::class, 'destroy'])->name('destroy');

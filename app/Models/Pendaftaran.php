@@ -4,28 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Pasien;
 
 class Pendaftaran extends Model
 {
     use HasFactory;
 
     protected $table = 'pendaftarans';
+    protected $guarded = []; // IZINKAN SEMUA KOLOM DIISI
 
-    protected $fillable = [
-        'no_daftar',
-        'nama',
-        'nik',
-        'pasien_id',
-        'jenis_kelamin',
-        'tanggal_lahir',
-        'telepon',
-        'poli',
-        'status',
-    ];
-
+    // Relasi ke Master Pasien
     public function pasien()
     {
         return $this->belongsTo(Pasien::class, 'pasien_id');
+    }
+    
+    // Relasi ke Rekam Medis (SOAP)
+    public function pemeriksaan()
+    {
+        return $this->hasOne(Pemeriksaan::class);
     }
 }
