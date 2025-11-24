@@ -165,7 +165,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold text-primary"><i class="bi-hospital-fill me-2"></i>RME RS POLIJE</h5>
+                    <h5 class="fw-bold text-primary"><i class="bi-hospital-fill me-2"></i>RME KLINIK POLIJE</h5>
                     <p class="text-muted">Sistem Informasi Manajemen Rumah Sakit Terintegrasi.</p>
                 </div>
                 <div class="col-md-2 offset-md-1 mb-4">
