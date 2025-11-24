@@ -93,7 +93,7 @@
                     <div class="card feature-card h-100 p-4 text-center">
                         <div class="feature-icon"><i class="bi-database-fill-check"></i></div>
                         <div class="feature-title">Data Terpusat</div>
-                        <div class="feature-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio.</div>
+                        <div class="feature-desc">Semua informasi pasien tersimpan dalam satu sistem terpadu sehingga memudahkan akses data kapan pun dibutuhkan. Dengan integrasi otomatis antar unit, pencatatan menjadi lebih efisien dan risiko kesalahan dapat diminimalkan.</div>
                     </div>
                 </div>
 
@@ -101,7 +101,7 @@
                     <div class="card feature-card h-100 p-4 text-center">
                         <div class="feature-icon"><i class="bi-speedometer2"></i></div>
                         <div class="feature-title">Akses Cepat</div>
-                        <div class="feature-desc">Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh.</div>
+                        <div class="feature-desc">Proses pencarian dan pembaruan data berlangsung secara real-time. Tenaga medis dapat memperoleh informasi pasien hanya dalam hitungan detik, sehingga pelayanan dapat diberikan lebih cepat dan tepat.</div>
                     </div>
                 </div>
 
