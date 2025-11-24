@@ -20,7 +20,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #ffffffff;
+            background-color: #f5f9f8;
         }
         .sidebar {
             position: fixed;

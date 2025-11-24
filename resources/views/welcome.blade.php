@@ -15,7 +15,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Rekam Medis Elektronik - RS Polije</title>
+    <title>Sistem Rekam Medis Elektronik - Klinik Polije</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -33,7 +33,7 @@
         /* Hero: clean gradient background */
         .hero-section{
             background: linear-gradient(135deg, #eaf4ff 0%, #ffffff 100%);
-            color: #0b2a44;
+            color:rgb(8, 32, 55);
             padding: 7rem 0 4rem 0;
             text-align: center;
         }
@@ -109,7 +109,7 @@
                     <div class="card feature-card h-100 p-4 text-center">
                         <div class="feature-icon"><i class="bi-shield-lock-fill"></i></div>
                         <div class="feature-title">Keamanan Terjamin</div>
-                        <div class="feature-desc">Nulla facilisi. Cras mattis consectetur purus sit amet fermentum.</div>
+                        <div class="feature-desc">Sistem dilengkapi dengan standar keamanan tingkat tinggi, termasuk enkripsi data dan pengaturan hak akses. Privasi pasien tetap terlindungi dan hanya pengguna berwenang yang dapat mengakses informasi sensitif.</div>
                     </div>
                 </div>
 
@@ -165,7 +165,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold text-primary"><i class="bi-hospital-fill me-2"></i>RME RS POLIJE</h5>
+                    <h5 class="fw-bold text-primary"><i class="bi-hospital-fill me-2"></i>RME KLINIK POLIJE</h5>
                     <p class="text-muted">Sistem Informasi Manajemen Rumah Sakit Terintegrasi.</p>
                 </div>
                 <div class="col-md-2 offset-md-1 mb-4">
