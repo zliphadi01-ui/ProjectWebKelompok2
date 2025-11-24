@@ -180,7 +180,7 @@
                     <h5 class="fw-bold">Kontak IT Support</h5>
                     <p class="text-muted mb-1"><i class="bi-geo-alt-fill me-2"></i>Gedung IT, Politeknik Negeri Jember</p>
                     <p class="text-muted mb-1"><i class="bi-telephone-fill me-2"></i>(0331) 123-456 ext. 2</p>
-                    <p class="text-muted mb-1"><i class="bi-envelope-fill me-2"></i>itsupport@rspolije.ac.id</p>
+                    <p class="text-muted mb-1"><i class="bi-envelope-fill me-2"></i>itsupport@klinikpolije.ac.id</p>
                 </div>
             </div>
             <hr>
