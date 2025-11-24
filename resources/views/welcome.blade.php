@@ -49,7 +49,7 @@
         .feature-desc{ color:var(--muted); font-size:.95rem; }
 
         .section-title{ text-align:center; margin-bottom:1rem; }
-        footer{ background:#0b1a2b; color:#d6e7ff; }
+        footer{ background:#adb5bd; color:#FFFFFF; }
     </style>
 </head>
 <body>
