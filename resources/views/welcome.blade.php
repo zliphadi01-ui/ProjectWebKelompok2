@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Rekam Medis Elektronik - RS Polije</title>
+    <title>Sistem Rekam Medis Elektronik - Klinik Polije</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -56,7 +56,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="{{ url('/') }}"><i class="bi-hospital-fill me-2"></i>RME RS POLIJE</a>
+            <a class="navbar-brand fw-bold text-primary" href="{{ url('/') }}"><i class="bi-hospital-fill me-2"></i>RME Klinik POLIJE</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
