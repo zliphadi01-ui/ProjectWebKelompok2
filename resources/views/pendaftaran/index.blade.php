@@ -5,91 +5,52 @@
     <h1 class="h3 mb-4 text-gray-800">Pendaftaran Pasien</h1>
 
     <div class="row justify-content-center">
-        <div class="col-md-10">
-            
-            {{-- KOTAK PENCARIAN UTAMA --}}
+        <div class="col-md-8">
+            {{-- Menampilkan pesan sukses atau error dari Controller --}}
+            @if(session('success')) <div class="alert alert-success">{{ session('success') }}</div> @endif
+            @if(session('error')) <div class="alert alert-danger">{{ session('error') }}</div> @endif
+
             <div class="card shadow mb-4">
                 <div class="card-header py-3 bg-primary text-white">
-                    <h6 class="m-0 fw-bold"><i class="bi-search me-2"></i>Cari Data Pasien Terlebih Dahulu</h6>
+                    <h6 class="m-0 fw-bold"><i class="bi-search me-2"></i>Cari Data Pasien</h6>
                 </div>
-                <div class="card-body">
-                    <form action="{{ route('pendaftaran.index') }}" method="GET">
+                <div class="card-body text-center py-5">
+                    {{-- Form Pencarian --}}
+                    <form action="{{ route('pendaftaran.index') }}" method="GET" class="mb-4">
                         <div class="input-group input-group-lg">
-                            {{-- Input pencarian --}}
-                            <input type="text" name="q" class="form-control" 
-                                   placeholder="Masukkan Nama, NIK, atau No. RM..." 
-                                   value="{{ $query ?? '' }}" autofocus required>
+                            <input type="text" name="q" class="form-control" placeholder="Masukkan Nama / NIK / No. RM..." value="{{ $query ?? '' }}" required>
                             <button class="btn btn-primary" type="submit">Cari</button>
                         </div>
-                        <small class="text-muted ms-1">
-                            Sistem akan mengecek apakah pasien sudah terdaftar untuk mencegah duplikasi No. RM.
-                        </small>
+                        <small class="text-muted mt-2 d-block">Cari dulu sebelum input baru.</small>
                     </form>
+
+                    {{-- Hasil Pencarian ditampilkan jika sudah ada query --}}
+                    @if(isset($query))
+                        <hr>
+                        @if(isset($pasiens) && $pasiens->count() > 0)
+                            <h5 class="text-success mb-3">Pasien Ditemukan: Silakan Daftar Poli</h5>
+                            <div class="list-group text-start">
+                                @foreach($pasiens as $p)
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 class="mb-1 fw-bold">{{ $p->nama }}</h5>
+                                        <small class="text-muted">RM: {{ $p->no_rm }} | NIK: {{ $p->nik }}</small>
+                                    </div>
+                                    <a href="{{ route('pendaftaran.daftar-poli', $p->id) }}" class="btn btn-success btn-sm">Daftar Poli</a>
+                                </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="alert alert-warning mt-3">
+                                <p>Data pasien tidak ditemukan.</p>
+                                <a href="{{ route('pendaftaran.create-baru') }}" class="btn btn-primary mt-2">
+                                    <i class="bi-person-plus-fill"></i> Buat Pasien Baru
+                                </a>
+                            </div>
+                        @endif
+                    @endif
                 </div>
             </div>
-
-            {{-- LOGIKA HASIL PENCARIAN --}}
-            @if(isset($query))
-                @if(isset($pasiens) && $pasiens->count() > 0)
-                    {{-- SKENARIO A: PASIEN DITEMUKAN --}}
-                    <div class="card shadow mb-4 border-left-success">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 fw-bold text-success">Hasil Pencarian: Ditemukan {{ $pasiens->count() }} Data</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered table-hover">
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th>No. RM</th>
-                                            <th>Nama Pasien</th>
-                                            <th>NIK</th>
-                                            <th>Alamat</th>
-                                            <th class="text-center">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($pasiens as $p)
-                                        <tr>
-                                            <td class="fw-bold">{{ $p->no_rm }}</td>
-                                            <td>
-                                                {{ $p->nama }} <br>
-                                                <small class="text-muted">{{ $p->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }} | {{ $p->tanggal_lahir }}</small>
-                                            </td>
-                                            <td>{{ $p->nik }}</td>
-                                            <td>{{ $p->alamat }}</td>
-                                            <td class="text-center">
-                                                {{-- TOMBOL DAFTAR BEROBAT (Route ini harus ada di web.php) --}}
-                                                <a href="{{ route('pendaftaran.daftar-poli', $p->id) }}" class="btn btn-success">
-                                                    <i class="bi-clipboard-plus"></i> Daftar Berobat
-                                                </a>
-                                            </td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                @else
-                    {{-- SKENARIO B: PASIEN TIDAK DITEMUKAN --}}
-                    <div class="alert alert-warning text-center py-5 shadow-sm" role="alert">
-                        <i class="bi-exclamation-circle display-4 text-warning mb-3 d-block"></i>
-                        <h4 class="alert-heading">Data Pasien Tidak Ditemukan</h4>
-                        <p>
-                            Tidak ada data pasien dengan kata kunci "<strong>{{ $query }}</strong>". <br>
-                            Silakan buat data pasien baru.
-                        </p>
-                        <hr>
-                        {{-- TOMBOL BUAT BARU --}}
-                        <a href="{{ route('pendaftaran.create-baru') }}" class="btn btn-primary btn-lg">
-                            <i class="bi-person-plus-fill me-2"></i> Buat Pasien Baru
-                        </a>
-                    </div>
-                @endif
-            @endif
-
         </div>
     </div>
 </div>
