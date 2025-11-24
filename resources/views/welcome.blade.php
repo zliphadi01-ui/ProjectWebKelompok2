@@ -117,7 +117,7 @@
                     <div class="card feature-card h-100 p-4 text-center">
                         <div class="feature-icon"><i class="bi-people-fill"></i></div>
                         <div class="feature-title">Manajemen User</div>
-                        <div class="feature-desc">Maecenas faucibus mollis interdum. Lorem ipsum dolor sit amet.</div>
+                        <div class="feature-desc">Pengelolaan akun tenaga medis, admin, dan staf pendukung dilakukan secara fleksibel dan terstruktur. Setiap pengguna memiliki hak akses sesuai perannya, memastikan alur kerja tetap aman dan efisien..</div>
                     </div>
                 </div>
             </div>
