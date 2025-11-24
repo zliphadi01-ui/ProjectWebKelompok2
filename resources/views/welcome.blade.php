@@ -15,7 +15,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Rekam Medis Elektronik - RS Polije</title>
+    <title>Sistem Rekam Medis Elektronik - Klinik Polije</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -33,7 +33,7 @@
         /* Hero: clean gradient background */
         .hero-section{
             background: linear-gradient(135deg, #eaf4ff 0%, #ffffff 100%);
-            color: #0b2a44;
+            color:rgb(8, 32, 55);
             padding: 7rem 0 4rem 0;
             text-align: center;
         }
