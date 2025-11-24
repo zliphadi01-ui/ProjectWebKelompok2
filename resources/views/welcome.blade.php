@@ -109,7 +109,7 @@
                     <div class="card feature-card h-100 p-4 text-center">
                         <div class="feature-icon"><i class="bi-shield-lock-fill"></i></div>
                         <div class="feature-title">Keamanan Terjamin</div>
-                        <div class="feature-desc">Nulla facilisi. Cras mattis consectetur purus sit amet fermentum.</div>
+                        <div class="feature-desc">Sistem dilengkapi dengan standar keamanan tingkat tinggi, termasuk enkripsi data dan pengaturan hak akses. Privasi pasien tetap terlindungi dan hanya pengguna berwenang yang dapat mengakses informasi sensitif.</div>
                     </div>
                 </div>
 
