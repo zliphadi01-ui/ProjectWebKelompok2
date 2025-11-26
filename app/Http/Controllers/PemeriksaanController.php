@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pemeriksaan;
-use App\Models\Pendaftaran; // Pastikan ini ada
+use App\Models\Pendaftaran;
 use App\Models\Pasien;
 use App\Events\DashboardStatsUpdated;
 use Carbon\Carbon;
@@ -12,7 +12,7 @@ use Carbon\Carbon;
 class PemeriksaanController extends Controller
 {
     // ==========================================================
-    // FUNGSI SOAP YANG DIPERBAIKI
+    // MENAMPILKAN HALAMAN SOAP
     // ==========================================================
     public function soap($id = null)
     {
@@ -20,193 +20,165 @@ class PemeriksaanController extends Controller
         $pasien = null;
 
         if ($id) {
-            // 1. Dapatkan pendaftaran (ini sudah benar)
             $pendaftaran = Pendaftaran::find($id);
 
             if ($pendaftaran) {
-                // 2. Coba dapatkan pasien dari relasi (cara cepat)
-                $pasien = $pendaftaran->pasien;
-
-                // 3. JIKA GAGAL (karena relasi data lama rusak), coba cari manual pakai pasien_id
-                if (!$pasien && $pendaftaran->pasien_id) {
-                    $pasien = Pasien::find($pendaftaran->pasien_id);
-                }
+                // Ambil pasien dari relasi atau fallback manual
+                $pasien = $pendaftaran->pasien ?? Pasien::find($pendaftaran->pasien_id);
             }
         }
 
-        // 4. JIKA MASIH GAGAL TOTAL (pasien_id=NULL atau ID tidak ada)
-        //    Kita buat "Pasien Bayangan" (Object) agar halaman tidak error
-        //    Kita gunakan data salinan dari pendaftaran (yang kita tahu ada di Model Pendaftaran)
+        // Jika data pasien rusak/hilang, buat dummy object agar tidak error di view
         if (!$pasien && $pendaftaran) {
-            $pasien = new Pasien(); // Buat objek Pasien kosong
-            $pasien->id = $pendaftaran->pasien_id; // Tetapkan ID jika ada
-            $pasien->nama = $pendaftaran->nama; // Isi dengan nama salinan
-            $pasien->no_rm = 'N/A (Data Lama)'; // Tandai sebagai data lama
-            
-            // Isi properti lain yang mungkin ditampilkan di SOAP view
+            $pasien = new Pasien(); 
+            $pasien->id = $pendaftaran->pasien_id;
+            $pasien->nama = $pendaftaran->nama; // Ambil nama dari pendaftaran
+            $pasien->no_rm = 'Data Lama';
             $pasien->jenis_kelamin = $pendaftaran->jenis_kelamin;
             $pasien->tanggal_lahir = $pendaftaran->tanggal_lahir;
-            $pasien->telepon = $pendaftaran->telepon;
-            $pasien->alamat = $pendaftaran->alamat ?? 'N/A';
-            $pasien->alergi = $pendaftaran->alergi ?? 'N/A';
-            $pasien->golongan_darah = $pendaftaran->golongan_darah ?? 'N/A';
+            $pasien->alamat = $pendaftaran->alamat;
         }
-        
-        // 5. HAPUS FALLBACK YANG SALAH (PENTING!)
-        // if (! $pasien) {
-        //    $pasien = Pasien::latest()->first(); // <-- INI YANG MENYEBABKAN "BUDI SANTOSO" MUNCUL
-        // }
 
         return view('pemeriksaan.soap', ['pasien' => $pasien, 'pendaftaran' => $pendaftaran]);
     }
+
     // ==========================================================
-    // AKHIR FUNGSI YANG DIPERBAIKI
+    // DAFTAR ANTRIAN PEMERIKSAAN
     // ==========================================================
-    
-    // Daftar (index) pasien untuk pemeriksaan
     public function index()
     {
-        // 1. Ambil data pasien yang antre
         try {
-            // Kode Anda sudah 'use App\Models\Pendaftaran;' jadi ini akan berhasil
             $daftar_pasien = Pendaftaran::with('pasien')
-                                    ->where('status', '!=', 'Selesai')
-                                    ->where('status', '!=', 'Dibatalkan')
+                                    ->whereNotIn('status', ['Selesai', 'Dibatalkan'])
                                     ->orderBy('created_at', 'asc')
                                     ->get();
         } catch (\Exception $e) {
-            // Jika ada error (misal: relasi 'pasien' tidak ada), kirim array kosong
             $daftar_pasien = collect();
         }
 
-        // 2. Kirim data itu ke view
-        // INI ADALAH BAGIAN YANG MEMPERBAIKI ERROR ANDA
-        return view('pemeriksaan.index', [
-            'daftar_pasien' => $daftar_pasien
-        ]);
+        return view('pemeriksaan.index', compact('daftar_pasien'));
     }
     
-    // Simpan data SOAP
+    // ==========================================================
+    // SIMPAN DATA SOAP
+    // ==========================================================
     public function store(Request $request)
     {
-        // Validasi input
+        // Validasi
         $validated = $request->validate([
-            'pendaftaran_id' => 'nullable|integer|exists:pendaftarans,id',
-            'pasien_id' => 'nullable|integer|exists:pasien,id',
-            'subjective' => 'required|string',
-            'objective' => 'required|string',
-            'assessment' => 'required|string',
-            'plan' => 'required|string',
-            'tekanan_darah' => 'nullable|string',
-            'nadi' => 'nullable|string',
-            'suhu' => 'nullable|string',
-            'berat_badan' => 'nullable|string',
-            'icd_code' => 'nullable|string',
-            'diagnosis' => 'required|string'
+            'pendaftaran_id' => 'nullable',
+            'pasien_id'      => 'nullable',
+            'subjective'     => 'required|string', // Wajib
+            'objective'      => 'required|string', // Wajib
+            'plan'           => 'required|string', // Wajib
+            'diagnosis'      => 'required|string', // Wajib
+            
+            // Assessment kita buat BOLEH KOSONG (nullable) agar tidak error saat dikosongkan
+            'assessment'     => 'nullable|string', 
+            'tekanan_darah'  => 'nullable|string',
+            'nadi'           => 'nullable|string',
+            'suhu'           => 'nullable|string',
+            'berat_badan'    => 'nullable|string',
+            'icd_code'       => 'nullable|string',
         ]);
 
-        $pemeriksaan = Pemeriksaan::create([
-            'pendaftaran_id' => $validated['pendaftaran_id'] ?? null,
-            'pasien_id' => $validated['pasien_id'] ?? null,
-            'subjective' => $validated['subjective'],
-            'objective' => $validated['objective'],
-            'assessment' => $validated['assessment'],
-            'plan' => $validated['plan'],
-            'tekanan_darah' => $validated['tekanan_darah'] ?? null,
-            'nadi' => $validated['nadi'] ?? null,
-            'suhu' => $validated['suhu'] ?? null,
-            'berat_badan' => $validated['berat_badan'] ?? null,
-            'icd_code' => $validated['icd_code'] ?? null,
-            'diagnosis' => $validated['diagnosis'],
-        ]);
+        // Simpan ke Database
+        $pemeriksaan = Pemeriksaan::create($validated);
 
-        // update pendaftaran status if present
-        if (! empty($validated['pendaftaran_id'])) {
+        // Update Status Pendaftaran jadi Selesai
+        if (!empty($validated['pendaftaran_id'])) {
             $p = Pendaftaran::find($validated['pendaftaran_id']);
-            if ($p) { $p->status = 'Selesai'; $p->save(); }
+            if ($p) { 
+                $p->status = 'Selesai'; 
+                $p->save(); 
+            }
         }
 
-        // dispatch dashboard stats update
-        $today = Carbon::today();
-        $kunjungan = Pendaftaran::whereDate('created_at', $today)->count();
-        $pasienBaru = Pasien::whereDate('created_at', $today)->count();
-        $antrean = Pendaftaran::whereNotIn('status', ['Selesai', 'Dibatalkan'])->count();
-        event(new DashboardStatsUpdated($kunjungan, $pasienBaru, $antrean));
+        // Cek tombol mana yang ditekan (Simpan Biasa atau Simpan & Cetak)
+        if ($request->has('action') && $request->action == 'print') {
+            return redirect()->route('pemeriksaan.print', ['id' => $pemeriksaan->id]);
+        }
 
         return redirect()->route('kunjungan.hari-ini')
-            ->with('success', 'Data SOAP berhasil disimpan!');
+            ->with('success', 'Data Pemeriksaan berhasil disimpan!');
     }
+
+    public function storePasienBaru(Request $request)
+{
+    // --- KODE DEBUGGING (HAPUS NANTI) ---
+    // Ini untuk mengecek apakah tombol "Daftar" benar-benar nyambung ke sini
+    // dd($request->all()); 
+    // ------------------------------------
+
+    // Validasi (Cek apakah data lengkap)
+    $validated = $request->validate([
+        'nama' => 'required',
+        'nik' => 'required|numeric|digits:16', // Pastikan ini 16
+        'jenis_kelamin' => 'required',
+        'poli' => 'required',
+    ]);
+
+    // Jika lolos validasi, kode di bawah ini akan jalan.
+    // Jika GAGAL validasi, Laravel otomatis melempar kembali ke halaman sebelumnya (Refresh).
     
-    // Simpan dan cetak SOAP
+    DB::beginTransaction();
+    try {
+        // 1. Simpan/Cek Pasien
+        $pasien = Pasien::firstOrCreate(
+            ['nik' => $request->nik],
+            [
+                'nama' => $request->nama,
+                'no_rm' => date('ym') . '-' . rand(1000, 9999),
+                'jenis_kelamin' => $request->jenis_kelamin,
+                'tanggal_lahir' => $request->tanggal_lahir,
+                'telepon' => $request->telepon,
+                'alamat' => $request->alamat,
+            ]
+        );
+
+        // 2. Simpan Pendaftaran
+        $pendaftaran = Pendaftaran::create([
+            'pasien_id' => $pasien->id,
+            'no_daftar' => 'REG-' . time(),
+            'poliklinik' => $request->poli,
+            'status' => 'Menunggu',
+            'dokter' => '-',
+            'keluhan' => $request->keluhan,
+            'jenis_pembayaran' => 'Umum',
+        ]);
+
+        DB::commit();
+
+        // SUKSES
+        return redirect()->route('pemeriksaan.soap', $pendaftaran->id);
+
+    } catch (\Exception $e) {
+        DB::rollback();
+        // Debugging Error Database
+        dd("ERROR DATABASE: " . $e->getMessage()); // <--- KITA TAMBAH INI
+    }
+}
+    
+    // ==========================================================
+    // FUNGSI KHUSUS SIMPAN & CETAK (Opsional, tapi saya gabung logika di atas)
+    // ==========================================================
     public function storeAndPrint(Request $request)
     {
-        // Validasi input (reuse rules) and save
-        $validated = $request->validate([
-            'pendaftaran_id' => 'nullable|integer|exists:pendaftarans,id',
-            'pasien_id' => 'nullable|integer|exists:pasien,id',
-            'subjective' => 'required|string',
-            'objective' => 'required|string',
-            'assessment' => 'required|string',
-            'plan' => 'required|string',
-            'tekanan_darah' => 'nullable|string',
-            'nadi' => 'nullable|string',
-            'suhu' => 'nullable|string',
-            'berat_badan' => 'nullable|string',
-            'icd_code' => 'nullable|string',
-            'diagnosis' => 'required|string'
-        ]);
-
-        $pemeriksaan = Pemeriksaan::create([
-            'pendaftaran_id' => $validated['pendaftaran_id'] ?? null,
-            'pasien_id' => $validated['pasien_id'] ?? null,
-            'subjective' => $validated['subjective'],
-            'objective' => $validated['objective'],
-            'assessment' => $validated['assessment'],
-            'plan' => $validated['plan'],
-            'tekanan_darah' => $validated['tekanan_darah'] ?? null,
-            'nadi' => $validated['nadi'] ?? null,
-            'suhu' => $validated['suhu'] ?? null,
-            'berat_badan' => $validated['berat_badan'] ?? null,
-            'icd_code' => $validated['icd_code'] ?? null,
-            'diagnosis' => $validated['diagnosis'],
-        ]);
-
-        if (! empty($validated['pendaftaran_id'])) {
-            $p = Pendaftaran::find($validated['pendaftaran_id']);
-            if ($p) { $p->status = 'Selesai'; $p->save(); }
-        }
-
-        return redirect()->route('pemeriksaan.print', ['id' => $pemeriksaan->id])
-            ->with('success', 'Data SOAP berhasil disimpan dan siap dicetak!');
+        // Kita alihkan ke fungsi store tapi tambahkan parameter action
+        $request->merge(['action' => 'print']);
+        return $this->store($request);
     }
     
-    // Cetak hasil pemeriksaan
+    // Cetak hasil
     public function print($id)
     {
-        // Ambil data pemeriksaan
-        $pem = Pemeriksaan::with(['pasien','pendaftaran'])->findOrFail($id);
-        return view('pemeriksaan.print', ['pemeriksaan' => $pem]);
+        $pemeriksaan = Pemeriksaan::with(['pasien','pendaftaran'])->findOrFail($id);
+        return view('pemeriksaan.print', compact('pemeriksaan'));
     }
-    
-    // Riwayat pemeriksaan pasien
+
+    // Riwayat (Placeholder)
     public function riwayat($no_rm)
     {
-        // Ambil riwayat pemeriksaan berdasarkan No. RM
-        $riwayat = [
-            [
-                'tanggal' => '15-10-2025',
-                'diagnosis' => 'ISPA',
-                'dokter' => 'Dr. Ahmad',
-                'tindakan' => 'Pemberian obat'
-            ],
-            [
-                'tanggal' => '10-09-2025',
-                'diagnosis' => 'Hipertensi',
-                'dokter' => 'Dr. Siti',
-                'tindakan' => 'Konsultasi'
-            ]
-        ];
-        
-        return view('pemeriksaan.riwayat', ['riwayat' => $riwayat]);
+        return view('pemeriksaan.riwayat');
     }
 }
