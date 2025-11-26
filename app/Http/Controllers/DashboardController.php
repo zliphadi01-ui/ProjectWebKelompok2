@@ -44,7 +44,7 @@ class DashboardController extends Controller
                 'labels' => $labels,
                 'data' => $dataGrafik,
             ],
-            'recent' => Pendaftaran::latest()->limit(5)->get(),
+            'recent' => Pendaftaran::whereNotIn('status', ['Selesai', 'Dibatalkan'])->latest()->limit(5)->get(),
             'tanggal' => Carbon::now()->translatedFormat('l, j F Y')
         ];
 

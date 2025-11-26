@@ -103,64 +103,8 @@ class PemeriksaanController extends Controller
             ->with('success', 'Data Pemeriksaan berhasil disimpan!');
     }
 
-    public function storePasienBaru(Request $request)
-{
-    // --- KODE DEBUGGING (HAPUS NANTI) ---
-    // Ini untuk mengecek apakah tombol "Daftar" benar-benar nyambung ke sini
-    // dd($request->all()); 
-    // ------------------------------------
-
-    // Validasi (Cek apakah data lengkap)
-    $validated = $request->validate([
-        'nama' => 'required',
-        'nik' => 'required|numeric|digits:16', // Pastikan ini 16
-        'jenis_kelamin' => 'required',
-        'poli' => 'required',
-    ]);
-
-    // Jika lolos validasi, kode di bawah ini akan jalan.
-    // Jika GAGAL validasi, Laravel otomatis melempar kembali ke halaman sebelumnya (Refresh).
-    
-    DB::beginTransaction();
-    try {
-        // 1. Simpan/Cek Pasien
-        $pasien = Pasien::firstOrCreate(
-            ['nik' => $request->nik],
-            [
-                'nama' => $request->nama,
-                'no_rm' => date('ym') . '-' . rand(1000, 9999),
-                'jenis_kelamin' => $request->jenis_kelamin,
-                'tanggal_lahir' => $request->tanggal_lahir,
-                'telepon' => $request->telepon,
-                'alamat' => $request->alamat,
-            ]
-        );
-
-        // 2. Simpan Pendaftaran
-        $pendaftaran = Pendaftaran::create([
-            'pasien_id' => $pasien->id,
-            'no_daftar' => 'REG-' . time(),
-            'poliklinik' => $request->poli,
-            'status' => 'Menunggu',
-            'dokter' => '-',
-            'keluhan' => $request->keluhan,
-            'jenis_pembayaran' => 'Umum',
-        ]);
-
-        DB::commit();
-
-        // SUKSES
-        return redirect()->route('pemeriksaan.soap', $pendaftaran->id);
-
-    } catch (\Exception $e) {
-        DB::rollback();
-        // Debugging Error Database
-        dd("ERROR DATABASE: " . $e->getMessage()); // <--- KITA TAMBAH INI
-    }
-}
-    
     // ==========================================================
-    // FUNGSI KHUSUS SIMPAN & CETAK (Opsional, tapi saya gabung logika di atas)
+    // FUNGSI KHUSUS SIMPAN & CETAK
     // ==========================================================
     public function storeAndPrint(Request $request)
     {

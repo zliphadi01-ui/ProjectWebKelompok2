@@ -93,14 +93,14 @@ class PendaftaranController extends Controller
 
             DB::commit();
 
-            // 4. KEMBALI KE DATA KUNJUNGAN (SESUAI PERMINTAAN)
+            // 4. Redirect ke halaman Pendaftaran atau Pemeriksaan
             return redirect()->route('pendaftaran.index')
-                             ->with('success', 'Berhasil Mendaftarkan Pasien: ' . $pasien->nama);
+                             ->with('success', 'Berhasil Mendaftarkan Pasien: ' . $pasien->nama . '. Silakan lanjut ke menu Pemeriksaan.');
 
         } catch (\Exception $e) {
             DB::rollback();
             // Tampilkan error di layar jika gagal
-            dd("GAGAL MENYIMPAN: " . $e->getMessage());
+            return back()->with('error', "GAGAL MENYIMPAN: " . $e->getMessage())->withInput();
         }
     }
 

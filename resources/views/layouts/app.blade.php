@@ -182,6 +182,10 @@
             <span class="fs-4">RME POLIJE</span>
         </a>
         <hr>
+        @php
+            $user = Auth::user();
+            $role = $user ? $user->role : 'guest';
+        @endphp
         <ul class="nav nav-pills flex-column mb-auto sidebar-nav">
             <li class="nav-item">
                 <a href="{{ url('/dashboard') }}" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
@@ -189,7 +193,8 @@
                 </a>
             </li>
 
-            {{-- Pendaftaran Dropdown --}}
+            {{-- Pendaftaran Dropdown (Admin & Pendaftaran) --}}
+            @if(in_array($role, ['admin', 'pendaftaran']))
             <li class="nav-item">
                 <a href="#pendaftaranMenu" class="nav-link d-flex justify-content-between align-items-center {{ request()->is('pendaftaran*') ? 'active' : '' }}"
                 data-bs-toggle="collapse" role="button" aria-expanded="{{ request()->is('pendaftaran*') ? 'true' : 'false' }}">
@@ -199,26 +204,20 @@
 
                 <div class="collapse {{ request()->is('pendaftaran*') ? 'show' : '' }}" id="pendaftaranMenu">
                     <ul class="nav flex-column ms-3">
-                        
-                        {{-- 1. MENU UTAMA (MENGGANTIKAN PASIEN BARU & LAMA) --}}
                         <li>
                             <a href="{{ route('pendaftaran.index') }}" class="nav-link nav-link-sm {{ request()->routeIs('pendaftaran.index') || request()->routeIs('pendaftaran.create-baru') ? 'active' : '' }}">
                                 <i class="bi-pencil-square me-1"></i> Buat Pendaftaran
                             </a>
                         </li>
-
-                        {{-- 2. MENU MONITORING --}}
                         <li>
                             <a href="{{ route('pendaftaran.list') }}" class="nav-link nav-link-sm {{ request()->routeIs('pendaftaran.list') ? 'active' : '' }}">
                                 <i class="bi-list-ul me-1"></i> Data Kunjungan
                             </a>
                         </li>
-                        
                     </ul>
                 </div>
             </li>
 
-            {{-- Pasien Dropdown --}}
             <li class="nav-item">
                 <a href="#pasienMenu" class="nav-link d-flex justify-content-between align-items-center {{ request()->is('pasien*') ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ request()->is('pasien*') ? 'true' : 'false' }}">
                     <span><i class="bi-people-fill me-2"></i> Pasien</span>
@@ -236,7 +235,6 @@
                 </div>
             </li>
 
-            {{-- BPJS Dropdown --}}
             <li class="nav-item">
                 <a href="#bpjsMenu" class="nav-link d-flex justify-content-between align-items-center {{ request()->is('bpjs*') ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ request()->is('bpjs*') ? 'true' : 'false' }}">
                     <span><i class="bi-card-checklist me-2"></i> BPJS</span>
@@ -250,8 +248,10 @@
                     </ul>
                 </div>
             </li>
+            @endif
 
-            {{-- Poliklinik Dropdown --}}
+            {{-- Poliklinik & Pemeriksaan (Admin & Dokter) --}}
+            @if(in_array($role, ['admin', 'dokter']))
             @php
                 $isPemeriksaan = request()->routeIs('pemeriksaan.*') || request()->is('pemeriksaan*');
                 $isPoli = (request()->is('poli*') || request()->is('kunjungan*')) && !$isPemeriksaan;
@@ -263,22 +263,29 @@
                 </a>
                 <div class="collapse {{ $isPoli ? 'show' : '' }}" id="poliMenu">
                     <ul class="nav flex-column ms-3">
-                        <li><a href="{{ url('/poli/klinik-umum') }}" class="nav-link nav-link-sm {{ request()->is('poli/klinik-umum*') ? 'active' : '' }}">Klinik Umum</a></li>
-                        <li><a href="{{ url('/poli/ugd') }}" class="nav-link nav-link-sm {{ request()->is('poli/ugd*') ? 'active' : '' }}">UGD</a></li>
-                        <li><a href="{{ url('/poli/klinik-gigi') }}" class="nav-link nav-link-sm {{ request()->is('poli/klinik-gigi*') ? 'active' : '' }}">Klinik Gigi</a></li>
-                        <li><a href="{{ url('/poli/rawat-inap') }}" class="nav-link nav-link-sm {{ request()->is('poli/rawat-inap*') ? 'active' : '' }}">Rawat Inap</a></li>
+                        @foreach(config('poli.options') as $poliOption)
+                        <li>
+                            <a href="{{ route('poli.show', ['nama_poli' => $poliOption]) }}" class="nav-link nav-link-sm {{ request()->is('poli/' . $poliOption) ? 'active' : '' }}">
+                                {{ $poliOption }}
+                            </a>
+                        </li>
+                        @endforeach
                     </ul>
                 </div>
             </li>
 
-            {{-- Pemeriksaan (direct link) --}}
             <li class="nav-item">
                 <a href="{{ route('pemeriksaan.index') }}" class="nav-link {{ $isPemeriksaan ? 'active' : '' }}">
                     <i class="bi-file-medical me-2"></i> Pemeriksaan
                 </a>
             </li>
+            <li class="nav-item"><a href="{{ url('/laboratorium') }}" class="nav-link {{ request()->is('laboratorium*') ? 'active' : '' }}"><i class="bi-microscope me-2"></i> Laboratorium</a></li>
+            <li class="nav-item"><a href="{{ url('/rawat-inap') }}" class="nav-link {{ request()->is('rawat-inap*') ? 'active' : '' }}"><i class="bi-house-fill me-2"></i> Rawat Inap</a></li>
+            <li class="nav-item"><a href="{{ url('/poned') }}" class="nav-link {{ request()->is('poned*') ? 'active' : '' }}"><i class="bi-activity me-2"></i> PONED</a></li>
+            @endif
 
-            {{-- Gudang Obat Dropdown --}}
+            {{-- Gudang Obat (Admin & Apotek) --}}
+            @if(in_array($role, ['admin', 'apotek']))
             <li class="nav-item">
                 <a href="#gudangMenu" class="nav-link d-flex justify-content-between align-items-center {{ request()->is('gudang*') || request()->is('apotek*') ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ request()->is('gudang*') || request()->is('apotek*') ? 'true' : 'false' }}">
                     <span><i class="bi-box-seam me-2"></i> Gudang Obat</span>
@@ -293,15 +300,20 @@
                     </ul>
                 </div>
             </li>
+            @endif
 
-            {{-- Kasir --}}
+            {{-- Kasir (Admin & Kasir) --}}
+            @if(in_array($role, ['admin', 'kasir']))
             <li class="nav-item">
                 <a href="{{ url('/kasir') }}" class="nav-link {{ request()->is('kasir*') ? 'active' : '' }}">
                     <i class="bi-cash-coin me-2"></i> Kasir
                 </a>
             </li>
+            <li class="nav-item"><a href="{{ url('/billing') }}" class="nav-link {{ request()->is('billing*') ? 'active' : '' }}"><i class="bi-receipt me-2"></i> Billing</a></li>
+            @endif
 
-            {{-- Master Data --}}
+            {{-- Master Data & Lainnya (Admin Only) --}}
+            @if($role === 'admin')
             @php $isMaster = request()->is('master-data*'); @endphp
             <li class="nav-item">
                 <a href="#masterDataMenu" class="nav-link d-flex justify-content-between align-items-center {{ $isMaster ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ $isMaster ? 'true' : 'false' }}">
@@ -331,7 +343,6 @@
                 </div>
             </li>
 
-            {{-- Laporan Dropdown --}}
             <li class="nav-item">
                 <a href="#laporanMenu" class="nav-link d-flex justify-content-between align-items-center {{ request()->is('laporan*') ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ request()->is('laporan*') ? 'true' : 'false' }}">
                     <span><i class="bi-file-earmark-text me-2"></i> Laporan</span>
@@ -347,16 +358,12 @@
                 </div>
             </li>
 
-            {{-- Lainnya --}}
-            <li class="nav-item"><a href="{{ url('/laboratorium') }}" class="nav-link {{ request()->is('laboratorium*') ? 'active' : '' }}"><i class="bi-microscope me-2"></i> Laboratorium</a></li>
-            <li class="nav-item"><a href="{{ url('/rawat-inap') }}" class="nav-link {{ request()->is('rawat-inap*') ? 'active' : '' }}"><i class="bi-house-fill me-2"></i> Rawat Inap</a></li>
-            <li class="nav-item"><a href="{{ url('/poned') }}" class="nav-link {{ request()->is('poned*') ? 'active' : '' }}"><i class="bi-activity me-2"></i> PONED</a></li>
             <li class="nav-item"><a href="{{ url('/ubah-password') }}" class="nav-link {{ request()->is('ubah-password*') ? 'active' : '' }}"><i class="bi-key-fill me-2"></i> Ubah Password</a></li>
             <li class="nav-item"><a href="{{ url('/pengaturan') }}" class="nav-link {{ request()->is('pengaturan*') ? 'active' : '' }}"><i class="bi-gear-fill me-2"></i> Pengaturan</a></li>
             <li class="nav-item"><a href="{{ url('/pengaturan-grup') }}" class="nav-link {{ request()->is('pengaturan-grup*') ? 'active' : '' }}"><i class="bi-people-fill me-2"></i> Pengaturan Grup</a></li>
             <li class="nav-item"><a href="{{ url('/bypass') }}" class="nav-link {{ request()->is('bypass*') ? 'active' : '' }}"><i class="bi-toggle-on me-2"></i> Bypass</a></li>
             <li class="nav-item"><a href="{{ url('/whatsapp') }}" class="nav-link {{ request()->is('whatsapp*') ? 'active' : '' }}"><i class="bi-whatsapp me-2"></i> Whatsapp</a></li>
-            <li class="nav-item"><a href="{{ url('/billing') }}" class="nav-link {{ request()->is('billing*') ? 'active' : '' }}"><i class="bi-receipt me-2"></i> Billing</a></li>
+            @endif
         </ul>
         <hr>
 

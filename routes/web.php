@@ -8,61 +8,22 @@ use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\KunjunganController;
 use App\Http\Controllers\PemeriksaanController;
 use App\Http\Controllers\MasterDataController;
-use App\Http\Controllers\PageController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\PharmacyController;
+use App\Http\Controllers\FinanceController;
+use App\Http\Controllers\BpjsController;
+use App\Http\Controllers\MedicalSupportController;
 use App\Http\Controllers\RawatInapController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use App\Models\User;
-use App\Models\Pendaftaran;
-use App\Models\Pasien;
+
 // =======================
-// LOGIN & LOGOUT MANUAL
+// LOGIN & LOGOUT
 // =======================
-Route::get('/login', function () {
-    return view('auth.login');
-})->name('login');
+use App\Http\Controllers\AuthController;
 
-Route::post('/login', function (Request $request) {
-    $username = $request->input('username');
-    $password = $request->input('password');
-
-    // login sederhana tanpa database
-    // first, try database users if table exists
-    try {
-        if (Schema::hasTable('users')) {
-            $user = User::where('email', $username)->orWhere('name', $username)->first();
-            if ($user && Hash::check($password, $user->password)) {
-                session(['user' => $user->name, 'user_id' => $user->id, 'user_photo' => $user->profile_photo ?? null]);
-                if ($request->wantsJson() || $request->ajax()) {
-                    return response()->json(['ok' => true, 'redirect' => url('/dashboard')]);
-                }
-                return redirect('/dashboard');
-            }
-        }
-    } catch (\Exception $e) {
-        // ignore DB errors and fallback to hardcoded login
-    }
-
-    // fallback hardcoded credential
-    if ($username === 'admin' && $password === '12345') {
-        session(['user' => $username]);
-        if ($request->wantsJson() || $request->ajax()) {
-            return response()->json(['ok' => true, 'redirect' => url('/dashboard')]);
-        }
-        return redirect('/dashboard');
-    }
-
-    if ($request->wantsJson() || $request->ajax()) {
-        return response()->json(['ok' => false, 'message' => 'Username atau password salah'], 422);
-    }
-
-    return back()->with('error', 'Username atau password salah!');
-});
-
-Route::get('/logout', function () {
-    session()->forget('user');
-    return redirect('/login');
-})->name('logout');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Profile edit & upload
 use App\Http\Controllers\ProfileController;
@@ -98,26 +59,26 @@ Route::get('/dashboard/stats', [DashboardController::class, 'stats'])->name('das
 Route::get('/dashboard/details/{type}', [DashboardController::class, 'details'])->name('dashboard.details');
 
 // General pages (placeholders)
-Route::get('/bpjs', [PageController::class, 'bpjs'])->name('bpjs');
-Route::get('/gudang', [PageController::class, 'gudangObat'])->name('gudang');
-Route::get('/kasir', [PageController::class, 'kasir'])->name('kasir');
-Route::get('/laporan', [PageController::class, 'laporan'])->name('laporan');
-Route::get('/laboratorium', [PageController::class, 'laboratorium'])->name('laboratorium');
+Route::get('/bpjs', [BpjsController::class, 'bpjs'])->name('bpjs');
+Route::get('/gudang', [PharmacyController::class, 'gudangObat'])->name('gudang');
+Route::get('/kasir', [FinanceController::class, 'kasir'])->name('kasir');
+Route::get('/laporan', [ReportController::class, 'laporan'])->name('laporan');
+Route::get('/laboratorium', [MedicalSupportController::class, 'laboratorium'])->name('laboratorium');
 // Additional generic pages used by sidebar
-Route::get('/apotek', [PageController::class, 'apotek'])->name('apotek');
-Route::get('/apotek-retail', [PageController::class, 'apotekRetail'])->name('apotek.retail');
-Route::get('/master-obat', [PageController::class, 'masterObat'])->name('master-obat');
-Route::get('/farmasi', [PageController::class, 'farmasi'])->name('farmasi');
-Route::get('/poli-bpjs', [PageController::class, 'poliBpjs'])->name('poli-bpjs');
-Route::get('/riwayat-peserta-bpjs', [PageController::class, 'riwayatPesertaBpjs'])->name('riwayat-peserta-bpjs');
-Route::get('/cetak-rujukan-bpjs', [PageController::class, 'cetakRujukanBpjs'])->name('cetak-rujukan-bpjs');
-Route::get('/poli/{slug}', [PageController::class, 'poli'])->name('poli.show');
-Route::get('/laporan/pembagian', [PageController::class, 'laporanPembagian'])->name('laporan.pembagian');
-Route::get('/pengaturan', [PageController::class, 'pengaturan'])->name('pengaturan');
-Route::get('/pengaturan-grup', [PageController::class, 'pengaturanGrup'])->name('pengaturan.grup');
-Route::get('/bypass', [PageController::class, 'bypass'])->name('bypass');
-Route::get('/whatsapp', [PageController::class, 'whatsapp'])->name('whatsapp');
-Route::get('/billing', [PageController::class, 'billing'])->name('billing');
+Route::get('/apotek', [PharmacyController::class, 'apotek'])->name('apotek');
+Route::get('/apotek-retail', [PharmacyController::class, 'apotekRetail'])->name('apotek.retail');
+Route::get('/master-obat', [PharmacyController::class, 'masterObat'])->name('master-obat');
+Route::get('/farmasi', [PharmacyController::class, 'farmasi'])->name('farmasi');
+Route::get('/poli-bpjs', [BpjsController::class, 'poliBpjs'])->name('poli-bpjs');
+Route::get('/riwayat-peserta-bpjs', [BpjsController::class, 'riwayatPesertaBpjs'])->name('riwayat-peserta-bpjs');
+Route::get('/cetak-rujukan-bpjs', [BpjsController::class, 'cetakRujukanBpjs'])->name('cetak-rujukan-bpjs');
+Route::get('/poli/{nama_poli}', [MedicalSupportController::class, 'poli'])->name('poli.show');
+Route::get('/laporan/pembagian', [ReportController::class, 'laporanPembagian'])->name('laporan.pembagian');
+Route::get('/pengaturan', [SettingsController::class, 'pengaturan'])->name('pengaturan');
+Route::get('/pengaturan-grup', [SettingsController::class, 'pengaturanGrup'])->name('pengaturan.grup');
+Route::get('/bypass', [SettingsController::class, 'bypass'])->name('bypass');
+Route::get('/whatsapp', [SettingsController::class, 'whatsapp'])->name('whatsapp');
+Route::get('/billing', [FinanceController::class, 'billing'])->name('billing');
 
 // Rawat Inap resource (CRUD) - connected to DB
 Route::resource('rawat-inap', RawatInapController::class);
