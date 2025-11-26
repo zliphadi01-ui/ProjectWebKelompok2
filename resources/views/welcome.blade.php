@@ -66,7 +66,7 @@
                     <li class="nav-item"><a class="nav-link" href="#">Panduan</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">IT Support</a></li>
                 </ul>
-                <a href="{{ url('/login') }}" class="btn btn-primary ms-lg-3">Login Petugas</a>
+                <a href="{{ url('/login') }}" class="btn btn-primary ms-lg-3">Login</a>
             </div>
         </div>
     </nav>
