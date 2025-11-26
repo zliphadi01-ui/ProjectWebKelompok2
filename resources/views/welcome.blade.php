@@ -28,6 +28,7 @@
             --muted: #6c757d;
             --card-radius: .75rem;
         }
+        html { scroll-behavior: smooth; }
         body{ font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; }
 
         /* Hero: clean gradient background */
@@ -62,9 +63,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#">Portal</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Panduan</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">IT Support</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">Portal</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features">Panduan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">IT Support</a></li>
                 </ul>
                 <a href="{{ url('/login') }}" class="btn btn-primary ms-lg-3">Login</a>
             </div>
@@ -81,7 +82,7 @@
     </header>
 
     <!-- Features section: title + 4 cards (icons moved up under title) -->
-    <section class="py-5">
+    <section class="py-5" id="features">
         <div class="container">
             <div class="section-title">
                 <h2 class="fw-bold">Fitur Unggulan Sistem RME</h2>
@@ -126,7 +127,7 @@
     </section>
 
     <!-- Brief modules (kept compact) -->
-    <section class="py-5 bg-light">
+    <section class="py-5 bg-light" id="modules">
         <div class="container">
             <div class="section-title">
                 <h2 class="fw-bold">Modul Utama Sistem</h2>
@@ -161,7 +162,7 @@
         </div>
     </section>
 
-    <footer class="py-5">
+    <footer class="py-5" id="contact">
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4">
@@ -171,9 +172,9 @@
                 <div class="col-md-2 offset-md-1 mb-4">
                     <h5 class="fw-bold">Tautan Cepat</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-muted text-decoration-none">Dashboard</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">Panduan Sistem</a></li>
-                        <li><a href="#" class="text-muted text-decoration-none">Bantuan Teknis</a></li>
+                        <li><a href="{{ route('dashboard') }}" class="text-muted text-decoration-none">Dashboard</a></li>
+                        <li><a href="#modules" class="text-muted text-decoration-none">Panduan Sistem</a></li>
+                        <li><a href="#contact" class="text-muted text-decoration-none">Bantuan Teknis</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4 offset-md-1 mb-4">
