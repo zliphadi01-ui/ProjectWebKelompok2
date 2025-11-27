@@ -64,6 +64,7 @@ Route::get('/gudang', [PharmacyController::class, 'gudangObat'])->name('gudang')
 Route::get('/kasir', [FinanceController::class, 'kasir'])->name('kasir');
 Route::get('/laporan', [ReportController::class, 'laporan'])->name('laporan');
 Route::get('/laboratorium', [MedicalSupportController::class, 'laboratorium'])->name('laboratorium');
+Route::get('/poned', [MedicalSupportController::class, 'poned'])->name('poned');
 // Additional generic pages used by sidebar
 Route::get('/apotek', [PharmacyController::class, 'apotek'])->name('apotek');
 Route::get('/apotek-retail', [PharmacyController::class, 'apotekRetail'])->name('apotek.retail');
@@ -166,3 +167,7 @@ Route::prefix('master-data')->name('master-data.')->group(function () {
     
     
 });
+
+// ICD-10 Search API
+use App\Http\Controllers\Api\Icd10Controller;
+Route::get('/icd10/search', [Icd10Controller::class, 'search'])->name('icd10.search');

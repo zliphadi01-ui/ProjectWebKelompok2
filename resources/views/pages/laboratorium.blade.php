@@ -8,26 +8,41 @@
 
 <div class="row mb-4">
     <div class="col-md-3">
-        <div class="card border-0 shadow-sm text-white" style="background: linear-gradient(45deg, #4e73df, #224abe);">
+        <div class="card border-0 shadow-sm text-white" style="background: linear-gradient(135deg, #4e73df, #224abe);">
             <div class="card-body">
-                <h6 class="text-uppercase mb-1">Total Permintaan Hari Ini</h6>
-                <h2 class="mb-0 fw-bold">12</h2>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-uppercase mb-1 opacity-75">Total Permintaan</h6>
+                        <h2 class="mb-0 fw-bold">12</h2>
+                    </div>
+                    <i class="bi-clipboard-data fs-1 opacity-50"></i>
+                </div>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card border-0 shadow-sm text-white" style="background: linear-gradient(45deg, #1cc88a, #13855c);">
+        <div class="card border-0 shadow-sm text-white" style="background: linear-gradient(135deg, #1cc88a, #13855c);">
             <div class="card-body">
-                <h6 class="text-uppercase mb-1">Selesai Diperiksa</h6>
-                <h2 class="mb-0 fw-bold">8</h2>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-uppercase mb-1 opacity-75">Selesai Diperiksa</h6>
+                        <h2 class="mb-0 fw-bold">8</h2>
+                    </div>
+                    <i class="bi-check-circle fs-1 opacity-50"></i>
+                </div>
             </div>
         </div>
     </div>
     <div class="col-md-3">
-        <div class="card border-0 shadow-sm text-white" style="background: linear-gradient(45deg, #f6c23e, #dda20a);">
+        <div class="card border-0 shadow-sm text-white" style="background: linear-gradient(135deg, #f6c23e, #dda20a);">
             <div class="card-body">
-                <h6 class="text-uppercase mb-1">Menunggu Hasil</h6>
-                <h2 class="mb-0 fw-bold">4</h2>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-uppercase mb-1 opacity-75">Menunggu Hasil</h6>
+                        <h2 class="mb-0 fw-bold">4</h2>
+                    </div>
+                    <i class="bi-hourglass-split fs-1 opacity-50"></i>
+                </div>
             </div>
         </div>
     </div>
