@@ -165,7 +165,12 @@ Route::prefix('master-data')->name('master-data.')->group(function () {
     Route::get('/resep-info', [MasterDataController::class, 'resepInfo'])->name('resep-info');
     Route::get('/rs-rujukan', [MasterDataController::class, 'rsRujukan'])->name('rs-rujukan');
     
-    
+    // ICD-10 Master Data
+    Route::get('/icd10', [Icd10Controller::class, 'index'])->name('icd10.index');
+    Route::post('/icd10', [Icd10Controller::class, 'store'])->name('icd10.store');
+    Route::put('/icd10/{id}', [Icd10Controller::class, 'update'])->name('icd10.update');
+    Route::delete('/icd10/{id}', [Icd10Controller::class, 'destroy'])->name('icd10.destroy');
+    Route::post('/icd10/import', [Icd10Controller::class, 'import'])->name('icd10.import');
 });
 
 // ICD-10 Search API
