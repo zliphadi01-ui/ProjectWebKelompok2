@@ -53,16 +53,14 @@
                 </div>
             </div>
         </div>
-
-        {{-- Card 3: Antrean --}}
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100 overflow-hidden card-hover">
-                <div class="card-body position-relative p-4">
-                    <div class="d-flex flex-column position-relative z-1">
-                        <div class="text-uppercase fw-bold text-info small mb-2 tracking-wide">Antrean Aktif</div>
-                        <div class="h2 fw-bold text-dark mb-0" id="antreanCount">{{ $antrean_aktif ?? 0 }}</div>
-                        <div class="small text-muted mt-2">
-                            <i class="bi-clock-history text-info"></i> Sedang menunggu
+        <div class="col-xl-3 col-md-6 mb-4">
+            <a href="#" class="stat-link text-decoration-none" data-type="antrean">
+            <div class="card stat-card border-start-info h-100 py-2">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <div class="text-xs fw-bold text-info text-uppercase mb-1">Antrean Aktif</div>
+                            <div class="h5 mb-0 fw-bold text-gray-800" id="antreanCount">{{ $antrean_aktif ?? 0 }}</div>
                         </div>
                     </div>
                     <div class="icon-bg text-info opacity-10">
