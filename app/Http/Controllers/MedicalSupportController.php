@@ -28,6 +28,11 @@ class MedicalSupportController extends Controller
         return view('pages.laboratorium');
     }
 
+    public function poned()
+    {
+        return view('pages.poned');
+    }
+
     public function poli(Request $request, $nama_poli = null)
     {
         $title = $nama_poli ?? 'Poliklinik';

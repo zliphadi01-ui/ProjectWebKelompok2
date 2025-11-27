@@ -93,11 +93,60 @@
                     {{-- ASSESSMENT --}}
                     <div class="mb-3">
                         <label class="fw-bold text-warning">A - Assessment (Diagnosa)</label>
-                        <div class="input-group mb-2">
+                        <div class="input-group mb-2 position-relative">
                             <span class="input-group-text bg-warning text-white">ICD-10</span>
-                            <input type="text" name="icd_code" class="form-control" placeholder="Kode (Opsional)" value="{{ old('icd_code') }}">
+                            <input type="text" id="icd_search" name="icd_code" class="form-control" placeholder="Ketik Kode atau Nama Penyakit..." value="{{ old('icd_code') }}" autocomplete="off">
+                            <div id="icd_results" class="list-group position-absolute w-100 shadow" style="top: 100%; z-index: 1000; display: none; max-height: 200px; overflow-y: auto;"></div>
                         </div>
-                        <input type="text" name="diagnosis" class="form-control mb-2 fw-bold" placeholder="Nama Diagnosa Utama (Wajib)" required value="{{ old('diagnosis') }}">
+                        <input type="text" id="diagnosis_input" name="diagnosis" class="form-control mb-2 fw-bold" placeholder="Nama Diagnosa Utama (Wajib)" required value="{{ old('diagnosis') }}">
+
+                        <script>
+                            const icdInput = document.getElementById('icd_search');
+                            const resultsDiv = document.getElementById('icd_results');
+                            const diagnosisInput = document.getElementById('diagnosis_input');
+
+                            icdInput.addEventListener('input', async function() {
+                                const query = this.value;
+                                if (query.length < 2) {
+                                    resultsDiv.style.display = 'none';
+                                    return;
+                                }
+
+                                try {
+                                    const res = await fetch(`{{ route('icd10.search') }}?q=${query}`);
+                                    const data = await res.json();
+                                    
+                                    resultsDiv.innerHTML = '';
+                                    if (data.length > 0) {
+                                        data.forEach(item => {
+                                            const a = document.createElement('a');
+                                            a.classList.add('list-group-item', 'list-group-item-action');
+                                            a.href = '#';
+                                            a.innerHTML = `<strong>${item.code}</strong> - ${item.name}`;
+                                            a.onclick = (e) => {
+                                                e.preventDefault();
+                                                icdInput.value = item.code;
+                                                diagnosisInput.value = item.name; // Auto-fill diagnosis name
+                                                resultsDiv.style.display = 'none';
+                                            };
+                                            resultsDiv.appendChild(a);
+                                        });
+                                        resultsDiv.style.display = 'block';
+                                    } else {
+                                        resultsDiv.style.display = 'none';
+                                    }
+                                } catch (e) {
+                                    console.error('Error fetching ICD-10:', e);
+                                }
+                            });
+
+                            // Hide results when clicking outside
+                            document.addEventListener('click', function(e) {
+                                if (!icdInput.contains(e.target) && !resultsDiv.contains(e.target)) {
+                                    resultsDiv.style.display = 'none';
+                                }
+                            });
+                        </script>
                         
                         {{-- Catatan Assessment dibuat tidak wajib di Controller --}}
                         <textarea name="assessment" class="form-control" rows="2" placeholder="Catatan tambahan diagnosa (Opsional)">{{ old('assessment') }}</textarea>
