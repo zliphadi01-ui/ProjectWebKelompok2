@@ -242,7 +242,7 @@
                 </a>
                 <div class="collapse {{ request()->is('bpjs*') ? 'show' : '' }}" id="bpjsMenu">
                     <ul class="nav flex-column ms-3">
-                        <li><a href="{{ url('/poli-bpjs') }}" class="nav-link nav-link-sm {{ request()->is('poli-bpjs*') ? 'active' : '' }}">Poli BPJS</a></li>
+                        <li><a href="{{ url('/poli-bpjs') }}" class="nav-link nav-link-sm {{ request()->is('poli-bpjs*') ? 'active' : '' }}">BPJS</a></li>
                         <li><a href="{{ url('/riwayat-peserta-bpjs') }}" class="nav-link nav-link-sm {{ request()->is('riwayat-peserta-bpjs*') ? 'active' : '' }}">Riwayat Peserta BPJS</a></li>
                         <li><a href="{{ url('/cetak-rujukan-bpjs') }}" class="nav-link nav-link-sm {{ request()->is('cetak-rujukan-bpjs*') ? 'active' : '' }}">Cetak Rujukan BPJS</a></li>
                     </ul>
