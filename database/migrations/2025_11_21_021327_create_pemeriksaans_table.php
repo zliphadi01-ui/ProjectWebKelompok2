@@ -10,8 +10,7 @@ return new class extends Migration
     {
         Schema::create('pemeriksaans', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('pendaftaran_id')->nullable()->index();
-            $table->unsignedBigInteger('pasien_id')->nullable()->index();
+
             // JEMBATAN RELASI
             // Menghubungkan pemeriksaan dengan pendaftaran dan pasien
             $table->foreignId('pendaftaran_id')->constrained('pendaftarans')->onDelete('cascade');
