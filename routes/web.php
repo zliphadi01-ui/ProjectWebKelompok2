@@ -16,6 +16,9 @@ use App\Http\Controllers\BpjsController;
 use App\Http\Controllers\MedicalSupportController;
 use App\Http\Controllers\RawatInapController;
 
+use App\Http\Controllers\Icd10Controller as WebIcd10Controller;
+use App\Http\Controllers\Api\Icd10Controller as ApiIcd10Controller;
+
 // =======================
 // LOGIN & LOGOUT
 // =======================
@@ -166,13 +169,12 @@ Route::prefix('master-data')->name('master-data.')->group(function () {
     Route::get('/rs-rujukan', [MasterDataController::class, 'rsRujukan'])->name('rs-rujukan');
     
     // ICD-10 Master Data
-    Route::get('/icd10', [Icd10Controller::class, 'index'])->name('icd10.index');
-    Route::post('/icd10', [Icd10Controller::class, 'store'])->name('icd10.store');
-    Route::put('/icd10/{id}', [Icd10Controller::class, 'update'])->name('icd10.update');
-    Route::delete('/icd10/{id}', [Icd10Controller::class, 'destroy'])->name('icd10.destroy');
-    Route::post('/icd10/import', [Icd10Controller::class, 'import'])->name('icd10.import');
+    Route::get('/icd10', [WebIcd10Controller::class, 'index'])->name('icd10.index');
+    Route::post('/icd10', [WebIcd10Controller::class, 'store'])->name('icd10.store');
+    Route::put('/icd10/{id}', [WebIcd10Controller::class, 'update'])->name('icd10.update');
+    Route::delete('/icd10/{id}', [WebIcd10Controller::class, 'destroy'])->name('icd10.destroy');
+    Route::post('/icd10/import', [WebIcd10Controller::class, 'import'])->name('icd10.import');
 });
 
 // ICD-10 Search API
-use App\Http\Controllers\Api\Icd10Controller;
-Route::get('/icd10/search', [Icd10Controller::class, 'search'])->name('icd10.search');
+Route::get('/icd10/search', [ApiIcd10Controller::class, 'search'])->name('icd10.search');
