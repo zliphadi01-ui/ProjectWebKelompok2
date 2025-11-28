@@ -214,6 +214,11 @@
                                 <i class="bi-list-ul me-1"></i> Data Kunjungan
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('kunjungan.hari-ini') }}" class="nav-link nav-link-sm {{ request()->routeIs('kunjungan.hari-ini') ? 'active' : '' }}">
+                                <i class="bi-speedometer2 me-1"></i> Dashboard Kunjungan
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </li>
@@ -254,7 +259,7 @@
             @if(in_array($role, ['admin', 'dokter']))
             @php
                 $isPemeriksaan = request()->routeIs('pemeriksaan.*') || request()->is('pemeriksaan*');
-                $isPoli = (request()->is('poli*') || request()->is('kunjungan*')) && !$isPemeriksaan;
+                $isPoli = request()->is('poli*');
             @endphp
             <li class="nav-item">
                 <a href="#poliMenu" class="nav-link d-flex justify-content-between align-items-center {{ $isPoli ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ $isPoli ? 'true' : 'false' }}">
@@ -272,6 +277,12 @@
                         @endforeach
                     </ul>
                 </div>
+            </li>
+
+            <li class="nav-item">
+                <a href="{{ route('kunjungan.hari-ini') }}" class="nav-link {{ request()->routeIs('kunjungan.hari-ini') ? 'active' : '' }}">
+                    <i class="bi-speedometer2 me-2"></i> Dashboard Kunjungan
+                </a>
             </li>
 
             <li class="nav-item">
