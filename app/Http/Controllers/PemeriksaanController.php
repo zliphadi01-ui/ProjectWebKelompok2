@@ -80,6 +80,8 @@ class PemeriksaanController extends Controller
             'suhu'           => 'nullable|string',
             'berat_badan'    => 'nullable|string',
             'icd_code'       => 'nullable|string',
+            'icd9_code'      => 'nullable|string',
+            'procedure'      => 'nullable|string',
         ]);
 
         // Simpan ke Database

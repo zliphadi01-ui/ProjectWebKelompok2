@@ -29,11 +29,14 @@
             <div id="loginAlert" class="alert d-none" role="alert"></div>
 
             <button type="submit" id="loginBtn" class="btn btn-primary w-100">Masuk</button>
+            
+            <div class="mt-3 text-center">
+                <small class="text-muted">Dev login: test@example.com / password</small>
+            </div>
         </form>
 
-            <div class="mt-3 text-center text-muted small">
-                <strong>Dev login:</strong> test@example.com / password
-            </div>
+
+
 
         <script>
             const form = document.getElementById('loginForm');

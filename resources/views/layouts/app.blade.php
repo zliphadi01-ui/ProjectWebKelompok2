@@ -335,7 +335,8 @@
                         <li><a href="{{ route('master-data.pegawai') }}" class="nav-link nav-link-sm {{ request()->is('master-data/pegawai*') ? 'active' : '' }}">Pegawai</a></li>
                         <li><a href="{{ route('master-data.jadwal-poli') }}" class="nav-link nav-link-sm {{ request()->is('master-data/jadwal-poli*') ? 'active' : '' }}">Jadwal Poli</a></li>
                         <li><a href="{{ route('master-data.tindakan-laborat') }}" class="nav-link nav-link-sm {{ request()->is('master-data/tindakan-laborat*') ? 'active' : '' }}">Tindakan &amp; Laborat</a></li>
-                        <li><a href="{{ route('master-data.diagnosa') }}" class="nav-link nav-link-sm {{ request()->is('master-data/diagnosa*') ? 'active' : '' }}">Diagnosa</a></li>
+                        <li><a href="{{ route('master-data.icd10.index') }}" class="nav-link nav-link-sm {{ request()->is('master-data/icd10*') ? 'active' : '' }}">Diagnosa ICD-10</a></li>
+                        <li><a href="{{ route('master-data.diagnosa') }}" class="nav-link nav-link-sm {{ request()->is('master-data/diagnosa*') ? 'active' : '' }}">Diagnosa (Lama)</a></li>
                         <li><a href="{{ route('master-data.kamar-rawat-inap') }}" class="nav-link nav-link-sm {{ request()->is('master-data/kamar-rawat-inap*') ? 'active' : '' }}">Kamar Rawat Inap</a></li>
                         <li><a href="{{ route('master-data.unit') }}" class="nav-link nav-link-sm {{ request()->is('master-data/unit*') ? 'active' : '' }}">Unit</a></li>
                         <li><a href="{{ route('master-data.vendor') }}" class="nav-link nav-link-sm {{ request()->is('master-data/vendor*') ? 'active' : '' }}">Vendor</a></li>

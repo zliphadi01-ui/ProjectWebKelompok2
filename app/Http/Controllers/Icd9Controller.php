@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Icd10Code;
+use App\Models\Icd9Procedure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
-class Icd10Controller extends Controller
+class Icd9Controller extends Controller
 {
     // =================================================================
     // MASTER DATA MANAGEMENT (CRUD)
@@ -16,36 +16,36 @@ class Icd10Controller extends Controller
     {
         $query = $request->input('q');
         
-        $codes = Icd10Code::when($query, function ($q) use ($query) {
+        $procedures = Icd9Procedure::when($query, function ($q) use ($query) {
             $q->where('code', 'like', "%$query%")
               ->orWhere('name', 'like', "%$query%");
         })->orderBy('code')->paginate(20);
 
-        return view('master-data.icd10.index', compact('codes', 'query'));
+        return view('master-data.icd9.index', compact('procedures', 'query'));
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'code' => 'required|unique:icd10_codes,code',
+            'code' => 'required|unique:icd9_procedures,code',
             'name' => 'required|string',
         ]);
 
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput()->with('error', 'Gagal menambah data. Cek inputan Anda.');
+            return back()->withErrors($validator)->withInput()->with('error', 'Gagal menambah data.');
         }
 
-        Icd10Code::create($request->only('code', 'name'));
+        Icd9Procedure::create($request->only('code', 'name'));
 
-        return back()->with('success', 'Data ICD-10 berhasil ditambahkan.');
+        return back()->with('success', 'Data ICD-9 berhasil ditambahkan.');
     }
 
     public function update(Request $request, $id)
     {
-        $code = Icd10Code::findOrFail($id);
+        $procedure = Icd9Procedure::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'code' => 'required|unique:icd10_codes,code,' . $id,
+            'code' => 'required|unique:icd9_procedures,code,' . $id,
             'name' => 'required|string',
         ]);
 
@@ -53,15 +53,15 @@ class Icd10Controller extends Controller
             return back()->withErrors($validator)->withInput()->with('error', 'Gagal update data.');
         }
 
-        $code->update($request->only('code', 'name'));
+        $procedure->update($request->only('code', 'name'));
 
-        return back()->with('success', 'Data ICD-10 berhasil diperbarui.');
+        return back()->with('success', 'Data ICD-9 berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
-        Icd10Code::destroy($id);
-        return back()->with('success', 'Data ICD-10 berhasil dihapus.');
+        Icd9Procedure::destroy($id);
+        return back()->with('success', 'Data ICD-9 berhasil dihapus.');
     }
 
     public function import(Request $request)
@@ -73,10 +73,8 @@ class Icd10Controller extends Controller
         $file = $request->file('file');
         $path = $file->getRealPath();
         
-        // Membaca file CSV
         $data = array_map('str_getcsv', file($path));
         
-        // Hapus header jika ada
         if (count($data) > 0) {
             if (isset($data[0][0]) && (strtolower($data[0][0]) == 'code' || strtolower($data[0][0]) == 'kode')) {
                 array_shift($data);
@@ -96,7 +94,7 @@ class Icd10Controller extends Controller
                     $name = trim($row[1]);
 
                     if (!empty($code) && !empty($name)) {
-                        Icd10Code::updateOrCreate(
+                        Icd9Procedure::updateOrCreate(
                             ['code' => $code],
                             ['name' => $name]
                         );
@@ -105,7 +103,7 @@ class Icd10Controller extends Controller
                 }
             }
             DB::commit();
-            return back()->with('success', "Berhasil mengimpor $count data ICD-10.");
+            return back()->with('success', "Berhasil mengimpor $count data ICD-9.");
         } catch (\Exception $e) {
             DB::rollBack();
             return back()->with('error', 'Terjadi kesalahan saat impor: ' . $e->getMessage());
@@ -123,7 +121,7 @@ class Icd10Controller extends Controller
             return response()->json([]);
         }
 
-        $results = Icd10Code::where('code', 'like', "%{$query}%")
+        $results = Icd9Procedure::where('code', 'like', "%{$query}%")
                             ->orWhere('name', 'like', "%{$query}%")
                             ->limit(10)
                             ->get();

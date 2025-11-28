@@ -3,8 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class UserSeeder extends Seeder
 {
@@ -13,7 +13,7 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = [
+        DB::table('users')->insert([
             [
                 'name' => 'admin',
                 'email' => 'admin@example.com',
@@ -24,6 +24,12 @@ class UserSeeder extends Seeder
                 'name' => 'dokter',
                 'email' => 'dokter@example.com',
                 'role' => 'dokter',
+                'password' => '12345',
+            ],
+            [
+                'name' => 'perawat',
+                'email' => 'perawat@example.com',
+                'role' => 'perawat',
                 'password' => '12345',
             ],
             [
@@ -50,15 +56,12 @@ class UserSeeder extends Seeder
                 'role' => 'rekam_medis',
                 'password' => '12345',
             ],
-        ];
-
-        foreach ($users as $userData) {
-            User::updateOrCreate(
-                ['name' => $userData['name']], // Check by name
-                $userData
-            );
-        }
-        
-        $this->command->info('Users (admin, dokter, pendaftaran, apotek, kasir) created successfully.');
+            [
+                'name' => 'pasien',
+                'email' => 'pasien@example.com',
+                'role' => 'pasien',
+                'password' => '12345',
+            ],
+        ]);
     }
 }

@@ -15,6 +15,9 @@ use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\BpjsController;
 use App\Http\Controllers\MedicalSupportController;
 use App\Http\Controllers\RawatInapController;
+use App\Http\Controllers\UserController;
+
+use App\Http\Controllers\Icd10Controller;
 
 // =======================
 // LOGIN & LOGOUT
@@ -37,13 +40,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/register', function () {
-    return view('register');
-});
-
-Route::post('/register/process', function () {
-    return redirect('/dashboard');
-});
+// Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+// Route::post('/register', [AuthController::class, 'register']);
 
 // Dashboard dengan Controller
 Route::get('/dashboard', function () {
@@ -65,9 +63,6 @@ Route::get('/kasir', [FinanceController::class, 'kasir'])->name('kasir');
 Route::get('/laporan', [ReportController::class, 'index'])->name('laporan.index');
 Route::get('/laporan/kunjungan', [ReportController::class, 'kunjungan'])->name('laporan.kunjungan');
 Route::get('/laporan/diagnosa', [ReportController::class, 'diagnosa'])->name('laporan.diagnosa');
-
-// ICD-10 Search
-Route::get('/icd10/search', [App\Http\Controllers\Icd10Controller::class, 'search'])->name('icd10.search');
 
 // Laboratorium
 Route::get('/laboratorium', [App\Http\Controllers\LaboratoriumController::class, 'index'])->name('laboratorium.index');
@@ -182,7 +177,13 @@ Route::prefix('master-data')->name('master-data.')->group(function () {
     Route::get('/mitra', [MasterDataController::class, 'mitra'])->name('mitra');
     Route::get('/hak-akses', [MasterDataController::class, 'hakAkses'])->name('hak-akses');
     Route::get('/aktivasi-poli', [MasterDataController::class, 'aktivasiPoli'])->name('aktivasi-poli');
-    Route::get('/pegawai', [MasterDataController::class, 'pegawai'])->name('pegawai');
+    
+    // Pegawai Management (UserController)
+    Route::get('/pegawai', [UserController::class, 'index'])->name('pegawai');
+    Route::post('/pegawai', [UserController::class, 'store'])->name('pegawai.store');
+    Route::put('/pegawai/{id}', [UserController::class, 'update'])->name('pegawai.update');
+    Route::delete('/pegawai/{id}', [UserController::class, 'destroy'])->name('pegawai.destroy');
+
     Route::get('/jadwal-poli', [MasterDataController::class, 'jadwalPoli'])->name('jadwal-poli');
     Route::get('/tindakan-laborat', [MasterDataController::class, 'tindakanLaborat'])->name('tindakan-laborat');
     Route::get('/diagnosa', [MasterDataController::class, 'diagnosa'])->name('diagnosa');
@@ -195,5 +196,21 @@ Route::prefix('master-data')->name('master-data.')->group(function () {
     Route::get('/resep-info', [MasterDataController::class, 'resepInfo'])->name('resep-info');
     Route::get('/rs-rujukan', [MasterDataController::class, 'rsRujukan'])->name('rs-rujukan');
     
-    
+    // ICD-10 Master Data
+    Route::get('/icd10', [Icd10Controller::class, 'index'])->name('icd10.index');
+    Route::post('/icd10', [Icd10Controller::class, 'store'])->name('icd10.store');
+    Route::put('/icd10/{id}', [Icd10Controller::class, 'update'])->name('icd10.update');
+    Route::delete('/icd10/{id}', [Icd10Controller::class, 'destroy'])->name('icd10.destroy');
+    Route::post('/icd10/import', [Icd10Controller::class, 'import'])->name('icd10.import');
+
+    // ICD-9 Master Data
+    Route::get('/icd9', [App\Http\Controllers\Icd9Controller::class, 'index'])->name('icd9.index');
+    Route::post('/icd9', [App\Http\Controllers\Icd9Controller::class, 'store'])->name('icd9.store');
+    Route::put('/icd9/{id}', [App\Http\Controllers\Icd9Controller::class, 'update'])->name('icd9.update');
+    Route::delete('/icd9/{id}', [App\Http\Controllers\Icd9Controller::class, 'destroy'])->name('icd9.destroy');
+    Route::post('/icd9/import', [App\Http\Controllers\Icd9Controller::class, 'import'])->name('icd9.import');
 });
+
+// ICD Search API
+Route::get('/icd10/search', [Icd10Controller::class, 'search'])->name('icd10.search');
+Route::get('/icd9/search', [App\Http\Controllers\Icd9Controller::class, 'search'])->name('icd9.search');
