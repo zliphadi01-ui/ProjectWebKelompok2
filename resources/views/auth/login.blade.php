@@ -29,13 +29,14 @@
             <div id="loginAlert" class="alert d-none" role="alert"></div>
 
             <button type="submit" id="loginBtn" class="btn btn-primary w-100">Masuk</button>
+            
+            <div class="mt-3 text-center">
+                <small class="text-muted">Dev login: test@example.com / password</small>
+            </div>
         </form>
 
 
 
-            <div class="mt-3 text-center">
-                <small>Belum punya akun? <a href="{{ route('register') }}">Daftar disini</a></small>
-            </div>
 
         <script>
             const form = document.getElementById('loginForm');
