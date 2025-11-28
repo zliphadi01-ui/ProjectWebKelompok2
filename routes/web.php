@@ -40,13 +40,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/register', function () {
-    return view('register');
-});
-
-Route::post('/register/process', function () {
-    return redirect('/dashboard');
-});
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
 
 // Dashboard dengan Controller
 Route::get('/dashboard', function () {

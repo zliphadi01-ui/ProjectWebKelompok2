@@ -27,6 +27,12 @@ class UserSeeder extends Seeder
                 'password' => '12345',
             ],
             [
+                'name' => 'perawat',
+                'email' => 'perawat@example.com',
+                'role' => 'perawat',
+                'password' => '12345',
+            ],
+            [
                 'name' => 'pendaftaran',
                 'email' => 'pendaftaran@example.com',
                 'role' => 'pendaftaran',
@@ -42,6 +48,12 @@ class UserSeeder extends Seeder
                 'name' => 'kasir',
                 'email' => 'kasir@example.com',
                 'role' => 'kasir',
+                'password' => '12345',
+            ],
+            [
+                'name' => 'pasien',
+                'email' => 'pasien@example.com',
+                'role' => 'pasien',
                 'password' => '12345',
             ],
         ];

@@ -35,6 +35,10 @@
                 <strong>Dev login:</strong> test@example.com / password
             </div>
 
+            <div class="mt-3 text-center">
+                <small>Belum punya akun? <a href="{{ route('register') }}">Daftar disini</a></small>
+            </div>
+
         <script>
             const form = document.getElementById('loginForm');
             const alertBox = document.getElementById('loginAlert');
