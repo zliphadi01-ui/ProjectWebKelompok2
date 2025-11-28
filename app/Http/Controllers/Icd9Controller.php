@@ -123,7 +123,8 @@ class Icd9Controller extends Controller
 
         $results = Icd9Procedure::where('code', 'like', "%{$query}%")
                             ->orWhere('name', 'like', "%{$query}%")
-                            ->limit(10)
+                            ->orWhere('keywords', 'like', "%{$query}%") // Cari di keywords juga
+                            ->limit(20)
                             ->get();
 
         return response()->json($results);

@@ -125,7 +125,8 @@ class Icd10Controller extends Controller
 
         $results = Icd10Code::where('code', 'like', "%{$query}%")
                             ->orWhere('name', 'like', "%{$query}%")
-                            ->limit(10)
+                            ->orWhere('keywords', 'like', "%{$query}%") // Cari di keywords juga
+                            ->limit(20) // Naikkan limit biar lebih banyak opsi
                             ->get();
 
         return response()->json($results);
