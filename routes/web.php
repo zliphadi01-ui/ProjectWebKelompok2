@@ -62,9 +62,24 @@ Route::get('/dashboard/details/{type}', [DashboardController::class, 'details'])
 Route::get('/bpjs', [BpjsController::class, 'bpjs'])->name('bpjs');
 Route::get('/gudang', [PharmacyController::class, 'gudangObat'])->name('gudang');
 Route::get('/kasir', [FinanceController::class, 'kasir'])->name('kasir');
-Route::get('/laporan', [ReportController::class, 'laporan'])->name('laporan');
-Route::get('/laboratorium', [MedicalSupportController::class, 'laboratorium'])->name('laboratorium');
+Route::get('/laporan', [ReportController::class, 'index'])->name('laporan.index');
+Route::get('/laporan/kunjungan', [ReportController::class, 'kunjungan'])->name('laporan.kunjungan');
+Route::get('/laporan/diagnosa', [ReportController::class, 'diagnosa'])->name('laporan.diagnosa');
+
+// ICD-10 Search
+Route::get('/icd10/search', [App\Http\Controllers\Icd10Controller::class, 'search'])->name('icd10.search');
+
+// Laboratorium
+Route::get('/laboratorium', [App\Http\Controllers\LaboratoriumController::class, 'index'])->name('laboratorium.index');
+Route::post('/laboratorium', [App\Http\Controllers\LaboratoriumController::class, 'store'])->name('laboratorium.store');
+Route::put('/laboratorium/{id}', [App\Http\Controllers\LaboratoriumController::class, 'updateStatus'])->name('laboratorium.update');
+
 Route::get('/poned', [MedicalSupportController::class, 'poned'])->name('poned');
+// Rawat Inap resource (CRUD) - connected to DB
+Route::resource('rawat-inap', RawatInapController::class);
+Route::post('/rawat-inap/{id}/cppt', [App\Http\Controllers\RawatInapController::class, 'storeCppt'])->name('rawat-inap.cppt.store');
+Route::put('/rawat-inap/{id}/discharge', [App\Http\Controllers\RawatInapController::class, 'discharge'])->name('rawat-inap.discharge');
+
 // Additional generic pages used by sidebar
 Route::get('/apotek', [PharmacyController::class, 'apotek'])->name('apotek');
 Route::get('/apotek-retail', [PharmacyController::class, 'apotekRetail'])->name('apotek.retail');
@@ -81,8 +96,23 @@ Route::get('/bypass', [SettingsController::class, 'bypass'])->name('bypass');
 Route::get('/whatsapp', [SettingsController::class, 'whatsapp'])->name('whatsapp');
 Route::get('/billing', [FinanceController::class, 'billing'])->name('billing');
 
-// Rawat Inap resource (CRUD) - connected to DB
-Route::resource('rawat-inap', RawatInapController::class);
+
+
+// IGD Module
+Route::prefix('igd')->name('igd.')->group(function () {
+    Route::get('/', [App\Http\Controllers\IgdController::class, 'index'])->name('index');
+    Route::get('/create', [App\Http\Controllers\IgdController::class, 'create'])->name('create');
+    Route::post('/store', [App\Http\Controllers\IgdController::class, 'store'])->name('store');
+    Route::get('/triase/{id}', [App\Http\Controllers\IgdController::class, 'triase'])->name('triase');
+    Route::post('/triase/{id}', [App\Http\Controllers\IgdController::class, 'storeTriase'])->name('store-triase');
+});
+
+// Rekam Medis Module
+Route::prefix('rekam-medis')->name('rekam-medis.')->group(function () {
+    Route::get('/', [App\Http\Controllers\RekamMedisController::class, 'index'])->name('index');
+    Route::get('/pasien', [App\Http\Controllers\RekamMedisController::class, 'pasien'])->name('pasien');
+    Route::get('/riwayat/{id}', [App\Http\Controllers\RekamMedisController::class, 'riwayat'])->name('riwayat');
+});
 
 // Pendaftaran dengan Controller (Satu Pintu FIX)
 Route::prefix('pendaftaran')->name('pendaftaran.')->group(function () {
@@ -167,7 +197,3 @@ Route::prefix('master-data')->name('master-data.')->group(function () {
     
     
 });
-
-// ICD-10 Search API
-use App\Http\Controllers\Api\Icd10Controller;
-Route::get('/icd10/search', [Icd10Controller::class, 'search'])->name('icd10.search');

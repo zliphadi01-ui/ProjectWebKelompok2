@@ -1,47 +1,58 @@
 @extends('layouts.app')
 
 @section('content')
-<h3>Tambah Rawat Inap</h3>
-
-<form method="POST" action="{{ route('rawat-inap.store') }}">
-    @csrf
-    <div class="mb-3">
-        <label class="form-label">Pasien</label>
-        <select name="pasien_id" class="form-select">
-            <option value="">-- Pilih Pasien (opsional) --</option>
-            @foreach($pasien as $p)
-                <option value="{{ $p->id }}">{{ $p->no_rm ?? '' }} - {{ $p->nama ?? $p->nama_lengkap ?? 'Pasien' }}</option>
-            @endforeach
-        </select>
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-primary fw-bold">Penerimaan Pasien Rawat Inap</h2>
+        <a href="{{ route('rawat-inap.index') }}" class="btn btn-secondary">Kembali</a>
     </div>
 
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label class="form-label">Kamar</label>
-            <input type="text" name="kamar" class="form-control" />
+    <div class="card shadow border-0">
+        <div class="card-body">
+            <form action="{{ route('rawat-inap.store') }}" method="POST">
+                @csrf
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Pilih Pasien</label>
+                        <select name="pasien_id" class="form-select" required>
+                            <option value="">-- Cari Pasien --</option>
+                            @foreach($pasien as $p)
+                                <option value="{{ $p->id }}">{{ $p->nama }} ({{ $p->no_rm }})</option>
+                            @endforeach
+                        </select>
+                        <small class="text-muted">Hanya menampilkan 200 pasien teratas.</small>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">Pilih Bed Tersedia</label>
+                        <select name="bed_id" class="form-select" required>
+                            <option value="">-- Pilih Bed --</option>
+                            @foreach($beds as $bed)
+                                <option value="{{ $bed->id }}" {{ request('bed_id') == $bed->id ? 'selected' : '' }}>
+                                    {{ $bed->nama_kamar }} - Bed {{ $bed->no_bed }} (Kelas {{ $bed->kelas }})
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label class="form-label fw-bold">Diagnosa Awal</label>
+                        <textarea name="diagnosis" class="form-control" rows="2" placeholder="Diagnosa masuk..."></textarea>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label class="form-label fw-bold">Catatan Tambahan</label>
+                        <textarea name="notes" class="form-control" rows="2" placeholder="Instruksi awal..."></textarea>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary px-4">
+                        <i class="bi-save me-2"></i> Simpan & Masukkan Pasien
+                    </button>
+                </div>
+            </form>
         </div>
-        <div class="col-md-6 mb-3">
-            <label class="form-label">No Kamar</label>
-            <input type="text" name="no_kamar" class="form-control" />
-        </div>
     </div>
-
-    <div class="mb-3">
-        <label class="form-label">Tanggal Masuk</label>
-        <input type="datetime-local" name="tanggal_masuk" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Diagnosis</label>
-        <textarea name="diagnosis" class="form-control" rows="3"></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label class="form-label">Catatan</label>
-        <textarea name="notes" class="form-control" rows="2"></textarea>
-    </div>
-
-    <button class="btn btn-primary">Simpan</button>
-    <a href="{{ route('rawat-inap.index') }}" class="btn btn-secondary">Batal</a>
-</form>
+</div>
 @endsection

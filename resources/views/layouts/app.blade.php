@@ -280,8 +280,13 @@
                 </a>
             </li>
             <li class="nav-item"><a href="{{ url('/laboratorium') }}" class="nav-link {{ request()->is('laboratorium*') ? 'active' : '' }}"><i class="bi-microscope me-2"></i> Laboratorium</a></li>
-            <li class="nav-item"><a href="{{ url('/rawat-inap') }}" class="nav-link {{ request()->is('rawat-inap*') ? 'active' : '' }}"><i class="bi-house-fill me-2"></i> Rawat Inap</a></li>
             <li class="nav-item"><a href="{{ url('/poned') }}" class="nav-link {{ request()->is('poned*') ? 'active' : '' }}"><i class="bi-activity me-2"></i> PONED</a></li>
+            @endif
+
+            {{-- Unit Layanan (IGD & Rawat Inap) - Accessible to Admin, Dokter, Pendaftaran --}}
+            @if(in_array($role, ['admin', 'dokter', 'pendaftaran']))
+            <li class="nav-item"><a href="{{ url('/rawat-inap') }}" class="nav-link {{ request()->is('rawat-inap*') ? 'active' : '' }}"><i class="bi-house-fill me-2"></i> Rawat Inap</a></li>
+            <li class="nav-item"><a href="{{ route('igd.index') }}" class="nav-link {{ request()->routeIs('igd.*') ? 'active' : '' }}"><i class="bi-cone-striped me-2"></i> IGD & Triase</a></li>
             @endif
 
             {{-- Gudang Obat (Admin & Apotek) --}}
@@ -350,10 +355,9 @@
                 </a>
                 <div class="collapse {{ request()->is('laporan*') ? 'show' : '' }}" id="laporanMenu">
                     <ul class="nav flex-column ms-3">
-                        <li><a href="{{ url('/laporan/obat') }}" class="nav-link nav-link-sm {{ request()->is('laporan/obat*') ? 'active' : '' }}">Laporan Obat</a></li>
-                        <li><a href="{{ url('/laporan/mitra') }}" class="nav-link nav-link-sm {{ request()->is('laporan/mitra*') ? 'active' : '' }}">Laporan Mitra</a></li>
-                        <li><a href="{{ url('/laporan/loket') }}" class="nav-link nav-link-sm {{ request()->is('laporan/loket*') ? 'active' : '' }}">Laporan Loket</a></li>
-                        <li><a href="{{ url('/laporan/pembagian') }}" class="nav-link nav-link-sm {{ request()->is('laporan/pembagian*') ? 'active' : '' }}">Laporan Pembagian</a></li>
+                        <li><a href="{{ route('laporan.index') }}" class="nav-link nav-link-sm {{ request()->routeIs('laporan.index') ? 'active' : '' }}">Pusat Laporan</a></li>
+                        <li><a href="{{ route('laporan.kunjungan') }}" class="nav-link nav-link-sm {{ request()->routeIs('laporan.kunjungan') ? 'active' : '' }}">Laporan Kunjungan</a></li>
+                        <li><a href="{{ route('laporan.diagnosa') }}" class="nav-link nav-link-sm {{ request()->routeIs('laporan.diagnosa') ? 'active' : '' }}">Laporan Morbiditas</a></li>
                     </ul>
                 </div>
             </li>
@@ -363,6 +367,33 @@
             <li class="nav-item"><a href="{{ url('/pengaturan-grup') }}" class="nav-link {{ request()->is('pengaturan-grup*') ? 'active' : '' }}"><i class="bi-people-fill me-2"></i> Pengaturan Grup</a></li>
             <li class="nav-item"><a href="{{ url('/bypass') }}" class="nav-link {{ request()->is('bypass*') ? 'active' : '' }}"><i class="bi-toggle-on me-2"></i> Bypass</a></li>
             <li class="nav-item"><a href="{{ url('/whatsapp') }}" class="nav-link {{ request()->is('whatsapp*') ? 'active' : '' }}"><i class="bi-whatsapp me-2"></i> Whatsapp</a></li>
+            @endif
+
+            {{-- Rekam Medis (Role: rekam_medis) --}}
+            @if($role === 'rekam_medis')
+            <li class="nav-item">
+                <a href="{{ route('rekam-medis.index') }}" class="nav-link {{ request()->routeIs('rekam-medis.index') ? 'active' : '' }}">
+                    <i class="bi-grid-fill me-2"></i> Dashboard RM
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="{{ route('rekam-medis.pasien') }}" class="nav-link {{ request()->routeIs('rekam-medis.pasien') || request()->routeIs('rekam-medis.riwayat') ? 'active' : '' }}">
+                    <i class="bi-folder2-open me-2"></i> Data Pasien (EMR)
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#laporanMenu" class="nav-link d-flex justify-content-between align-items-center {{ request()->is('laporan*') ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ request()->is('laporan*') ? 'true' : 'false' }}">
+                    <span><i class="bi-file-earmark-text me-2"></i> Laporan</span>
+                    <i class="bi-chevron-down"></i>
+                </a>
+                <div class="collapse {{ request()->is('laporan*') ? 'show' : '' }}" id="laporanMenu">
+                    <ul class="nav flex-column ms-3">
+                        <li><a href="{{ route('laporan.index') }}" class="nav-link nav-link-sm {{ request()->routeIs('laporan.index') ? 'active' : '' }}">Pusat Laporan</a></li>
+                        <li><a href="{{ route('laporan.kunjungan') }}" class="nav-link nav-link-sm {{ request()->routeIs('laporan.kunjungan') ? 'active' : '' }}">Laporan Kunjungan</a></li>
+                        <li><a href="{{ route('laporan.diagnosa') }}" class="nav-link nav-link-sm {{ request()->routeIs('laporan.diagnosa') ? 'active' : '' }}">Laporan Morbiditas</a></li>
+                    </ul>
+                </div>
+            </li>
             @endif
         </ul>
         <hr>

@@ -10,9 +10,11 @@
         </div>
         <div class="d-none d-md-block text-end">
             <div class="small text-muted mb-1">{{ \Carbon\Carbon::now()->translatedFormat('l, j F Y') }}</div>
+            @if(in_array(Auth::user()->role, ['admin', 'pendaftaran']))
             <a href="{{ route('pendaftaran.create-baru') }}" class="btn btn-primary rounded-pill shadow-sm px-4">
                 <i class="bi-plus-lg me-2"></i>Pasien Baru
             </a>
+            @endif
         </div>
     </div>
 
@@ -37,6 +39,7 @@
         </div>
 
         {{-- Card 2: Pasien Baru --}}
+        @if(in_array(Auth::user()->role, ['admin', 'pendaftaran']))
         <div class="col-xl-3 col-md-6">
             <div class="card border-0 shadow-sm h-100 overflow-hidden card-hover">
                 <div class="card-body position-relative p-4">
@@ -53,6 +56,8 @@
                 </div>
             </div>
         </div>
+        @endif
+
         <div class="col-xl-3 col-md-6 mb-4">
             <a href="#" class="stat-link text-decoration-none" data-type="antrean">
             <div class="card stat-card border-start-info h-100 py-2">
@@ -71,6 +76,7 @@
         </div>
 
         {{-- Card 4: Resep --}}
+        @if(in_array(Auth::user()->role, ['admin', 'apotek', 'dokter']))
         <div class="col-xl-3 col-md-6">
             <div class="card border-0 shadow-sm h-100 overflow-hidden card-hover">
                 <div class="card-body position-relative p-4">
@@ -87,6 +93,7 @@
                 </div>
             </div>
         </div>
+        @endif
     </div>
 
     <div class="row g-4">
@@ -96,6 +103,7 @@
             <div class="mb-4">
                 <h5 class="fw-bold text-gray-800 mb-3">Akses Cepat</h5>
                 <div class="row g-3">
+                    @if(in_array(Auth::user()->role, ['admin', 'pendaftaran', 'dokter']))
                     <div class="col-md-3 col-6">
                         <a href="{{ route('pendaftaran.index') }}" class="card border-0 shadow-sm h-100 card-hover text-decoration-none">
                             <div class="card-body text-center p-4">
@@ -106,6 +114,9 @@
                             </div>
                         </a>
                     </div>
+                    @endif
+
+                    @if(in_array(Auth::user()->role, ['admin', 'dokter']))
                     <div class="col-md-3 col-6">
                         <a href="{{ route('pemeriksaan.index') }}" class="card border-0 shadow-sm h-100 card-hover text-decoration-none">
                             <div class="card-body text-center p-4">
@@ -116,6 +127,9 @@
                             </div>
                         </a>
                     </div>
+                    @endif
+
+                    @if(in_array(Auth::user()->role, ['admin', 'apotek']))
                     <div class="col-md-3 col-6">
                         <a href="{{ route('gudang') }}" class="card border-0 shadow-sm h-100 card-hover text-decoration-none">
                             <div class="card-body text-center p-4">
@@ -126,6 +140,9 @@
                             </div>
                         </a>
                     </div>
+                    @endif
+
+                    @if(in_array(Auth::user()->role, ['admin', 'pendaftaran']))
                     <div class="col-md-3 col-6">
                         <a href="{{ route('poli-bpjs') }}" class="card border-0 shadow-sm h-100 card-hover text-decoration-none">
                             <div class="card-body text-center p-4">
@@ -136,6 +153,7 @@
                             </div>
                         </a>
                     </div>
+                    @endif
                 </div>
             </div>
 

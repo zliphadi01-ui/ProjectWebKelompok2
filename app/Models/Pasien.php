@@ -27,6 +27,22 @@ class Pasien extends Model
     }
 
     /**
+     * Boot method to handle model events.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($pasien) {
+            // Auto-generate No RM if not provided (Format: 000001)
+            if (empty($pasien->no_rm)) {
+                $pasien->no_rm = str_pad($pasien->id, 6, '0', STR_PAD_LEFT);
+                $pasien->saveQuietly(); // saveQuietly to avoid triggering updated event if any
+            }
+        });
+    }
+
+    /**
      * Relasi ke Pendaftaran
      */
     public function pendaftarans()

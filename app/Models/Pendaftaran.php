@@ -17,6 +17,11 @@ class Pendaftaran extends Model
     {
         return $this->belongsTo(Pasien::class, 'pasien_id');
     }
+
+    public function triage()
+    {
+        return $this->hasOne(Triage::class);
+    }
     
     // Relasi ke Rekam Medis (SOAP)
     public function pemeriksaan()
