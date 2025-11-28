@@ -31,9 +31,7 @@
             <button type="submit" id="loginBtn" class="btn btn-primary w-100">Masuk</button>
         </form>
 
-            <div class="mt-3 text-center text-muted small">
-                <strong>Dev login:</strong> test@example.com / password
-            </div>
+
 
             <div class="mt-3 text-center">
                 <small>Belum punya akun? <a href="{{ route('register') }}">Daftar disini</a></small>
