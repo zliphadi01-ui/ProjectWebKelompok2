@@ -17,7 +17,9 @@
                         <select name="pasien_id" class="form-select" required>
                             <option value="">-- Cari Pasien --</option>
                             @foreach($pasien as $p)
-                                <option value="{{ $p->id }}">{{ $p->nama }} ({{ $p->no_rm }})</option>
+                                <option value="{{ $p->id }}" {{ (isset($selectedPasienId) && $selectedPasienId == $p->id) ? 'selected' : '' }}>
+                                    {{ $p->nama }} ({{ $p->no_rm }})
+                                </option>
                             @endforeach
                         </select>
                         <small class="text-muted">Hanya menampilkan 200 pasien teratas.</small>

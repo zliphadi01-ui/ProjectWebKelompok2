@@ -199,6 +199,28 @@
                         <textarea name="plan" class="form-control" rows="3" placeholder="Rencana pengobatan & resep..." required>{{ old('plan') }}</textarea>
                     </div>
 
+                    {{-- TINDAK LANJUT --}}
+                    <div class="card bg-light border-0 mb-3">
+                        <div class="card-body">
+                            <h6 class="fw-bold text-dark"><i class="bi-arrow-right-circle"></i> Tindak Lanjut</h6>
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label class="small fw-bold">Keputusan</label>
+                                    <select name="tindak_lanjut" class="form-select" required>
+                                        <option value="Pulang" {{ old('tindak_lanjut') == 'Pulang' ? 'selected' : '' }}>Pulang (Selesai)</option>
+                                        <option value="Rawat Inap" {{ old('tindak_lanjut') == 'Rawat Inap' ? 'selected' : '' }}>Rawat Inap</option>
+                                        <option value="Rujuk" {{ old('tindak_lanjut') == 'Rujuk' ? 'selected' : '' }}>Rujuk ke RS Lain</option>
+                                        <option value="Kontrol" {{ old('tindak_lanjut') == 'Kontrol' ? 'selected' : '' }}>Kontrol Ulang</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <label class="small fw-bold">Keterangan Tambahan</label>
+                                    <input type="text" name="keterangan_tindak_lanjut" class="form-control" placeholder="Cth: Rujuk ke RSUD Soebandi..." value="{{ old('keterangan_tindak_lanjut') }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
                 <div class="card-footer bg-white d-flex justify-content-end gap-2">
                     <button type="submit" name="action" value="save" class="btn btn-success">

@@ -82,6 +82,8 @@ class PemeriksaanController extends Controller
             'icd_code'       => 'nullable|string',
             'icd9_code'      => 'nullable|string',
             'procedure'      => 'nullable|string',
+            'tindak_lanjut'  => 'nullable|string',
+            'keterangan_tindak_lanjut' => 'nullable|string',
         ]);
 
         // Simpan ke Database
@@ -94,6 +96,12 @@ class PemeriksaanController extends Controller
                 $p->status = 'Selesai'; 
                 $p->save(); 
             }
+        }
+
+        // LOGIKA TINDAK LANJUT
+        if ($request->tindak_lanjut == 'Rawat Inap') {
+            return redirect()->route('rawat-inap.create', ['pasien_id' => $validated['pasien_id']])
+                ->with('success', 'Pemeriksaan disimpan. Silakan lengkapi data Rawat Inap.');
         }
 
         // Cek tombol mana yang ditekan (Simpan Biasa atau Simpan & Cetak)

@@ -25,12 +25,24 @@ class RawatInapController extends Controller
         return view('rawat-inap.index', compact('beds', 'totalBeds', 'occupied', 'available'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
+        $selectedPasienId = $request->query('pasien_id');
+
         $pasien = Pasien::orderBy('nama')->limit(200)->get();
+
+        // Jika ada pasien yang dipilih tapi tidak ada di list (karena limit), ambil manual
+        if ($selectedPasienId && !$pasien->contains('id', $selectedPasienId)) {
+            $selectedPasien = Pasien::find($selectedPasienId);
+            if ($selectedPasien) {
+                $pasien->push($selectedPasien);
+            }
+        }
+
         // Only available beds
         $beds = Bed::where('status', 'available')->orderBy('kelas')->get();
-        return view('rawat-inap.create', compact('pasien', 'beds'));
+        
+        return view('rawat-inap.create', compact('pasien', 'beds', 'selectedPasienId'));
     }
 
     public function store(Request $request)
