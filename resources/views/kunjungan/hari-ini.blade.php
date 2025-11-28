@@ -3,7 +3,7 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="h3 mb-0 text-gray-800">Kunjungan Hari Ini</h1>
-    <span class="badge bg-primary fs-6">{{ \Carbon\Carbon::now()->translatedFormat('l, j F Y') }}</span>
+    <span class="badge bg-primary fs-6">{{ $tanggal }}</span>
 </div>
 
 <div class="row mb-4">
@@ -13,7 +13,7 @@
                 <div class="row align-items-center">
                     <div class="col">
                         <div class="text-xs fw-bold text-primary text-uppercase mb-1">Total Kunjungan</div>
-                        <div class="h4 mb-0 fw-bold text-gray-800">45</div>
+                        <div class="h4 mb-0 fw-bold text-gray-800">{{ $statistik['total'] }}</div>
                     </div>
                     <div class="col-auto">
                         <i class="bi-calendar-check-fill fs-2 text-muted"></i>
@@ -29,7 +29,7 @@
                 <div class="row align-items-center">
                     <div class="col">
                         <div class="text-xs fw-bold text-warning text-uppercase mb-1">Menunggu</div>
-                        <div class="h4 mb-0 fw-bold text-gray-800">12</div>
+                        <div class="h4 mb-0 fw-bold text-gray-800">{{ $statistik['menunggu'] }}</div>
                     </div>
                     <div class="col-auto">
                         <i class="bi-hourglass-split fs-2 text-muted"></i>
@@ -45,7 +45,7 @@
                 <div class="row align-items-center">
                     <div class="col">
                         <div class="text-xs fw-bold text-info text-uppercase mb-1">Sedang Diperiksa</div>
-                        <div class="h4 mb-0 fw-bold text-gray-800">3</div>
+                        <div class="h4 mb-0 fw-bold text-gray-800">{{ $statistik['sedang_diperiksa'] }}</div>
                     </div>
                     <div class="col-auto">
                         <i class="bi-activity fs-2 text-muted"></i>
@@ -61,7 +61,7 @@
                 <div class="row align-items-center">
                     <div class="col">
                         <div class="text-xs fw-bold text-success text-uppercase mb-1">Selesai</div>
-                        <div class="h4 mb-0 fw-bold text-gray-800">30</div>
+                        <div class="h4 mb-0 fw-bold text-gray-800">{{ $statistik['selesai'] }}</div>
                     </div>
                     <div class="col-auto">
                         <i class="bi-check-circle-fill fs-2 text-muted"></i>
@@ -75,30 +75,30 @@
 <div class="card shadow">
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
         <h6 class="m-0 fw-bold text-primary">Daftar Kunjungan</h6>
-        <button class="btn btn-sm btn-success">
+        <a href="{{ route('kunjungan.refresh') }}" class="btn btn-sm btn-success">
             <i class="bi-arrow-clockwise me-1"></i> Refresh
-        </button>
+        </a>
     </div>
     <div class="card-body">
-        <div class="row mb-3">
+        <form action="{{ route('kunjungan.filter') }}" method="POST" class="row mb-3">
+            @csrf
             <div class="col-md-4">
-                <select class="form-select">
+                <select name="poliklinik" class="form-select" onchange="this.form.submit()">
                     <option value="">Semua Poliklinik</option>
-                    <option>Poli Umum</option>
-                    <option>Poli Gigi</option>
-                    <option>Poli Anak</option>
-                    <option>Poli Kebidanan</option>
+                    @foreach(config('poli.options') as $poli)
+                        <option value="{{ $poli }}" {{ request('poliklinik') == $poli ? 'selected' : '' }}>{{ $poli }}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="col-md-4">
-                <select class="form-select">
+                <select name="status" class="form-select" onchange="this.form.submit()">
                     <option value="">Semua Status</option>
-                    <option value="menunggu">Menunggu</option>
-                    <option value="diperiksa">Sedang Diperiksa</option>
-                    <option value="selesai">Selesai</option>
+                    <option value="Menunggu" {{ request('status') == 'Menunggu' ? 'selected' : '' }}>Menunggu</option>
+                    <option value="Diperiksa" {{ request('status') == 'Diperiksa' ? 'selected' : '' }}>Sedang Diperiksa</option>
+                    <option value="Selesai" {{ request('status') == 'Selesai' ? 'selected' : '' }}>Selesai</option>
                 </select>
             </div>
-        </div>
+        </form>
 
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
@@ -114,58 +114,48 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @forelse($kunjungan as $k)
                     <tr>
-                        <td><span class="badge bg-primary">A-01</span></td>
-                        <td>08:15</td>
-                        <td>12-34-56</td>
-                        <td>Budi Santoso</td>
-                        <td>Poli Umum</td>
-                        <td><span class="badge bg-warning">Menunggu</span></td>
+                        <td><span class="badge bg-primary">{{ $k->no_antrian }}</span></td>
+                        <td>{{ $k->created_at->format('H:i') }}</td>
+                        <td>{{ $k->pasien->no_rm ?? '-' }}</td>
+                        <td>{{ $k->pasien->nama ?? '-' }}</td>
+                        <td>{{ $k->poli_tujuan }}</td>
                         <td>
-                            <a href="{{ url('/pemeriksaan/soap') }}" class="btn btn-sm btn-primary">
-                                <i class="bi-play-fill"></i> Panggil
-                            </a>
+                            @if($k->status == 'Menunggu')
+                                <span class="badge bg-warning">Menunggu</span>
+                            @elseif($k->status == 'Diperiksa')
+                                <span class="badge bg-info">Sedang Diperiksa</span>
+                            @elseif($k->status == 'Selesai')
+                                <span class="badge bg-success">Selesai</span>
+                            @else
+                                <span class="badge bg-secondary">{{ $k->status }}</span>
+                            @endif
+                        </td>
+                        <td>
+                            @if($k->status == 'Menunggu' || $k->status == 'Diperiksa')
+                                <a href="{{ route('pemeriksaan.soap', $k->id) }}" class="btn btn-sm btn-primary">
+                                    <i class="bi-play-fill"></i> Panggil
+                                </a>
+                            @elseif($k->status == 'Selesai')
+                                @php
+                                    $pemeriksaan = \App\Models\Pemeriksaan::where('pendaftaran_id', $k->id)->first();
+                                @endphp
+                                @if($pemeriksaan)
+                                    <a href="{{ route('pemeriksaan.print', $pemeriksaan->id) }}" class="btn btn-sm btn-info text-white" title="Lihat Hasil">
+                                        <i class="bi-eye-fill"></i> Detail
+                                    </a>
+                                @else
+                                    <span class="text-muted small">Belum ada data</span>
+                                @endif
+                            @endif
                         </td>
                     </tr>
+                    @empty
                     <tr>
-                        <td><span class="badge bg-primary">G-01</span></td>
-                        <td>08:22</td>
-                        <td>11-22-33</td>
-                        <td>Citra Lestari</td>
-                        <td>Poli Gigi</td>
-                        <td><span class="badge bg-info">Sedang Diperiksa</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-secondary" disabled>
-                                <i class="bi-play-fill"></i> Panggil
-                            </button>
-                        </td>
+                        <td colspan="7" class="text-center text-muted py-4">Belum ada kunjungan hari ini.</td>
                     </tr>
-                    <tr>
-                        <td><span class="badge bg-primary">A-02</span></td>
-                        <td>08:30</td>
-                        <td>22-11-44</td>
-                        <td>Ahmad Rizki</td>
-                        <td>Poli Umum</td>
-                        <td><span class="badge bg-warning">Menunggu</span></td>
-                        <td>
-                            <a href="{{ url('/pemeriksaan/soap') }}" class="btn btn-sm btn-primary">
-                                <i class="bi-play-fill"></i> Panggil
-                            </a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><span class="badge bg-primary">U-01</span></td>
-                        <td>08:45</td>
-                        <td>33-55-77</td>
-                        <td>Siti Nurhaliza</td>
-                        <td>Poli Umum</td>
-                        <td><span class="badge bg-success">Selesai</span></td>
-                        <td>
-                            <button class="btn btn-sm btn-info" title="Lihat Hasil">
-                                <i class="bi-eye-fill"></i> Detail
-                            </button>
-                        </td>
-                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
