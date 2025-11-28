@@ -150,7 +150,11 @@ Route::prefix('master-data')->name('master-data.')->group(function () {
     Route::get('/mitra', [MasterDataController::class, 'mitra'])->name('mitra');
     Route::get('/hak-akses', [MasterDataController::class, 'hakAkses'])->name('hak-akses');
     Route::get('/aktivasi-poli', [MasterDataController::class, 'aktivasiPoli'])->name('aktivasi-poli');
-    Route::get('/pegawai', [MasterDataController::class, 'pegawai'])->name('pegawai');
+    // Route::get('/pegawai', [MasterDataController::class, 'pegawai'])->name('pegawai'); // OLD STATIC
+    Route::get('/pegawai', [\App\Http\Controllers\UserController::class, 'index'])->name('pegawai');
+    Route::post('/pegawai', [\App\Http\Controllers\UserController::class, 'store'])->name('pegawai.store');
+    Route::put('/pegawai/{id}', [\App\Http\Controllers\UserController::class, 'update'])->name('pegawai.update');
+    Route::delete('/pegawai/{id}', [\App\Http\Controllers\UserController::class, 'destroy'])->name('pegawai.destroy');
     Route::get('/jadwal-poli', [MasterDataController::class, 'jadwalPoli'])->name('jadwal-poli');
     Route::get('/tindakan-laborat', [MasterDataController::class, 'tindakanLaborat'])->name('tindakan-laborat');
     Route::get('/diagnosa', [MasterDataController::class, 'diagnosa'])->name('diagnosa');
