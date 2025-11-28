@@ -214,11 +214,6 @@
                                 <i class="bi-list-ul me-1"></i> Data Kunjungan
                             </a>
                         </li>
-                        <li>
-                            <a href="{{ route('kunjungan.hari-ini') }}" class="nav-link nav-link-sm {{ request()->routeIs('kunjungan.hari-ini') ? 'active' : '' }}">
-                                <i class="bi-speedometer2 me-1"></i> Dashboard Kunjungan
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </li>
@@ -281,7 +276,7 @@
 
             <li class="nav-item">
                 <a href="{{ route('kunjungan.hari-ini') }}" class="nav-link {{ request()->routeIs('kunjungan.hari-ini') ? 'active' : '' }}">
-                    <i class="bi-speedometer2 me-2"></i> Dashboard Kunjungan
+                    <i class="bi-speedometer2 me-2"></i> Kunjungan Poliklinik
                 </a>
             </li>
 
