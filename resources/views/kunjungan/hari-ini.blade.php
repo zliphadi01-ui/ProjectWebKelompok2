@@ -75,7 +75,7 @@
 <div class="card shadow">
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
         <h6 class="m-0 fw-bold text-primary">Daftar Kunjungan</h6>
-        <a href="{{ route('kunjungan.refresh') }}" class="btn btn-sm btn-primary">
+        <a href="{{ route('kunjungan.refresh') }}" class="btn btn-sm btn-warning text-white">
             <i class="bi-arrow-clockwise me-1"></i> Refresh
         </a>
     </div>
