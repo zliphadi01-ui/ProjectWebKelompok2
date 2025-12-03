@@ -47,7 +47,7 @@
     }
 
     .nama-pasien {
-        color: #000; /* ✅ NAMA PASIEN HITAM */
+        color: #000; 
         font-weight: 600;
     }
 </style>

@@ -53,16 +53,18 @@
         </div>
     </div>
 
-    {{-- ✅ CSS KHUSUS HALAMAN INI --}}
+    {{-- ✅ CSS KHUSUS HALAMAN INI (FULL BIRU #007bff) --}}
     <style>
+        /* ✅ JUDUL BIRU */
         .text-title {
-            color: #40407a;
+            color: #007bff !important;
             font-weight: 700;
         }
 
+        /* ✅ CARD */
         .modern-card {
             border-radius: 16px;
-            border: none;
+            border: 1.5px solid #007bff;
             background: #ffffff;
         }
 
@@ -71,15 +73,18 @@
             font-size: 0.95rem;
         }
 
+        /* ✅ HEADER TABEL FULL BIRU */
         .modern-table thead {
-            background-color: #40407a;
-            color: #ffffff;
+            background-color: #007bff !important;
         }
 
-        .modern-table th {
+        .modern-table thead th {
+            background-color: #007bff !important;
+            color: #ffffff !important;
             font-weight: 600;
             border: none !important;
             padding: 14px;
+            text-align: center;
         }
 
         .modern-table td {
@@ -92,7 +97,7 @@
         }
 
         .modern-table tbody tr:hover {
-            background-color: rgba(64,64,122,0.06);
+            background-color: rgba(0, 123, 255, 0.08);
         }
 
         .btn-modern {
@@ -101,16 +106,17 @@
             padding: 4px 10px;
         }
 
+        /* ✅ TOMBOL LIHAT BIRU */
         .btn-info {
-            background-color: #40407a;
-            border-color: #40407a;
-            color: #fff;
+            background-color: #007bff !important;
+            border-color: #007bff !important;
+            color: #fff !important;
         }
 
         .btn-info:hover {
-            background-color: #2f2f66;
-            border-color: #2f2f66;
-            color: #fff;
+            background-color: #0056b3 !important;
+            border-color: #0056b3 !important;
+            color: #fff !important;
         }
     </style>
 @endsection
