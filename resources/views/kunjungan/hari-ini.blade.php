@@ -28,7 +28,7 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col">
-                        <div class="text-xs fw-bold text-warning text-uppercase mb-1">Menunggu</div>
+                        <div class="text-xs fw-bold text-primary text-uppercase mb-1">Menunggu</div>
                         <div class="h4 mb-0 fw-bold text-gray-800">{{ $statistik['menunggu'] }}</div>
                     </div>
                     <div class="col-auto">
