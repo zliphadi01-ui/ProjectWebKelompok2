@@ -12,10 +12,10 @@
             <div class="card shadow-lg border-0 mb-5" style="border-radius: 1rem;">
                 <div class="card-body p-5">
                     <form action="{{ route('pasien.pencarian') }}" method="GET">
-                        <div class="input-group input-group-lg">
+                        <div class="input-group">
                             <span class="input-group-text bg-white border-end-0 ps-4"><i class="bi-search fs-4 text-primary"></i></span>
                             <input type="text" name="q" class="form-control border-start-0 fs-4" placeholder="Ketik Nama, No. RM, atau NIK..." value="{{ $q ?? '' }}" autofocus>
-                            <button class="btn btn-primary px-5 fw-bold fs-5" type="submit">CARI</button>
+                            <button class="btn btn-primary px-4 fw-bold" type="submit">CARI</button>
                         </div>
                     </form>
                     <div class="text-center mt-3">
