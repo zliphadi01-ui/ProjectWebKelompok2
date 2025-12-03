@@ -2,8 +2,8 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="text-danger fw-bold"><i class="bi-hospital-fill me-2"></i>Instalasi Gawat Darurat (IGD)</h2>
-    <a href="{{ route('igd.create') }}" class="btn btn-danger btn-lg shadow-sm">
+    <h2 class="text-primary fw-bold"><i class="bi-hospital-fill me-2"></i>Instalasi Gawat Darurat (IGD)</h2>
+    <a href="{{ route('igd.create') }}" class="btn btn-primary btn-lg shadow-sm">
         <i class="bi-plus-circle me-2"></i> Terima Pasien Darurat
     </a>
 </div>
@@ -12,14 +12,14 @@
     {{-- Queue Column --}}
     <div class="col-md-12">
         <div class="card border-0 shadow-sm">
-            <div class="card-header bg-dark text-white py-3 d-flex justify-content-between align-items-center">
+            <div class="card-header bg-primary text-white py-3 d-flex justify-content-between align-items-center">
                 <h5 class="mb-0">Antrian Triase & Penanganan</h5>
-                <span class="badge bg-danger">{{ $igdPatients->count() }} Pasien</span>
+                <span class="badge bg-light text-primary border">{{ $igdPatients->count() }} Pasien</span>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
+                        <thead class="table-primary">
                             <tr>
                                 <th class="text-center">Prioritas</th>
                                 <th>Waktu Masuk</th>
@@ -70,7 +70,7 @@
                                 </td>
                                 <td class="text-end">
                                     @if(!$p->triage)
-                                        <a href="{{ route('igd.triase', $p->id) }}" class="btn btn-warning btn-sm">
+                                        <a href="{{ route('igd.triase', $p->id) }}" class="btn btn-info btn-sm text-white">
                                             <i class="bi-clipboard-pulse me-1"></i> Lakukan Triase
                                         </a>
                                     @else
