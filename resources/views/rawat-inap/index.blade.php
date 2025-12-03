@@ -79,13 +79,7 @@
                             <h5 class="fw-bold text-dark mb-0">{{ $bed->nama_kamar }}</h5>
                             <small class="text-muted">Kelas {{ $bed->kelas }} • Bed {{ $bed->no_bed }}</small>
                         </div>
-                        @if($bed->gender == 'L')
-                            <i class="bi-gender-male text-primary fs-5" title="Laki-laki"></i>
-                        @elseif($bed->gender == 'P')
-                            <i class="bi-gender-female text-danger fs-5" title="Perempuan"></i>
-                        @else
-                            <i class="bi-gender-ambiguous text-secondary fs-5" title="Campur"></i>
-                        @endif
+            
                     </div>
 
                     @if($bed->status == 'occupied' && $bed->rawatInap)
