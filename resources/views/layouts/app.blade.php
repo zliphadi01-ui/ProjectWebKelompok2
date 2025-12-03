@@ -8,171 +8,192 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root{
-            --ui-bg: #0b1a2b; /* dark sidebar */
-            --primary: #0bb3a8; /* teal/tosca */
-            --primary-600: #089b8f;
-            --muted: #6c757d;
-            --card-bg: #ffffff;
-            --card-shadow: 0 8px 24px rgba(11,179,168,0.08);
-            --glass: rgba(255,255,255,0.6);
-        }
+:root{
+    --ui-bg: #0b1a2b; /* dark sidebar */
+    --primary: #40407a;        /* ✅ WARNA UTAMA BARU */
+    --primary-600: #32325f;
+    --muted: #6c757d;
+    --card-bg: #ffffff;
+    --card-shadow: 0 8px 26px rgba(64,64,122,0.12);
+    --glass: rgba(255,255,255,0.6);
+}
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f5f9f8;
-        }
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 280px;
-            z-index: 100;
-            padding: 48px 0 0;
-            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-            transition: all 0.3s ease;
-            overflow-y: auto;
-        }
-        .sidebar-nav .nav-link {
-            color: rgba(255,255,255,.8);
-            font-weight: 500;
-            padding: 0.75rem 1rem;
-            margin-bottom: 0.25rem;
-            border-radius: 0.375rem;
-            transition: all 0.2s;
-        }
-        .sidebar-nav .nav-link:hover {
-            color: #fff;
-            background-color: rgba(255,255,255,.1);
-        }
-        .sidebar-nav .nav-link.active {
-            color: #fff;
-            background-color: #0d6efd;
-        }
-        .sidebar .nav-heading {
-            font-size: .75rem;
-            text-transform: uppercase;
-            color: rgba(255,255,255,.4);
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-        .nav-link-sm {
-            font-size: 0.875rem;
-            padding: 0.5rem 1rem !important;
-        }
-        .nav-link .bi-chevron-down {
-            transition: transform 0.2s;
-        }
-        .nav-link[aria-expanded="true"] .bi-chevron-down {
-            transform: rotate(180deg);
-        }
-        .collapse .nav {
-            background-color: rgba(0,0,0,0.1);
-            border-radius: 0.375rem;
-            padding: 0.5rem 0;
-            margin-top: 0.25rem;
-        }
-        .main-content {
-            margin-left: 280px;
-            transition: all 0.3s ease;
-        }
-        .topbar {
-            height: 56px;
-        }
-        body.sidebar-toggled .sidebar {
-            margin-left: -280px;
-        }
-        body.sidebar-toggled .main-content {
-            margin-left: 0;
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                margin-left: -280px;
-            }
-            .main-content {
-                margin-left: 0;
-            }
-            body.sidebar-toggled .sidebar {
-                margin-left: 0;
-            }
-        }
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f6f7fb; /* lebih clean */
+}
 
-        /* Dashboard stat-card styling and animations */
-        .stat-card{
-            background: var(--card-bg);
-            border: 0;
-            border-radius: .75rem;
-            padding: 1rem .85rem;
-            box-shadow: var(--card-shadow);
-            transform: translateY(6px);
-            opacity: 0;
-            transition: transform .22s ease, box-shadow .22s ease, opacity .22s ease;
-            will-change: transform, opacity;
-        }
-        /* staggered fade-in for cards inside #statsRow */
-        #statsRow .col-xl-3:nth-child(1) .stat-card{ animation: fadeUp .45s ease .05s forwards; }
-        #statsRow .col-xl-3:nth-child(2) .stat-card{ animation: fadeUp .45s ease .12s forwards; }
-        #statsRow .col-xl-3:nth-child(3) .stat-card{ animation: fadeUp .45s ease .18s forwards; }
-        #statsRow .col-xl-3:nth-child(4) .stat-card{ animation: fadeUp .45s ease .25s forwards; }
+/* ================= SIDEBAR ================= */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    z-index: 100;
+    padding: 48px 0 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .08);
+    transition: all 0.3s ease;
+    overflow-y: auto;
+}
 
-        @keyframes fadeUp{
-            to { opacity: 1; transform: translateY(0); }
-        }
+.sidebar-nav .nav-link {
+    color: rgba(255,255,255,.8);
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.25rem;
+    border-radius: 0.6rem; /* lebih soft */
+    transition: all 0.2s ease;
+}
 
-        .stat-card:hover{ transform: translateY(-8px); box-shadow: 0 18px 50px rgba(11,179,168,0.12); }
+.sidebar-nav .nav-link:hover {
+    color: #fff;
+    background-color: rgba(255,255,255,.12);
+}
 
-        /* --- CSS TAMBAHAN UNTUK PROFIL (FIX) --- */
-        .avatar-profile {
-            width: 40px;        /* Ukuran fix */
-            height: 40px;       /* Ukuran fix */
-            object-fit: cover;  /* Agar gambar tidak gepeng */
-            border-radius: 50%; /* Bulat sempurna */
-            flex-shrink: 0;     /* Agar tidak tergencet */
-            border: 2px solid rgba(255,255,255,0.2);
-            background-color: #fff;
-        }
-        
-        /* Mempercantik Dropdown Menu */
-        .dropdown-menu {
-            border: none;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-            border-radius: 12px;
-            padding: 8px;
-            margin-top: 10px !important; /* Jarak dari tombol */
-            background-color: #fff !important; /* Pastikan putih bersih */
-        }
+.sidebar-nav .nav-link.active {
+    color: #fff;
+    background-color: var(--primary); /* ✅ ikut warna utama */
+}
 
-        .dropdown-item {
-            border-radius: 8px;
-            padding: 10px 16px;
-            font-weight: 500;
-            color: #4b5563; /* Abu tua */
-            transition: all 0.2s;
-        }
+.sidebar .nav-heading {
+    font-size: .75rem;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.4);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
 
-        .dropdown-item:hover {
-            background-color: #eff6ff !important; /* Biru muda soft */
-            color: #0d6efd !important; /* Biru */
-            transform: translateX(5px); /* Efek geser */
-        }
-        
-        /* Icon di dalam dropdown */
-        .dropdown-item i {
-            margin-right: 10px;
-            color: #9ca3af;
-            transition: color 0.2s;
-        }
-        .dropdown-item:hover i {
-            color: #0d6efd;
-        }
-        
-        /* Hapus panah dropdown default yg kadang mengganggu */
-        .dropdown-toggle::after {
-            vertical-align: middle;
-        }
-    </style>
+.nav-link-sm {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem !important;
+}
+
+.nav-link .bi-chevron-down {
+    transition: transform 0.2s;
+}
+
+.nav-link[aria-expanded="true"] .bi-chevron-down {
+    transform: rotate(180deg);
+}
+
+.collapse .nav {
+    background-color: rgba(255,255,255,0.05);
+    border-radius: 0.6rem;
+    padding: 0.5rem 0;
+    margin-top: 0.25rem;
+}
+
+/* ================= MAIN CONTENT ================= */
+.main-content {
+    margin-left: 280px;
+    transition: all 0.3s ease;
+}
+
+.topbar {
+    height: 56px;
+}
+
+body.sidebar-toggled .sidebar {
+    margin-left: -280px;
+}
+
+body.sidebar-toggled .main-content {
+    margin-left: 0;
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        margin-left: -280px;
+    }
+    .main-content {
+        margin-left: 0;
+    }
+    body.sidebar-toggled .sidebar {
+        margin-left: 0;
+    }
+}
+
+/* ================= STAT CARD ================= */
+.stat-card{
+    background: var(--card-bg);
+    border: 0;
+    border-radius: 1rem; /* lebih modern */
+    padding: 1rem .85rem;
+    box-shadow: var(--card-shadow);
+    transform: translateY(6px);
+    opacity: 0;
+    transition: transform .25s ease, box-shadow .25s ease, opacity .25s ease;
+    will-change: transform, opacity;
+}
+
+/* staggered fade-in */
+#statsRow .col-xl-3:nth-child(1) .stat-card{ animation: fadeUp .45s ease .05s forwards; }
+#statsRow .col-xl-3:nth-child(2) .stat-card{ animation: fadeUp .45s ease .12s forwards; }
+#statsRow .col-xl-3:nth-child(3) .stat-card{ animation: fadeUp .45s ease .18s forwards; }
+#statsRow .col-xl-3:nth-child(4) .stat-card{ animation: fadeUp .45s ease .25s forwards; }
+
+@keyframes fadeUp{
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.stat-card:hover{ 
+    transform: translateY(-8px); 
+    box-shadow: 0 20px 55px rgba(64,64,122,0.18); 
+}
+
+/* ================= AVATAR ================= */
+.avatar-profile {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.25);
+    background-color: #fff;
+}
+
+/* ================= DROPDOWN ================= */
+.dropdown-menu {
+    border: none;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+    border-radius: 14px;
+    padding: 8px;
+    margin-top: 10px !important;
+    background-color: #fff !important;
+}
+
+.dropdown-item {
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-weight: 500;
+    color: #4b5563;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(64,64,122,0.1) !important; /* ✅ soft dari primary */
+    color: var(--primary) !important;
+    transform: translateX(5px);
+}
+
+/* Icon di dalam dropdown */
+.dropdown-item i {
+    margin-right: 10px;
+    color: #9ca3af;
+    transition: color 0.2s;
+}
+
+.dropdown-item:hover i {
+    color: var(--primary);
+}
+
+/* Hapus panah dropdown */
+.dropdown-toggle::after {
+    vertical-align: middle;
+}
+</style>
+
     @stack('styles')
 </head>
 <body>
