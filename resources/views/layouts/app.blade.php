@@ -257,11 +257,14 @@ body.sidebar-toggled .main-content {
             </li>
 
             <li class="nav-item">
-                <a href="#bpjsMenu" class="nav-link d-flex justify-content-between align-items-center {{ request()->is('bpjs*') ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ request()->is('bpjs*') ? 'true' : 'false' }}">
+                @php
+                    $isBpjs = request()->is('bpjs*') || request()->is('poli-bpjs*') || request()->is('riwayat-peserta-bpjs*') || request()->is('cetak-rujukan-bpjs*');
+                @endphp
+                <a href="#bpjsMenu" class="nav-link d-flex justify-content-between align-items-center {{ $isBpjs ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ $isBpjs ? 'true' : 'false' }}">
                     <span><i class="bi-card-checklist me-2"></i> BPJS</span>
                     <i class="bi-chevron-down"></i>
                 </a>
-                <div class="collapse {{ request()->is('bpjs*') ? 'show' : '' }}" id="bpjsMenu">
+                <div class="collapse {{ $isBpjs ? 'show' : '' }}" id="bpjsMenu">
                     <ul class="nav flex-column ms-3">
                         <li><a href="{{ url('/poli-bpjs') }}" class="nav-link nav-link-sm {{ request()->is('poli-bpjs*') ? 'active' : '' }}">BPJS</a></li>
                         <li><a href="{{ url('/riwayat-peserta-bpjs') }}" class="nav-link nav-link-sm {{ request()->is('riwayat-peserta-bpjs*') ? 'active' : '' }}">Riwayat Peserta BPJS</a></li>
@@ -319,11 +322,14 @@ body.sidebar-toggled .main-content {
             {{-- Gudang Obat (Admin & Apotek) --}}
             @if(in_array($role, ['admin', 'apotek']))
             <li class="nav-item">
-                <a href="#gudangMenu" class="nav-link d-flex justify-content-between align-items-center {{ request()->is('gudang*') || request()->is('apotek*') ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ request()->is('gudang*') || request()->is('apotek*') ? 'true' : 'false' }}">
+                @php
+                    $isGudang = request()->is('gudang*') || request()->is('apotek*') || request()->is('apotek-retail*') || request()->is('master-obat*') || request()->is('farmasi*');
+                @endphp
+                <a href="#gudangMenu" class="nav-link d-flex justify-content-between align-items-center {{ $isGudang ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ $isGudang ? 'true' : 'false' }}">
                     <span><i class="bi-box-seam me-2"></i> Gudang Obat</span>
                     <i class="bi-chevron-down"></i>
                 </a>
-                <div class="collapse {{ request()->is('gudang*') || request()->is('apotek*') ? 'show' : '' }}" id="gudangMenu">
+                <div class="collapse {{ $isGudang ? 'show' : '' }}" id="gudangMenu">
                     <ul class="nav flex-column ms-3">
                         <li><a href="{{ url('/apotek') }}" class="nav-link nav-link-sm {{ request()->is('apotek*') ? 'active' : '' }}">Apotek</a></li>
                         <li><a href="{{ url('/apotek-retail') }}" class="nav-link nav-link-sm {{ request()->is('apotek-retail*') ? 'active' : '' }}">Apotek Retail</a></li>
