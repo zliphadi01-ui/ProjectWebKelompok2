@@ -24,7 +24,7 @@
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Nama Pasien</label>
-                        <input type="text" class="form-control" readonly value="BUDI SANTOSO (L)">
+                        <input type="text" class="form-control" placeholder="Masukkan Nama Pasien">
                     </div>
                 </div>
 
@@ -37,6 +37,7 @@
                     <div class="col-md-6">
                         <label class="form-label">Jenis Pelayanan</label>
                         <select class="form-select">
+                            <option>-- Pilih Pelayanan --</option>
                             <option>Rawat Jalan</option>
                             <option>Rawat Inap</option>
                         </select>
