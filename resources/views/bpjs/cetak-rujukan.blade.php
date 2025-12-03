@@ -58,8 +58,15 @@
                         <label class="form-label">Poli Rujukan</label>
                         <select class="form-select">
                             <option>-- Pilih Poli --</option>
-                            <option>JANTUNG</option>
-                            <option>BEDAH</option>
+                            <option>Umum</option>
+                            <option>Anak</option>
+                            <option>Gigi</option>
+                            <option>Kandungan</option>
+                            <option>Mata</option>
+                            <option>THT</option>
+                            <option>Kulit & Kelamin</option>
+                            <option>Penyakit Dalam</option>
+                            <option>Bedah</option>
                         </select>
                     </div>
                 </div>
