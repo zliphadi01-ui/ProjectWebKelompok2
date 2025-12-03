@@ -1,376 +1,223 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid px-4 pb-5">
-    {{-- Hero Section --}}
-    <div class="d-flex justify-content-between align-items-end my-4">
-        <div>
-            <h6 class="text-uppercase text-muted small fw-bold mb-1">Overview</h6>
-            <h1 class="h2 fw-bold text-gray-800 mb-0">Dashboard Utama</h1>
+<div class="container-fluid">
+    <!-- Header -->
+    <div class="mb-4">
+        <h2>Dashboard Klinik</h2>
+        <p class="text-muted">Selamat datang, {{ Auth::user()->name ?? 'Admin' }}</p>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="stat-label">Pasien Baru</div>
+                        <div class="stat-value text-primary" id="val-pasien-baru">{{ $pasien_baru ?? 0 }}</div>
+                    </div>
+                    <i class="fas fa-users fa-3x text-primary opacity-25"></i>
+                </div>
+            </div>
         </div>
-        <div class="d-none d-md-block text-end">
-            <div class="small text-muted mb-1">{{ \Carbon\Carbon::now()->translatedFormat('l, j F Y') }}</div>
-            @if(in_array(Auth::user()->role, ['admin', 'pendaftaran']))
-            <a href="{{ route('pendaftaran.create-baru') }}" class="btn btn-primary rounded-pill shadow-sm px-4">
-                <i class="bi-plus-lg me-2"></i>Pasien Baru
-            </a>
-            @endif
+        <div class="col-md-3">
+            <div class="stat-card success">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="stat-label">Kunjungan Hari Ini</div>
+                        <div class="stat-value text-success" id="val-kunjungan">{{ $kunjungan_hari_ini ?? 0 }}</div>
+                    </div>
+                    <i class="fas fa-calendar-check fa-3x text-success opacity-25"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card warning">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="stat-label">Resep Pending</div>
+                        <div class="stat-value text-warning" id="val-resep">{{ $resep_pending ?? 0 }}</div>
+                    </div>
+                    <i class="fas fa-prescription-bottle-alt fa-3x text-warning opacity-25"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card danger">
+                <div class="d-flex align-items-center">
+                    <div class="flex-grow-1">
+                        <div class="stat-label">Antrian Aktif</div>
+                        <div class="stat-value text-danger" id="val-antrean">{{ $antrean_aktif ?? 0 }}</div>
+                    </div>
+                    <i class="fas fa-clock fa-3x text-danger opacity-25"></i>
+                </div>
+            </div>
         </div>
     </div>
 
-    {{-- Stats Cards Row --}}
-    <div class="row g-4 mb-5">
-        {{-- Card 1: Kunjungan --}}
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100 overflow-hidden card-hover">
-                <div class="card-body position-relative p-4">
-                    <div class="d-flex flex-column position-relative z-1">
-                        <div class="text-uppercase fw-bold text-primary small mb-2 tracking-wide">Total Kunjungan</div>
-                        <div class="h2 fw-bold text-dark mb-0" id="kunjunganCount">{{ $kunjungan_hari_ini ?? 0 }}</div>
-                        <div class="small text-muted mt-2">
-                            <i class="bi-arrow-up-short text-success"></i> Hari ini
-                        </div>
-                    </div>
-                    <div class="icon-bg text-primary opacity-10">
-                        <i class="bi-people-fill"></i>
-                    </div>
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
                 </div>
-            </div>
-        </div>
-
-        {{-- Card 2: Pasien Baru --}}
-        @if(in_array(Auth::user()->role, ['admin', 'pendaftaran']))
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100 overflow-hidden card-hover">
-                <div class="card-body position-relative p-4">
-                    <div class="d-flex flex-column position-relative z-1">
-                        <div class="text-uppercase fw-bold text-success small mb-2 tracking-wide">Pasien Baru</div>
-                        <div class="h2 fw-bold text-dark mb-0" id="pasienBaruCount">{{ $pasien_baru ?? 0 }}</div>
-                        <div class="small text-muted mt-2">
-                            <i class="bi-person-plus text-success"></i> Terdaftar hari ini
-                        </div>
-                    </div>
-                    <div class="icon-bg text-success opacity-10">
-                        <i class="bi-person-vcard-fill"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        @endif
-
-        <div class="col-xl-3 col-md-6 mb-4">
-            <a href="#" class="stat-link text-decoration-none" data-type="antrean">
-            <div class="card stat-card border-start-info h-100 py-2">
                 <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <div class="text-xs fw-bold text-info text-uppercase mb-1">Antrean Aktif</div>
-                            <div class="h5 mb-0 fw-bold text-gray-800" id="antreanCount">{{ $antrean_aktif ?? 0 }}</div>
-                        </div>
-                    </div>
-                    <div class="icon-bg text-info opacity-10">
-                        <i class="bi-hourglass-split"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    <div class="row text-center">
+                        @php $role = Auth::user()->role ?? 'guest'; @endphp
 
-        {{-- Card 4: Resep --}}
-        @if(in_array(Auth::user()->role, ['admin', 'apotek', 'dokter']))
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100 overflow-hidden card-hover">
-                <div class="card-body position-relative p-4">
-                    <div class="d-flex flex-column position-relative z-1">
-                        <div class="text-uppercase fw-bold text-warning small mb-2 tracking-wide">Resep Pending</div>
-                        <div class="h2 fw-bold text-dark mb-0" id="resepCount">{{ $resep_pending ?? 0 }}</div>
-                        <div class="small text-muted mt-2">
-                            <i class="bi-exclamation-circle text-warning"></i> Belum diproses
+                        @if(in_array($role, ['admin', 'pendaftaran']))
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ route('pendaftaran.create-baru') }}" class="btn btn-primary btn-lg w-100 py-4">
+                                <i class="fas fa-user-plus fa-2x d-block mb-2"></i>
+                                Pendaftaran Pasien
+                            </a>
                         </div>
-                    </div>
-                    <div class="icon-bg text-warning opacity-10">
-                        <i class="bi-capsule"></i>
+                        @endif
+
+                        @if(in_array($role, ['admin', 'dokter']))
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ route('pemeriksaan.index') }}" class="btn btn-success btn-lg w-100 py-4">
+                                <i class="fas fa-stethoscope fa-2x d-block mb-2"></i>
+                                Pemeriksaan
+                            </a>
+                        </div>
+                        @endif
+
+                        @if(in_array($role, ['admin', 'pendaftaran', 'rekam_medis']))
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ route('pasien.data') }}" class="btn btn-info btn-lg w-100 py-4">
+                                <i class="fas fa-search fa-2x d-block mb-2"></i>
+                                Cari Pasien
+                            </a>
+                        </div>
+                        @endif
+
+                        @if(in_array($role, ['admin', 'pendaftaran', 'rekam_medis']))
+                        <div class="col-md-3 mb-3">
+                            <a href="{{ route('laporan.index') }}" class="btn btn-warning btn-lg w-100 py-4">
+                                <i class="fas fa-chart-bar fa-2x d-block mb-2"></i>
+                                Laporan
+                            </a>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
         </div>
-        @endif
     </div>
 
-    <div class="row g-4">
-        {{-- Left Column --}}
-        <div class="col-lg-8">
-            {{-- Quick Actions Grid --}}
-            <div class="mb-4">
-                <h5 class="fw-bold text-gray-800 mb-3">Akses Cepat</h5>
-                <div class="row g-3">
-                    @if(in_array(Auth::user()->role, ['admin', 'pendaftaran', 'dokter']))
-                    <div class="col-md-3 col-6">
-                        <a href="{{ route('pendaftaran.index') }}" class="card border-0 shadow-sm h-100 card-hover text-decoration-none">
-                            <div class="card-body text-center p-4">
-                                <div class="avatar-md bg-primary bg-opacity-10 text-primary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                                    <i class="bi-search fs-4"></i>
-                                </div>
-                                <h6 class="fw-bold text-dark mb-0">Cari Pasien</h6>
-                            </div>
-                        </a>
-                    </div>
-                    @endif
-
-                    @if(in_array(Auth::user()->role, ['admin', 'dokter']))
-                    <div class="col-md-3 col-6">
-                        <a href="{{ route('pemeriksaan.index') }}" class="card border-0 shadow-sm h-100 card-hover text-decoration-none">
-                            <div class="card-body text-center p-4">
-                                <div class="avatar-md bg-success bg-opacity-10 text-success rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                                    <i class="bi-heart-pulse fs-4"></i>
-                                </div>
-                                <h6 class="fw-bold text-dark mb-0">Pemeriksaan</h6>
-                            </div>
-                        </a>
-                    </div>
-                    @endif
-
-                    @if(in_array(Auth::user()->role, ['admin', 'apotek']))
-                    <div class="col-md-3 col-6">
-                        <a href="{{ route('gudang') }}" class="card border-0 shadow-sm h-100 card-hover text-decoration-none">
-                            <div class="card-body text-center p-4">
-                                <div class="avatar-md bg-warning bg-opacity-10 text-warning rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                                    <i class="bi-box-seam fs-4"></i>
-                                </div>
-                                <h6 class="fw-bold text-dark mb-0">Stok Obat</h6>
-                            </div>
-                        </a>
-                    </div>
-                    @endif
-
-                    @if(in_array(Auth::user()->role, ['admin', 'pendaftaran']))
-                    <div class="col-md-3 col-6">
-                        <a href="{{ route('poli-bpjs') }}" class="card border-0 shadow-sm h-100 card-hover text-decoration-none">
-                            <div class="card-body text-center p-4">
-                                <div class="avatar-md bg-info bg-opacity-10 text-info rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                                    <i class="bi-hospital fs-4"></i>
-                                </div>
-                                <h6 class="fw-bold text-dark mb-0">Poli BPJS</h6>
-                            </div>
-                        </a>
-                    </div>
-                    @endif
+    <!-- Grafik Kunjungan -->
+    @if(isset($grafik_kunjungan))
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-chart-line"></i> Statistik Kunjungan (7 Hari Terakhir)</h5>
                 </div>
-            </div>
-
-            {{-- Chart Section --}}
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
-                    <h5 class="fw-bold text-gray-800 mb-0">Statistik Kunjungan</h5>
-                    <div class="dropdown">
-                        <button class="btn btn-sm btn-light rounded-pill px-3" type="button">
-                            7 Hari Terakhir
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body p-4">
-                    <div class="chart-area" style="height: 350px;">
-                        <canvas id="kunjunganChart"></canvas>
-                    </div>
+                <div class="card-body">
+                    <canvas id="kunjunganChart" height="100"></canvas>
                 </div>
             </div>
         </div>
+    </div>
+    @endif
 
-        {{-- Right Column: Live Queue --}}
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-transparent border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center">
-                    <h5 class="fw-bold text-gray-800 mb-0">Antrean Live</h5>
-                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">
-                        <span class="spinner-grow spinner-grow-sm me-1" role="status" aria-hidden="true"></span>
-                        LIVE
-                    </span>
+    <!-- Kunjungan Terbaru -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-history"></i> Kunjungan Terbaru</h5>
                 </div>
-                <div class="card-body p-0">
-                    <div class="list-group list-group-flush px-2">
-                        @forelse($recent as $r)
-                            <div class="list-group-item border-0 rounded-3 mb-2 p-3 d-flex align-items-center hover-bg-light transition-all">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="avatar rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold shadow-sm" style="width: 45px; height: 45px; font-size: 1.2rem;">
-                                        {{ substr($r->nama, 0, 1) }}
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1 min-w-0">
-                                    <h6 class="mb-1 fw-bold text-dark text-truncate">{{ $r->nama }}</h6>
-                                    <div class="d-flex align-items-center text-muted small">
-                                        <span class="badge bg-light text-dark border me-2">{{ $r->no_daftar }}</span>
-                                        <span class="text-truncate">{{ $r->poli ?? 'Umum' }}</span>
-                                    </div>
-                                </div>
-                                <div class="flex-shrink-0 ms-2">
-                                    @php
-                                        $statusClass = match($r->status) {
-                                            'Menunggu' => 'bg-warning text-dark',
-                                            'Diperiksa' => 'bg-info text-white',
-                                            'Selesai' => 'bg-success text-white',
-                                            default => 'bg-secondary text-white'
-                                        };
-                                    @endphp
-                                    <span class="badge {{ $statusClass }} rounded-pill">{{ $r->status }}</span>
-                                </div>
-                            </div>
-                        @empty
-                            <div class="text-center py-5">
-                                <div class="mb-3">
-                                    <i class="bi-clipboard-check display-4 text-muted opacity-25"></i>
-                                </div>
-                                <h6 class="text-muted fw-bold">Tidak ada antrean aktif</h6>
-                                <p class="text-muted small mb-0">Semua pasien telah dilayani.</p>
-                            </div>
-                        @endforelse
-                    </div>
-                </div>
-                <div class="card-footer bg-transparent border-0 text-center py-3">
-                    <a href="{{ route('pendaftaran.list') }}" class="btn btn-light text-primary fw-bold rounded-pill w-100">
-                        Lihat Semua Antrean
-                    </a>
+                <div class="card-body">
+                    <table class="table table-modern">
+                        <thead>
+                            <tr>
+                                <th>No. RM</th>
+                                <th>Nama Pasien</th>
+                                <th>Poli</th>
+                                <th>Waktu</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($recent ?? [] as $k)
+                            <tr>
+                                <td><strong>{{ $k->pasien->no_rm ?? $k->nama ?? '-' }}</strong></td>
+                                <td>{{ $k->nama ?? '-' }}</td>
+                                <td>{{ $k->poli ?? '-' }}</td>
+                                <td>{{ $k->created_at ? $k->created_at->format('H:i') : '-' }}</td>
+                                <td>
+                                    <span class="badge bg-success">{{ $k->status ?? 'Aktif' }}</span>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-4">
+                                    <i class="fas fa-inbox fa-3x text-muted mb-3 d-block"></i>
+                                    <p class="text-muted">Belum ada kunjungan hari ini</p>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<style>
-    /* Custom Utilities */
-    .tracking-wide { letter-spacing: 0.05em; }
-    .text-gray-800 { color: #2d3748; }
-    .opacity-10 { opacity: 0.1; }
-    .opacity-25 { opacity: 0.25; }
-    
-    /* Card Hover Effects */
-    .card-hover {
-        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    }
-    .card-hover:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
-    }
-
-    /* Icon Background */
-    .icon-bg {
-        position: absolute;
-        right: -10px;
-        bottom: -10px;
-        font-size: 6rem;
-        transform: rotate(-15deg);
-        z-index: 0;
-        pointer-events: none;
-    }
-
-    /* List Item Hover */
-    .hover-bg-light:hover {
-        background-color: #f8f9fa;
-        cursor: pointer;
-    }
-    .transition-all {
-        transition: all 0.2s ease;
-    }
-</style>
-@endsection
-
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Chart Configuration
-        const labels = @json($grafik_kunjungan['labels']);
-        const dataPoints = @json($grafik_kunjungan['data']);
-        const ctx = document.getElementById('kunjunganChart').getContext('2d');
-        
-        // Gradient for Chart
-        const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, 'rgba(78, 115, 223, 0.2)');
-        gradient.addColorStop(1, 'rgba(78, 115, 223, 0)');
-
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Kunjungan',
-                    data: dataPoints,
-                    borderColor: '#4e73df',
-                    backgroundColor: gradient,
-                    borderWidth: 3,
-                    pointBackgroundColor: '#fff',
-                    pointBorderColor: '#4e73df',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    fill: true,
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        backgroundColor: '#2d3748',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        padding: 12,
-                        cornerRadius: 8,
-                        displayColors: false,
-                        callbacks: {
-                            label: function(context) {
-                                return context.parsed.y + ' Pasien';
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { borderDash: [4, 4], drawBorder: false, color: "#e3e6f0" },
-                        ticks: { padding: 10, color: "#858796", font: { family: "'Nunito', sans-serif" } }
-                    },
-                    x: {
-                        grid: { display: false, drawBorder: false },
-                        ticks: { padding: 10, color: "#858796", font: { family: "'Nunito', sans-serif" } }
-                    }
-                },
-                interaction: {
-                    intersect: false,
-                    mode: 'index',
-                },
-            }
-        });
-
-        // Realtime Polling
-        function updateStats() {
-            fetch('{{ route('dashboard.stats') }}')
-                .then(r => r.json())
-                .then(data => {
-                    // Animate numbers
-                    animateValue("kunjunganCount", parseInt(document.getElementById("kunjunganCount").innerText), data.kunjungan_hari_ini, 1000);
-                    animateValue("pasienBaruCount", parseInt(document.getElementById("pasienBaruCount").innerText), data.pasien_baru, 1000);
-                    animateValue("antreanCount", parseInt(document.getElementById("antreanCount").innerText), data.antrean_aktif, 1000);
-                    animateValue("resepCount", parseInt(document.getElementById("resepCount").innerText), data.resep_pending || 0, 1000);
-                })
-                .catch(console.error);
-        }
-
-        function animateValue(id, start, end, duration) {
-            if (start === end) return;
-            const range = end - start;
-            let current = start;
-            const increment = end > start ? 1 : -1;
-            const stepTime = Math.abs(Math.floor(duration / range));
-            const obj = document.getElementById(id);
-            const timer = setInterval(function() {
-                current += increment;
-                obj.innerHTML = current;
-                if (current == end) {
-                    clearInterval(timer);
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@if(isset($grafik_kunjungan))
+<script>
+    const ctx = document.getElementById('kunjunganChart').getContext('2d');
+    const kunjunganChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {!! json_encode($grafik_kunjungan['labels']) !!},
+            datasets: [{
+                label: 'Jumlah Kunjungan',
+                data: {!! json_encode($grafik_kunjungan['data']) !!},
+                borderColor: '#3B82F6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                tension: 0.4,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
                 }
-            }, stepTime);
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
         }
+    });
+</script>
+@endif
 
-        setInterval(updateStats, 10000);
-    </script>
+<script>
+    // Polling script
+    setInterval(function() {
+        fetch("{{ route('dashboard.stats') }}")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('val-pasien-baru').innerText = data.pasien_baru;
+                document.getElementById('val-kunjungan').innerText = data.kunjungan_hari_ini;
+                document.getElementById('val-antrean').innerText = data.antrean_aktif;
+            });
+    }, 10000);
+</script>
 @endpush
+@endsection

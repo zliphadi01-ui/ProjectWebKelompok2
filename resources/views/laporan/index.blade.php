@@ -1,144 +1,107 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-        <h2 class="fw-bold text-gradient mb-1">Pusat Laporan</h2>
-        <small class="text-muted">Akses cepat seluruh laporan utama klinik</small>
+<div class="container-fluid">
+    <div class="mb-4">
+        <h2>Laporan Klinik</h2>
+        <p class="text-muted">Generate laporan berdasarkan periode</p>
+    </div>
+
+    <!-- Filter -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-filter"></i> Filter Laporan</h5>
+        </div>
+        <div class="card-body">
+            <form id="reportForm" method="GET">
+                <div class="row g-3">
+                    <div class="col-md-3">
+                        <label class="fw-bold">Jenis Laporan</label>
+                        <select id="jenis_laporan" name="jenis_laporan" class="form-control" required onchange="updateFormAction()">
+                            <option value="">Pilih Jenis</option>
+                            <option value="kunjungan">Laporan Kunjungan</option>
+                            <option value="diagnosa">Laporan Diagnosa</option>
+                            <option value="pendaftaran">Laporan Pendaftaran (Not Implemented)</option>
+                            <option value="pembayaran">Laporan Pembayaran (Not Implemented)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="fw-bold">Tanggal Mulai</label>
+                        <input type="date" name="start_date" class="form-control" required value="{{ date('Y-m-d') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="fw-bold">Tanggal Selesai</label>
+                        <input type="date" name="end_date" class="form-control" required value="{{ date('Y-m-d') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="fw-bold">&nbsp;</label>
+                        <button type="submit" class="btn btn-primary w-100">
+                            <i class="fas fa-chart-bar"></i> Generate Laporan
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Quick Reports -->
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card text-center" style="border-left: 5px solid #3B82F6;">
+                <div class="card-body py-4">
+                    <i class="fas fa-calendar-day fa-3x text-primary mb-3"></i>
+                    <h5>Laporan Hari Ini</h5>
+                    <p class="text-muted">Laporan kunjungan hari ini</p>
+                    <a href="{{ route('laporan.kunjungan', ['start_date' => date('Y-m-d'), 'end_date' => date('Y-m-d')]) }}" class="btn btn-primary">
+                        <i class="fas fa-eye"></i> Lihat Laporan
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card text-center" style="border-left: 5px solid #10B981;">
+                <div class="card-body py-4">
+                    <i class="fas fa-calendar-week fa-3x text-success mb-3"></i>
+                    <h5>Laporan Mingguan</h5>
+                    <p class="text-muted">Laporan 7 hari terakhir</p>
+                    <a href="{{ route('laporan.kunjungan', ['start_date' => date('Y-m-d', strtotime('-7 days')), 'end_date' => date('Y-m-d')]) }}" class="btn btn-success">
+                        <i class="fas fa-eye"></i> Lihat Laporan
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card text-center" style="border-left: 5px solid #F59E0B;">
+                <div class="card-body py-4">
+                    <i class="fas fa-calendar-alt fa-3x text-warning mb-3"></i>
+                    <h5>Laporan Bulanan</h5>
+                    <p class="text-muted">Laporan bulan ini</p>
+                    <a href="{{ route('laporan.kunjungan', ['start_date' => date('Y-m-01'), 'end_date' => date('Y-m-t')]) }}" class="btn btn-warning">
+                        <i class="fas fa-eye"></i> Lihat Laporan
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="row g-4">
+@push('scripts')
+<script>
+    function updateFormAction() {
+        const type = document.getElementById('jenis_laporan').value;
+        const form = document.getElementById('reportForm');
 
-    {{-- Laporan Kunjungan --}}
-    <div class="col-md-4">
-        <a href="{{ route('laporan.kunjungan') }}" class="card modern-card h-100 text-decoration-none">
-            <div class="card-body text-center p-5">
-
-                <div class="icon-wrapper bg-primary-soft mb-4">
-                    <i class="bi-people-fill fs-1 text-primary"></i>
-                </div>
-
-                <h5 class="fw-semibold text-dark mb-2">Laporan Kunjungan</h5>
-                <p class="text-muted small mb-3">
-                    Rekap jumlah kunjungan pasien harian dan per unit layanan.
-                </p>
-
-                <span class="modern-badge primary">Aktif</span>
-
-            </div>
-        </a>
-    </div>
-
-    {{-- Laporan Morbiditas --}}
-    <div class="col-md-4">
-        <a href="{{ route('laporan.diagnosa') }}" class="card modern-card h-100 text-decoration-none">
-            <div class="card-body text-center p-5">
-
-                <div class="icon-wrapper bg-danger-soft mb-4">
-                    <i class="bi-activity fs-1 text-danger"></i>
-                </div>
-
-                <h5 class="fw-semibold text-dark mb-2">Laporan Morbiditas</h5>
-                <p class="text-muted small mb-3">
-                    10 besar penyakit berdasarkan kode ICD-10.
-                </p>
-
-                <span class="modern-badge danger">Aktif</span>
-
-            </div>
-        </a>
-    </div>
-
-    {{-- Laporan Keuangan --}}
-    <div class="col-md-4">
-        <a href="#" class="card modern-card h-100 text-decoration-none disabled-card">
-            <div class="card-body text-center p-5">
-
-                <div class="icon-wrapper bg-warning-soft mb-4">
-                    <i class="bi-cash-coin fs-1 text-warning"></i>
-                </div>
-
-                <h5 class="fw-semibold text-dark mb-2">Laporan Keuangan</h5>
-                <p class="text-muted small mb-3">
-                    Rekap pendapatan dan transaksi layanan klinik.
-                </p>
-
-                <span class="modern-badge warning">Coming Soon</span>
-
-            </div>
-        </a>
-    </div>
-
-</div>
-
-<style>
-/* ===== Global Look ===== */
-.text-gradient {
-    background: linear-gradient(135deg, #2563eb, #22c55e);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* ===== Card Style ===== */
-.modern-card {
-    border: none;
-    border-radius: 18px;
-    background: #ffffff;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
-    transition: all 0.3s ease;
-}
-
-.modern-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
-}
-
-/* ===== Icon Wrapper ===== */
-.icon-wrapper {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* ===== Soft Background Colors ===== */
-.bg-primary-soft { background: rgba(37, 99, 235, 0.12); }
-.bg-danger-soft { background: rgba(239, 68, 68, 0.12); }
-.bg-warning-soft { background: rgba(245, 158, 11, 0.15); }
-
-/* ===== Badge ===== */
-.modern-badge {
-    display: inline-block;
-    padding: 6px 16px;
-    border-radius: 30px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.modern-badge.primary {
-    color: #2563eb;
-    background: rgba(37, 99, 235, 0.12);
-}
-
-.modern-badge.danger {
-    color: #dc2626;
-    background: rgba(239, 68, 68, 0.12);
-}
-
-.modern-badge.warning {
-    color: #92400e;
-    background: rgba(245, 158, 11, 0.18);
-}
-
-/* ===== Disabled Card ===== */
-.disabled-card {
-    filter: grayscale(100%);
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-</style>
+        if (type === 'kunjungan') {
+            form.action = "{{ route('laporan.kunjungan') }}";
+        } else if (type === 'diagnosa') {
+            form.action = "{{ route('laporan.diagnosa') }}";
+        } else {
+            form.action = "#"; // Fallback or handle not implemented
+            if(type) alert('Laporan ini belum tersedia.');
+        }
+    }
+</script>
+@endpush
 @endsection
