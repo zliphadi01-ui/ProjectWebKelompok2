@@ -3,7 +3,9 @@
 @section('content')
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3>Data Pasien</h3>
+     
+        <h3 class="text-primary fw-bold">Data Pasien</h3>
+
         <form class="d-flex" method="GET" action="{{ route('pasien.data') }}">
             <input type="text" name="q" class="form-control me-2" placeholder="Cari nama atau No. RM" value="{{ request('q') }}">
             <button class="btn btn-outline-primary">Cari</button>
@@ -13,7 +15,7 @@
     <div class="card">
         <div class="card-body p-0">
             <table class="table mb-0">
-                <thead class="table-secondary">
+                <thead class="thead-biru">
                     <tr>
                         <th>No</th>
                         <th>No. RM</th>
@@ -46,4 +48,18 @@
         </div>
     </div>
 </div>
+
+<style>
+
+.thead-biru {
+    background-color:rgb(16, 85, 194) !important; 
+}
+
+.thead-biru th {
+    color: #000 !important;         
+    font-weight: 600;
+    border-bottom: 2px solid #0d6efd;
+    padding: 14px 10px;
+}
+</style>
 @endsection
