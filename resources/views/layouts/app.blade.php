@@ -278,7 +278,8 @@ body.sidebar-toggled .main-content {
             @if(in_array($role, ['admin', 'dokter']))
             @php
                 $isPemeriksaan = request()->routeIs('pemeriksaan.*') || request()->is('pemeriksaan*');
-                $isPoli = request()->is('poli*');
+                // Fix: Ubah 'poli*' menjadi 'poli/*' agar tidak bentrok dengan 'poli-bpjs'
+                $isPoli = request()->is('poli/*');
             @endphp
             <li class="nav-item">
                 <a href="#poliMenu" class="nav-link d-flex justify-content-between align-items-center {{ $isPoli ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ $isPoli ? 'true' : 'false' }}">
