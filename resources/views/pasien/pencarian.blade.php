@@ -14,7 +14,7 @@
                     <form action="{{ route('pasien.pencarian') }}" method="GET">
                         <div class="input-group">
                             <span class="input-group-text bg-white border-end-0 ps-4"><i class="bi-search fs-4 text-primary"></i></span>
-                            <input type="text" name="q" class="form-control border-start-0 fs-4" placeholder="Ketik Nama, No. RM, atau NIK..." value="{{ $q ?? '' }}" autofocus>
+                            <input type="text" name="q" class="form-control border-start-0 fs-2" placeholder="Ketik Nama, No. RM, atau NIK..." value="{{ $q ?? '' }}" autofocus>
                             <button class="btn btn-primary px-4 fw-bold" type="submit">CARI</button>
                         </div>
                     </form>
