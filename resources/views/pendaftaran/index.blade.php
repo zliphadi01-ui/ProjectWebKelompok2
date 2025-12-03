@@ -25,7 +25,7 @@
                             <input type="text" name="q" class="form-control border-start-0" placeholder="Masukkan Nama / NIK / No. RM..." value="{{ $query ?? '' }}" required>
                             <button class="btn btn-primary px-4" type="submit">Cari</button>
                         </div>
-                        <small class="text-muted mt-2 d-block">Cari pasien yang sudah pernah berobat sebelumnya.</small>
+                        <small class="text-muted mt-5 d-block">Cari pasien yang sudah pernah berobat sebelumnya.</small>
                     </form>
 
                     {{-- Hasil Pencarian ditampilkan jika sudah ada query --}}
