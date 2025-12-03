@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mt-4">
-    <h3 class="fw-bold mb-4">
+    <h3 class="fw-bold mb-4 text-title">
         <i class="bi-card-text me-2"></i>
         Cetak Kartu Pasien
     </h3>
@@ -64,8 +64,12 @@
     @endif
 </div>
 
-{{-- Styling khusus print --}}
+
 <style>
+    .text-title {
+        color: #007bff; 
+    }
+
     @media print {
         body * {
             visibility: hidden;
