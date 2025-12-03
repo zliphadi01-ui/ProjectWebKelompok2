@@ -2,14 +2,14 @@
 
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="text-success fw-bold"><i class="bi-hospital me-2"></i>Poli Eksekutif BPJS (V-Claim)</h2>
-    <div class="badge bg-success fs-6">Online <i class="bi-wifi ms-1"></i></div>
+    <h2 class="text-primary fw-bold"><i class="bi-hospital me-2"></i>Poli Eksekutif BPJS (V-Claim)</h2>
+    <div class="badge bg-primary fs-6">Online <i class="bi-wifi ms-1"></i></div>
 </div>
 
 <div class="row mb-4">
     <div class="col-md-8">
         <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-success text-white">
+            <div class="card-header bg-primary text-white">
                 <h6 class="m-0 fw-bold">Buat SEP (Surat Eligibilitas Peserta)</h6>
             </div>
             <div class="card-body">
@@ -19,7 +19,7 @@
                             <label class="form-label">No. Kartu BPJS</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="0001234567890">
-                                <button class="btn btn-outline-success" type="button">Cari Peserta</button>
+                                <button class="btn btn-outline-primary" type="button">Cari Peserta</button>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -49,7 +49,7 @@
                         <label class="form-label">Diagnosa Awal (ICD-10)</label>
                         <input type="text" class="form-control" placeholder="Ketik kode atau nama diagnosa...">
                     </div>
-                    <button type="button" class="btn btn-success w-100 fw-bold">Simpan & Cetak SEP</button>
+                    <button type="button" class="btn btn-primary w-100 fw-bold">Simpan & Cetak SEP</button>
                 </form>
             </div>
         </div>
@@ -69,7 +69,7 @@
                     </li>
                     <li class="list-group-item bg-transparent d-flex justify-content-between">
                         <span>Klaim Disetujui</span>
-                        <span class="fw-bold text-success">30</span>
+                        <span class="fw-bold text-primary">30</span>
                     </li>
                     <li class="list-group-item bg-transparent d-flex justify-content-between">
                         <span>Klaim Ditolak</span>
@@ -103,7 +103,7 @@
                     <td>0001234567890</td>
                     <td>BUDI SANTOSO</td>
                     <td>PENYAKIT DALAM</td>
-                    <td><span class="badge bg-success">Terbit</span></td>
+                    <td><span class="badge bg-primary">Terbit</span></td>
                     <td><button class="btn btn-sm btn-outline-secondary"><i class="bi-printer"></i></button></td>
                 </tr>
                 <tr>
@@ -111,7 +111,7 @@
                     <td>0009876543210</td>
                     <td>SITI AMINAH</td>
                     <td>MATA</td>
-                    <td><span class="badge bg-success">Terbit</span></td>
+                    <td><span class="badge bg-primary">Terbit</span></td>
                     <td><button class="btn btn-sm btn-outline-secondary"><i class="bi-printer"></i></button></td>
                 </tr>
             </tbody>
