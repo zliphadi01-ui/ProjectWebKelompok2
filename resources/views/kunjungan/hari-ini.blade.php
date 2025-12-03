@@ -28,7 +28,7 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col">
-                        <div class="text-xs fw-bold text-warning text-uppercase mb-1">Menunggu</div>
+                        <div class="text-xs fw-bold text-primary text-uppercase mb-1">Menunggu</div>
                         <div class="h4 mb-0 fw-bold text-gray-800">{{ $statistik['menunggu'] }}</div>
                     </div>
                     <div class="col-auto">
@@ -44,7 +44,7 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col">
-                        <div class="text-xs fw-bold text-info text-uppercase mb-1">Sedang Diperiksa</div>
+                        <div class="text-xs fw-bold text-primary text-uppercase mb-1">Sedang Diperiksa</div>
                         <div class="h4 mb-0 fw-bold text-gray-800">{{ $statistik['sedang_diperiksa'] }}</div>
                     </div>
                     <div class="col-auto">
@@ -75,7 +75,7 @@
 <div class="card shadow">
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
         <h6 class="m-0 fw-bold text-primary">Daftar Kunjungan</h6>
-        <a href="{{ route('kunjungan.refresh') }}" class="btn btn-sm btn-success">
+        <a href="{{ route('kunjungan.refresh') }}" class="btn btn-sm btn-warning text-white">
             <i class="bi-arrow-clockwise me-1"></i> Refresh
         </a>
     </div>

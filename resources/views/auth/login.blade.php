@@ -31,7 +31,7 @@
             <button type="submit" id="loginBtn" class="btn btn-primary w-100">Masuk</button>
             
             <div class="mt-3 text-center">
-                <small class="text-muted">Dev login: test@example.com / password</small>
+                <small class="text-muted">RME Polije</small>
             </div>
         </form>
 
