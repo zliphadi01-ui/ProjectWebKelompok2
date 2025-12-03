@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Pasien extends Model
 {
-    protected $table = 'pasien'; // Pastikan nama tabel benar
+    protected $table = 'pasien';
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $fillable = [
         'no_rm', 'nama', 'nik', 'jenis_kelamin', 'tanggal_lahir',

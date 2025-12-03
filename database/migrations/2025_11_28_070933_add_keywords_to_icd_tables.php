@@ -15,9 +15,12 @@ return new class extends Migration
             $table->text('keywords')->nullable()->after('name'); // Untuk sinonim/istilah Indonesia
         });
 
-        Schema::table('icd9_procedures', function (Blueprint $table) {
-            $table->text('keywords')->nullable()->after('name'); // Untuk sinonim/istilah Indonesia
-        });
+        // Only add keywords if icd9_procedures table exists
+        if (Schema::hasTable('icd9_procedures')) {
+            Schema::table('icd9_procedures', function (Blueprint $table) {
+                $table->text('keywords')->nullable()->after('name'); // Untuk sinonim/istilah Indonesia
+            });
+        }
     }
 
     /**
@@ -29,8 +32,10 @@ return new class extends Migration
             $table->dropColumn('keywords');
         });
 
-        Schema::table('icd9_procedures', function (Blueprint $table) {
-            $table->dropColumn('keywords');
-        });
+        if (Schema::hasTable('icd9_procedures')) {
+            Schema::table('icd9_procedures', function (Blueprint $table) {
+                $table->dropColumn('keywords');
+            });
+        }
     }
 };
