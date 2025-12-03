@@ -44,7 +44,7 @@
             <div class="card-body">
                 <div class="row align-items-center">
                     <div class="col">
-                        <div class="text-xs fw-bold text-info text-uppercase mb-1">Sedang Diperiksa</div>
+                        <div class="text-xs fw-bold text-primary text-uppercase mb-1">Sedang Diperiksa</div>
                         <div class="h4 mb-0 fw-bold text-gray-800">{{ $statistik['sedang_diperiksa'] }}</div>
                     </div>
                     <div class="col-auto">
