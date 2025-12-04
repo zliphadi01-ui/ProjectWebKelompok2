@@ -34,14 +34,14 @@
             <div class="d-flex justify-content-between align-items-start mb-3">
                 <div>
                     <h6 class="text-muted text-uppercase small fw-bold tracking-wider mb-1">Terisi</h6>
-                    <h1 class="display-4 fw-bold text-danger mb-0">{{ $occupied }}</h1>
+                    <h1 class="display-4 fw-bold text-info mb-0">{{ $occupied }}</h1>
                 </div>
-                <div class="p-2 bg-danger-subtle rounded-circle text-danger">
+                <div class="p-2 bg-info-subtle rounded-circle text-info">
                     <i class="bi-person-fill-lock fs-4"></i>
                 </div>
             </div>
             <div class="progress" style="height: 6px;">
-                <div class="progress-bar bg-danger" role="progressbar" style="width: {{ $totalBeds > 0 ? ($occupied/$totalBeds)*100 : 0 }}%"></div>
+                <div class="progress-bar bg-info" role="progressbar" style="width: {{ $totalBeds > 0 ? ($occupied/$totalBeds)*100 : 0 }}%"></div>
             </div>
         </div>
     </div>
