@@ -1,17 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container-fluid px-4 pb-5">
+<div class="pb-5">
     {{-- Hero Section --}}
-    <div class="d-flex justify-content-between align-items-end my-4">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-end mb-5">
         <div>
-            <h6 class="text-uppercase text-muted small fw-bold mb-1">Overview</h6>
-            <h1 class="h2 fw-bold text-gray-800 mb-0">Dashboard Utama</h1>
+            <div class="text-uppercase text-primary fw-bold small mb-1 tracking-wide">Overview</div>
+            <h1 class="display-5 fw-bold text-dark mb-0">Dashboard Utama</h1>
+            <p class="text-muted mt-2 mb-0">Selamat datang kembali, {{ Auth::user()->name ?? 'User' }}.</p>
         </div>
-        <div class="d-none d-md-block text-end">
-            <div class="small text-muted mb-1">{{ \Carbon\Carbon::now()->translatedFormat('l, j F Y') }}</div>
+        <div class="d-none d-md-block text-end mt-3 mt-md-0">
+            <div class="h6 text-muted mb-2">{{ \Carbon\Carbon::now()->translatedFormat('l, j F Y') }}</div>
             @if(in_array(Auth::user()->role, ['admin', 'pendaftaran']))
-            <a href="{{ route('pendaftaran.create-baru') }}" class="btn btn-primary rounded-pill shadow-sm px-4">
+            <a href="{{ route('pendaftaran.create-baru') }}" class="btn btn-primary rounded-pill shadow px-4 hover-scale">
                 <i class="bi-plus-lg me-2"></i>Pasien Baru
             </a>
             @endif
@@ -22,76 +23,55 @@
     <div class="row g-4 mb-5">
         {{-- Card 1: Kunjungan --}}
         <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100 overflow-hidden card-hover">
-                <div class="card-body position-relative p-4">
-                    <div class="d-flex flex-column position-relative z-1">
-                        <div class="text-uppercase fw-bold text-primary small mb-2 tracking-wide">Total Kunjungan</div>
-                        <div class="h2 fw-bold text-dark mb-0" id="kunjunganCount">{{ $kunjungan_hari_ini ?? 0 }}</div>
-                        <div class="small text-muted mt-2">
-                            <i class="bi-arrow-up-short text-success"></i> Hari ini
-                        </div>
-                    </div>
-                    <div class="icon-bg text-primary opacity-10">
-                        <i class="bi-people-fill"></i>
-                    </div>
-                </div>
-            </div>
+            @include('components.stat-card', [
+                'title' => 'Total Kunjungan',
+                'value' => $kunjungan_hari_ini ?? 0,
+                'id' => 'kunjunganCount',
+                'icon' => 'people-fill',
+                'color' => 'primary',
+                'trend' => 'up',
+                'trendText' => 'Hari ini'
+            ])
         </div>
 
         {{-- Card 2: Pasien Baru --}}
         @if(in_array(Auth::user()->role, ['admin', 'pendaftaran']))
         <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100 overflow-hidden card-hover">
-                <div class="card-body position-relative p-4">
-                    <div class="d-flex flex-column position-relative z-1">
-                        <div class="text-uppercase fw-bold text-success small mb-2 tracking-wide">Pasien Baru</div>
-                        <div class="h2 fw-bold text-dark mb-0" id="pasienBaruCount">{{ $pasien_baru ?? 0 }}</div>
-                        <div class="small text-muted mt-2">
-                            <i class="bi-person-plus text-success"></i> Terdaftar hari ini
-                        </div>
-                    </div>
-                    <div class="icon-bg text-success opacity-10">
-                        <i class="bi-person-vcard-fill"></i>
-                    </div>
-                </div>
-            </div>
+            @include('components.stat-card', [
+                'title' => 'Pasien Baru',
+                'value' => $pasien_baru ?? 0,
+                'id' => 'pasienBaruCount',
+                'icon' => 'person-vcard-fill',
+                'color' => 'success',
+                'trend' => 'up',
+                'trendText' => 'Terdaftar hari ini'
+            ])
         </div>
         @endif
 
-        <div class="col-xl-3 col-md-6 mb-4">
-            <a href="#" class="stat-link text-decoration-none" data-type="antrean">
-            <div class="card stat-card border-start-info h-100 py-2">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <div class="text-xs fw-bold text-info text-uppercase mb-1">Antrean Aktif</div>
-                            <div class="h5 mb-0 fw-bold text-gray-800" id="antreanCount">{{ $antrean_aktif ?? 0 }}</div>
-                        </div>
-                    </div>
-                    <div class="icon-bg text-info opacity-10">
-                        <i class="bi-hourglass-split"></i>
-                    </div>
-                </div>
-            </div>
+        {{-- Card 3: Antrean Aktif --}}
+        <div class="col-xl-3 col-md-6">
+            @include('components.stat-card', [
+                'title' => 'Antrean Aktif',
+                'value' => $antrean_aktif ?? 0,
+                'id' => 'antreanCount',
+                'icon' => 'hourglass-split',
+                'color' => 'info',
+                'subtitle' => 'Sedang berlangsung'
+            ])
         </div>
 
         {{-- Card 4: Resep --}}
         @if(in_array(Auth::user()->role, ['admin', 'apotek', 'dokter']))
         <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100 overflow-hidden card-hover">
-                <div class="card-body position-relative p-4">
-                    <div class="d-flex flex-column position-relative z-1">
-                        <div class="text-uppercase fw-bold text-warning small mb-2 tracking-wide">Resep Pending</div>
-                        <div class="h2 fw-bold text-dark mb-0" id="resepCount">{{ $resep_pending ?? 0 }}</div>
-                        <div class="small text-muted mt-2">
-                            <i class="bi-exclamation-circle text-warning"></i> Belum diproses
-                        </div>
-                    </div>
-                    <div class="icon-bg text-warning opacity-10">
-                        <i class="bi-capsule"></i>
-                    </div>
-                </div>
-            </div>
+            @include('components.stat-card', [
+                'title' => 'Resep Pending',
+                'value' => $resep_pending ?? 0,
+                'id' => 'resepCount',
+                'icon' => 'capsule',
+                'color' => 'warning',
+                'subtitle' => 'Belum diproses'
+            ])
         </div>
         @endif
     </div>
@@ -101,16 +81,19 @@
         <div class="col-lg-8">
             {{-- Quick Actions Grid --}}
             <div class="mb-4">
-                <h5 class="fw-bold text-gray-800 mb-3">Akses Cepat</h5>
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <h5 class="fw-bold text-dark mb-0">Akses Cepat</h5>
+                </div>
                 <div class="row g-3">
                     @if(in_array(Auth::user()->role, ['admin', 'pendaftaran', 'dokter']))
                     <div class="col-md-3 col-6">
-                        <a href="{{ route('pendaftaran.index') }}" class="card border-0 shadow-sm h-100 card-hover text-decoration-none">
+                        <a href="{{ route('pendaftaran.index') }}" class="card h-100 text-decoration-none hover-scale border-0 shadow-sm">
                             <div class="card-body text-center p-4">
-                                <div class="avatar-md bg-primary bg-opacity-10 text-primary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                                    <i class="bi-search fs-4"></i>
+                                <div class="avatar bg-primary-subtle text-primary rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                                    <i class="bi-search fs-3"></i>
                                 </div>
                                 <h6 class="fw-bold text-dark mb-0">Cari Pasien</h6>
+                                <small class="text-muted" style="font-size: 0.75rem;">Data Rekam Medis</small>
                             </div>
                         </a>
                     </div>
@@ -118,12 +101,13 @@
 
                     @if(in_array(Auth::user()->role, ['admin', 'dokter']))
                     <div class="col-md-3 col-6">
-                        <a href="{{ route('pemeriksaan.index') }}" class="card border-0 shadow-sm h-100 card-hover text-decoration-none">
+                        <a href="{{ route('pemeriksaan.index') }}" class="card h-100 text-decoration-none hover-scale border-0 shadow-sm">
                             <div class="card-body text-center p-4">
-                                <div class="avatar-md bg-success bg-opacity-10 text-success rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                                    <i class="bi-heart-pulse fs-4"></i>
+                                <div class="avatar bg-success-subtle text-success rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                                    <i class="bi-heart-pulse fs-3"></i>
                                 </div>
                                 <h6 class="fw-bold text-dark mb-0">Pemeriksaan</h6>
+                                <small class="text-muted" style="font-size: 0.75rem;">Input Medis</small>
                             </div>
                         </a>
                     </div>
@@ -131,12 +115,13 @@
 
                     @if(in_array(Auth::user()->role, ['admin', 'apotek']))
                     <div class="col-md-3 col-6">
-                        <a href="{{ route('gudang') }}" class="card border-0 shadow-sm h-100 card-hover text-decoration-none">
+                        <a href="{{ route('gudang') }}" class="card h-100 text-decoration-none hover-scale border-0 shadow-sm">
                             <div class="card-body text-center p-4">
-                                <div class="avatar-md bg-warning bg-opacity-10 text-warning rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                                    <i class="bi-box-seam fs-4"></i>
+                                <div class="avatar bg-warning-subtle text-warning rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                                    <i class="bi-box-seam fs-3"></i>
                                 </div>
                                 <h6 class="fw-bold text-dark mb-0">Stok Obat</h6>
+                                <small class="text-muted" style="font-size: 0.75rem;">Inventory</small>
                             </div>
                         </a>
                     </div>
@@ -144,12 +129,13 @@
 
                     @if(in_array(Auth::user()->role, ['admin', 'pendaftaran']))
                     <div class="col-md-3 col-6">
-                        <a href="{{ route('poli-bpjs') }}" class="card border-0 shadow-sm h-100 card-hover text-decoration-none">
+                        <a href="{{ route('poli-bpjs') }}" class="card h-100 text-decoration-none hover-scale border-0 shadow-sm">
                             <div class="card-body text-center p-4">
-                                <div class="avatar-md bg-info bg-opacity-10 text-info rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
-                                    <i class="bi-hospital fs-4"></i>
+                                <div class="avatar bg-info-subtle text-info rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                                    <i class="bi-hospital fs-3"></i>
                                 </div>
                                 <h6 class="fw-bold text-dark mb-0">Poli BPJS</h6>
+                                <small class="text-muted" style="font-size: 0.75rem;">Antrean BPJS</small>
                             </div>
                         </a>
                     </div>
@@ -158,9 +144,9 @@
             </div>
 
             {{-- Chart Section --}}
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
-                    <h5 class="fw-bold text-gray-800 mb-0">Statistik Kunjungan</h5>
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold text-dark mb-0">Statistik Kunjungan</h5>
                     <div class="dropdown">
                         <button class="btn btn-sm btn-light rounded-pill px-3" type="button">
                             7 Hari Terakhir
@@ -177,11 +163,10 @@
 
         {{-- Right Column: Live Queue --}}
         <div class="col-lg-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-transparent border-0 pt-4 px-4 pb-2 d-flex justify-content-between align-items-center">
-                    <h5 class="fw-bold text-gray-800 mb-0">Antrean Live</h5>
-                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill px-3 py-2">
-                        <span class="spinner-grow spinner-grow-sm me-1" role="status" aria-hidden="true"></span>
+            <div class="card h-100">
+                <div class="card-header pt-4 px-4 pb-2 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold text-dark mb-0">Antrean Live</h5>
+                    <span class="badge bg-danger rounded-pill px-3 py-2 animate-pulse">
                         LIVE
                     </span>
                 </div>
@@ -235,39 +220,19 @@
 </div>
 
 <style>
-    /* Custom Utilities */
-    .tracking-wide { letter-spacing: 0.05em; }
-    .text-gray-800 { color: #2d3748; }
-    .opacity-10 { opacity: 0.1; }
-    .opacity-25 { opacity: 0.25; }
-    
-    /* Card Hover Effects */
-    .card-hover {
-        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    .animate-pulse {
+        animation: pulse 2s infinite;
     }
-    .card-hover:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+    @keyframes pulse {
+        0% { opacity: 1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 1; }
     }
-
-    /* Icon Background */
-    .icon-bg {
-        position: absolute;
-        right: -10px;
-        bottom: -10px;
-        font-size: 6rem;
-        transform: rotate(-15deg);
-        z-index: 0;
-        pointer-events: none;
+    .hover-scale {
+        transition: transform 0.2s;
     }
-
-    /* List Item Hover */
-    .hover-bg-light:hover {
-        background-color: #f8f9fa;
-        cursor: pointer;
-    }
-    .transition-all {
-        transition: all 0.2s ease;
+    .hover-scale:hover {
+        transform: scale(1.02);
     }
 </style>
 @endsection
@@ -282,8 +247,8 @@
         
         // Gradient for Chart
         const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, 'rgba(78, 115, 223, 0.2)');
-        gradient.addColorStop(1, 'rgba(78, 115, 223, 0)');
+        gradient.addColorStop(0, 'rgba(11, 107, 203, 0.2)'); // Primary color var
+        gradient.addColorStop(1, 'rgba(11, 107, 203, 0)');
 
         new Chart(ctx, {
             type: 'line',
@@ -292,11 +257,11 @@
                 datasets: [{
                     label: 'Kunjungan',
                     data: dataPoints,
-                    borderColor: '#4e73df',
+                    borderColor: '#0b6bcb', // Primary color
                     backgroundColor: gradient,
                     borderWidth: 3,
                     pointBackgroundColor: '#fff',
-                    pointBorderColor: '#4e73df',
+                    pointBorderColor: '#0b6bcb',
                     pointBorderWidth: 2,
                     pointRadius: 4,
                     pointHoverRadius: 6,
@@ -310,7 +275,7 @@
                 plugins: {
                     legend: { display: false },
                     tooltip: {
-                        backgroundColor: '#2d3748',
+                        backgroundColor: '#2d3436',
                         titleColor: '#fff',
                         bodyColor: '#fff',
                         padding: 12,
@@ -326,12 +291,12 @@
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { borderDash: [4, 4], drawBorder: false, color: "#e3e6f0" },
-                        ticks: { padding: 10, color: "#858796", font: { family: "'Nunito', sans-serif" } }
+                        grid: { borderDash: [4, 4], drawBorder: false, color: "#e2e8f0" },
+                        ticks: { padding: 10, color: "#64748b", font: { family: "'Inter', sans-serif" } }
                     },
                     x: {
                         grid: { display: false, drawBorder: false },
-                        ticks: { padding: 10, color: "#858796", font: { family: "'Nunito', sans-serif" } }
+                        ticks: { padding: 10, color: "#64748b", font: { family: "'Inter', sans-serif" } }
                     }
                 },
                 interaction: {
@@ -362,13 +327,15 @@
             const increment = end > start ? 1 : -1;
             const stepTime = Math.abs(Math.floor(duration / range));
             const obj = document.getElementById(id);
-            const timer = setInterval(function() {
-                current += increment;
-                obj.innerHTML = current;
-                if (current == end) {
-                    clearInterval(timer);
-                }
-            }, stepTime);
+            if(obj) {
+                const timer = setInterval(function() {
+                    current += increment;
+                    obj.innerHTML = current;
+                    if (current == end) {
+                        clearInterval(timer);
+                    }
+                }, stepTime);
+            }
         }
 
         setInterval(updateStats, 10000);

@@ -28,7 +28,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:5',
-            'role' => 'required|string|in:admin,dokter,perawat,pendaftaran,apotek,kasir,pasien',
+            'role' => 'required|string|in:admin,dokter,perawat,pendaftaran,apotek,kasir,pasien,rekam_medis',
             'nip' => 'nullable|string|max:50', // Optional NIP
             'profesi' => 'nullable|string|max:100', // Optional Profesi
             'unit' => 'nullable|string|max:100', // Optional Unit
@@ -57,7 +57,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-            'role' => 'required|string|in:admin,dokter,perawat,pendaftaran,apotek,kasir,pasien',
+            'role' => 'required|string|in:admin,dokter,perawat,pendaftaran,apotek,kasir,pasien,rekam_medis',
             'password' => 'nullable|string|min:5', // Password optional on update
         ]);
 

@@ -3,51 +3,49 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class SettingsController extends Controller
 {
-    protected function commonCounts()
-    {
-        $counts = [];
-        if (Schema::hasTable('pasien')) {
-            $counts['pasien'] = DB::table('pasien')->count();
-        }
-        if (Schema::hasTable('pendaftarans')) {
-            $counts['pendaftaran'] = DB::table('pendaftarans')->count();
-        }
-        if (Schema::hasTable('pemeriksaans')) {
-            $counts['pemeriksaan'] = DB::table('pemeriksaans')->count();
-        }
-        return $counts;
-    }
-
     public function pengaturan()
     {
-        $title = 'Pengaturan';
-        $counts = $this->commonCounts();
-        return view('pages.generic', compact('title', 'counts'));
+        return view('settings.index');
     }
 
-    public function pengaturanGrup()
+    public function updateProfile(Request $request)
     {
-        $title = 'Pengaturan Grup';
-        $counts = $this->commonCounts();
-        return view('pages.generic', compact('title', 'counts'));
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . Auth::id(),
+        ]);
+
+        $user = Auth::user();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->save();
+
+        return redirect()->route('pengaturan')->with('success', 'Profil berhasil diperbarui!');
     }
 
-    public function bypass()
+    public function updatePassword(Request $request)
     {
-        $title = 'Bypass';
-        $counts = $this->commonCounts();
-        return view('pages.generic', compact('title', 'counts'));
-    }
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
+        ]);
 
-    public function whatsapp()
-    {
-        $title = 'Whatsapp';
-        $counts = $this->commonCounts();
-        return view('pages.generic', compact('title', 'counts'));
+        $user = Auth::user();
+
+        // Verify current password
+        if (!Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Password lama tidak sesuai.']);
+        }
+
+        // Update password
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return redirect()->route('pengaturan')->with('success', 'Password berhasil diubah!');
     }
 }

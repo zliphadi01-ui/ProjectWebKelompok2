@@ -86,6 +86,8 @@ Route::get('/cetak-rujukan-bpjs', [BpjsController::class, 'cetakRujukanBpjs'])->
 Route::get('/poli/{nama_poli}', [MedicalSupportController::class, 'poli'])->name('poli.show');
 Route::get('/laporan/pembagian', [ReportController::class, 'laporanPembagian'])->name('laporan.pembagian');
 Route::get('/pengaturan', [SettingsController::class, 'pengaturan'])->name('pengaturan');
+Route::put('/pengaturan/profile', [SettingsController::class, 'updateProfile'])->name('pengaturan.update-profile');
+Route::put('/pengaturan/password', [SettingsController::class, 'updatePassword'])->name('pengaturan.update-password');
 Route::get('/pengaturan-grup', [SettingsController::class, 'pengaturanGrup'])->name('pengaturan.grup');
 Route::get('/bypass', [SettingsController::class, 'bypass'])->name('bypass');
 Route::get('/whatsapp', [SettingsController::class, 'whatsapp'])->name('whatsapp');

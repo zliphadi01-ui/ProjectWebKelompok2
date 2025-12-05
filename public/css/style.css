@@ -1,0 +1,375 @@
+/* 
+   ==========================================================================
+   PREMIUM MEDICAL DESIGN SYSTEM (v3.0)
+   "Vibrant Health" Theme
+   ========================================================================== 
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* 
+       1. COLOR PALETTE 
+       Vibrant, Trustworthy, Modern
+    */
+    --primary-h: 220;
+    --primary-s: 90%;
+    --primary-l: 56%;
+    --primary: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
+    --primary-dark: hsl(var(--primary-h), var(--primary-s), 40%);
+    --primary-light: hsl(var(--primary-h), var(--primary-s), 96%);
+    /* Tint */
+
+    --secondary: #00cec9;
+    /* Vibrant Teal */
+    --accent: #a29bfe;
+    /* Soft Purple */
+    --purple: #6c5ce7;
+
+    --success: #00b894;
+    --warning: #fdcb6e;
+    --danger: #ff7675;
+    --info: #74b9ff;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #0984e3 0%, #74b9ff 100%);
+    --gradient-purple: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+    --gradient-teal: linear-gradient(135deg, #00b894 0%, #55efc4 100%);
+    --gradient-orange: linear-gradient(135deg, #fdcb6e 0%, #ffeaa7 100%);
+
+    /* Neutrals */
+    --dark: #2d3436;
+    --text-main: #2d3436;
+    --text-muted: #636e72;
+    --text-light: #b2bec3;
+
+    --bg-body: #f0f3f8;
+    --bg-card: #ffffff;
+
+    /* 
+       2. SHAPES & DEPTH 
+    */
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+
+    --shadow-sm: 0 2px 4px rgba(45, 52, 54, 0.05);
+    --shadow-md: 0 8px 16px rgba(45, 52, 54, 0.08);
+    --shadow-lg: 0 16px 32px rgba(45, 52, 54, 0.12);
+    --shadow-hover: 0 20px 40px rgba(9, 132, 227, 0.15);
+
+    /* 
+       3. SIDEBAR 
+    */
+    --sidebar-width: 280px;
+    --sidebar-bg: #ffffff;
+}
+
+/* ================= RESET & BASE ================= */
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-body);
+    color: var(--text-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 700;
+    color: var(--dark);
+    letter-spacing: -0.02em;
+}
+
+a {
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+/* ================= COMPONENTS: CARDS ================= */
+
+.card {
+    background: var(--bg-card);
+    border: none;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+/* Glassmorphism utility */
+.glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+    padding: 1.5rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* ================= COMPONENTS: STAT CARDS ================= */
+
+.stat-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card .icon-bg {
+    opacity: 0.1;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover .icon-bg {
+    transform: rotate(0deg) scale(1.1);
+    opacity: 0.15;
+}
+
+/* ================= COMPONENTS: BUTTONS ================= */
+
+.btn {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--radius-sm);
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.btn-primary {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(9, 132, 227, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #0984e3 0%, #0984e3 100%);
+    box-shadow: 0 6px 20px rgba(9, 132, 227, 0.4);
+    transform: translateY(-2px);
+}
+
+.hover-scale:hover {
+    transform: scale(1.03);
+}
+
+/* ================= COMPONENTS: SIDEBAR ================= */
+
+.sidebar-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    z-index: 1000;
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s ease;
+    padding-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-brand {
+    padding: 2rem 1.5rem;
+    font-size: 1.5rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-menu {
+    padding: 0 1rem;
+    list-style: none;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Scrollbar for sidebar */
+.sidebar-menu::-webkit-scrollbar {
+    width: 4px;
+}
+
+.sidebar-menu::-webkit-scrollbar-thumb {
+    background: #dfe6e9;
+    border-radius: 4px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    border-radius: var(--radius-sm);
+    margin-bottom: 0.5rem;
+    transition: all 0.2s;
+}
+
+.nav-link i {
+    font-size: 1.25rem;
+    margin-right: 1rem;
+    color: #b2bec3;
+    transition: all 0.2s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background-color: var(--primary-light);
+    color: var(--primary);
+}
+
+.nav-link:hover i,
+.nav-link.active i {
+    color: var(--primary);
+    transform: translateX(3px);
+    /* Subtle nudge */
+}
+
+/* Submenu layout */
+.collapse .nav-link {
+    padding-left: 3.5rem;
+    font-size: 0.9rem;
+    position: relative;
+}
+
+.collapse .nav-link::before {
+    content: '';
+    position: absolute;
+    left: 2.2rem;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    background: #dfe6e9;
+    border-radius: 50%;
+    transform: translateY(-50%);
+}
+
+.collapse .nav-link:hover::before,
+.collapse .nav-link.active::before {
+    background: var(--primary);
+}
+
+.nav-heading {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #b2bec3;
+    font-weight: 700;
+    margin: 2rem 1rem 0.5rem;
+}
+
+/* ================= LAYOUT ================= */
+
+.main-content {
+    margin-left: var(--sidebar-width);
+    transition: margin-left 0.3s ease;
+    min-height: 100vh;
+    padding-bottom: 2rem;
+}
+
+.navbar-glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 900;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 992px) {
+    .sidebar-wrapper {
+        transform: translateX(-100%);
+    }
+
+    .sidebar-toggled .sidebar-wrapper {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* ================= UTILS & ANIMATION ================= */
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.text-gradient {
+    background: var(--gradient-primary);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.badge {
+    padding: 0.5em 1em;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Background Mesh Gradient (Optional usage on body or cards) */
+.bg-mesh {
+    background-color: hsla(220, 90%, 56%, 1);
+    background-image:
+        radial-gradient(at 40% 20%, hsla(270, 100%, 74%, 1) 0px, transparent 50%),
+        radial-gradient(at 80% 0%, hsla(189, 100%, 56%, 1) 0px, transparent 50%),
+        radial-gradient(at 0% 50%, hsla(340, 100%, 76%, 1) 0px, transparent 50%);
+}
