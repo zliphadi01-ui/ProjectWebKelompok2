@@ -19,6 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Set Carbon locale to Indonesian
+        \Carbon\Carbon::setLocale('id');
+        setlocale(LC_TIME, 'id_ID.UTF-8', 'id_ID', 'Indonesian');
     }
 }

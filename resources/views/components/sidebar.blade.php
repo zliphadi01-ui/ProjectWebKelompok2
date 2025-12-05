@@ -120,18 +120,22 @@
         </li>
         @endif
 
-        {{-- Unit Layanan (IGD & Rawat Inap) - Accessible to Admin, Dokter, Pendaftaran --}}
-        @if(in_array($role, ['admin', 'dokter', 'pendaftaran']))
+        {{-- Unit Layanan (Rawat Inap - Administrative) --}}
+        @if(in_array($role, ['admin', 'pendaftaran']))
         <li>
             <a href="{{ url('/rawat-inap') }}" class="nav-link {{ request()->is('rawat-inap*') ? 'active' : '' }}">
                 <i class="bi-house-fill"></i>
                 <span>Rawat Inap</span>
             </a>
         </li>
+        @endif
+
+        {{-- Triase IGD (Clinical - Doctor) --}}
+        @if(in_array($role, ['admin', 'dokter']))
         <li>
             <a href="{{ route('igd.index') }}" class="nav-link {{ request()->routeIs('igd.*') ? 'active' : '' }}">
-                <i class="bi-cone-striped"></i>
-                <span>IGD & Triase</span>
+                <i class="bi-heart-pulse-fill"></i>
+                <span>Triase IGD</span>
             </a>
         </li>
         @endif

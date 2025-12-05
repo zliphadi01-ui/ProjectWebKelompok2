@@ -102,6 +102,7 @@ Route::prefix('igd')->name('igd.')->group(function () {
     Route::post('/store', [App\Http\Controllers\IgdController::class, 'store'])->name('store');
     Route::get('/triase/{id}', [App\Http\Controllers\IgdController::class, 'triase'])->name('triase');
     Route::post('/triase/{id}', [App\Http\Controllers\IgdController::class, 'storeTriase'])->name('store-triase');
+    Route::delete('/{id}', [App\Http\Controllers\IgdController::class, 'destroy'])->name('destroy');
 });
 
 // Rekam Medis Module

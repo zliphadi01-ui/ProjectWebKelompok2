@@ -105,4 +105,20 @@ class IgdController extends Controller
 
         return redirect()->route('igd.index')->with('success', 'Triase berhasil disimpan.');
     }
+
+    // Hapus pasien dari antrian IGD
+    public function destroy($id)
+    {
+        $pendaftaran = Pendaftaran::findOrFail($id);
+        
+        // Hapus data triase jika ada
+        if ($pendaftaran->triage) {
+            $pendaftaran->triage->delete();
+        }
+        
+        // Hapus pendaftaran
+        $pendaftaran->delete();
+        
+        return redirect()->route('igd.index')->with('success', 'Pasien berhasil dihapus dari antrian IGD.');
+    }
 }

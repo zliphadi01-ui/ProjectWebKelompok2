@@ -78,6 +78,11 @@
                                             <i class="bi-stethoscope me-1"></i> Periksa
                                         </a>
                                     @endif
+                                    <button class="btn btn-danger btn-sm ms-1 btn-delete" 
+                                        data-id="{{ $p->id }}"
+                                        data-name="{{ $p->nama }}">
+                                        <i class="bi-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                             @empty
@@ -95,4 +100,55 @@
         </div>
     </div>
 </div>
+
+<!-- Single Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content border-0 shadow">
+            <form id="deleteForm" method="POST">
+                @csrf
+                @method('DELETE')
+                <div class="modal-header bg-danger text-white border-0">
+                    <h5 class="modal-title fw-bold">
+                        <i class="bi-exclamation-triangle me-2"></i>Hapus Pasien IGD
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p>Apakah Anda yakin ingin menghapus pasien <strong id="delete_name"></strong> dari antrian IGD?</p>
+                    <p class="text-danger small mb-0">
+                        <i class="bi-info-circle me-1"></i>Data triase dan riwayat akan ikut terhapus.
+                    </p>
+                </div>
+                <div class="modal-footer border-0 bg-light">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi-trash me-1"></i>Ya, Hapus
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
+
+@push('scripts')
+<script>
+// Delete Modal Handler
+document.querySelectorAll('.btn-delete').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const id = this.dataset.id;
+        const name = this.dataset.name;
+        
+        // Set form action
+        document.getElementById('deleteForm').action = `/igd/${id}`;
+        
+        // Set patient name
+        document.getElementById('delete_name').textContent = name;
+        
+        // Show modal
+        new bootstrap.Modal(document.getElementById('deleteModal')).show();
+    });
+});
+</script>
+@endpush
