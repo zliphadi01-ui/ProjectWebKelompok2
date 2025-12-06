@@ -202,6 +202,7 @@
                     {{-- PEMBERIAN OBAT --}}
                     <div class="mb-3">
                         <label class="fw-bold text-danger"><i class="bi-prescription2"></i> Pemberian Obat (Resep)</label>
+                        <small class="text-muted d-block mb-2">Harga obat akan terisi otomatis dari sistem inventory</small>
                         <div class="card border-danger">
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -211,7 +212,7 @@
                                                 <th width="40%">Nama Obat</th>
                                                 <th width="25%">Dosis</th>
                                                 <th width="15%">Jumlah</th>
-                                                <th width="15%">Harga</th>
+                                                <th width="15%">Harga (Auto)</th>
                                                 <th width="5%"></th>
                                             </tr>
                                         </thead>

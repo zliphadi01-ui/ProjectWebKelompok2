@@ -41,60 +41,16 @@
                             <td><strong class="text-danger">Rp {{ number_format($tagihan->total_biaya, 0, ',', '.') }}</strong></td>
                             <td><span class="badge bg-warning text-dark">Belum Bayar</span></td>
                             <td>
-                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#payModal{{ $tagihan->id }}">
+                                <button type="button" class="btn btn-sm btn-primary bayar-btn" 
+                                        data-id="{{ $tagihan->id }}"
+                                        data-no="{{ $tagihan->no_tagihan }}"
+                                        data-nama="{{ $tagihan->pasien->nama ?? '-' }}"
+                                        data-norm="{{ $tagihan->pasien->no_rm ?? '-' }}"
+                                        data-total="{{ $tagihan->total_biaya }}">
                                     <i class="bi-cash"></i> Bayar
                                 </button>
                             </td>
                         </tr>
-
-                        {{-- Payment Modal --}}
-                        <div class="modal fade" id="payModal{{ $tagihan->id }}" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-primary text-white">
-                                        <h5 class="modal-title">Proses Pembayaran</h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <form action="{{ route('kasir.process-payment', $tagihan->id) }}" method="POST">
-                                        @csrf
-                                        <div class="modal-body">
-                                            <div class="mb-3">
-                                                <label class="fw-bold">Pasien:</label>
-                                                <p>{{ $tagihan->pasien->nama ?? '-' }} ({{ $tagihan->pasien->no_rm ?? '-' }})</p>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="fw-bold">No Tagihan:</label>
-                                                <p>{{ $tagihan->no_tagihan }}</p>
-                                            </div>
-                                            <div class="mb-3 p-3 bg-light rounded">
-                                                <label class="fw-bold">Total Biaya:</label>
-                                                <h4 class="text-danger">Rp {{ number_format($tagihan->total_biaya, 0, ',', '.') }}</h4>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="fw-bold">Metode Pembayaran: <span class="text-danger">*</span></label>
-                                                <select name="metode_pembayaran" class="form-select" required>
-                                                    <option value="">-- Pilih Metode --</option>
-                                                    <option value="Tunai">Tunai</option>
-                                                    <option value="Transfer Bank">Transfer Bank</option>
-                                                    <option value="Debit Card">Debit Card</option>
-                                                    <option value="BPJS">BPJS</option>
-                                                </select>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="fw-bold">Jumlah Bayar: <span class="text-danger">*</span></label>
-                                                <input type="number" name="total_bayar" class="form-control" min="{{ $tagihan->total_biaya }}" step="0.01" required placeholder="Rp">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                            <button type="submit" class="btn btn-success">
-                                                <i class="bi-check-circle"></i> Konfirmasi Pembayaran
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
                         @endforeach
                     </tbody>
                 </table>
@@ -106,4 +62,83 @@
         @endif
     </div>
 </div>
+
+{{-- Single Payment Modal (Outside Loop) --}}
+<div class="modal fade" id="payModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">Proses Pembayaran</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="paymentForm" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="fw-bold">Pasien:</label>
+                        <p id="modal-pasien"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold">No Tagihan:</label>
+                        <p id="modal-notag"></p>
+                    </div>
+                    <div class="mb-3 p-3 bg-light rounded">
+                        <label class="fw-bold">Total Biaya:</label>
+                        <h4 class="text-danger" id="modal-total"></h4>
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold">Metode Pembayaran: <span class="text-danger">*</span></label>
+                        <select name="metode_pembayaran" class="form-select" required>
+                            <option value="">-- Pilih Metode --</option>
+                            <option value="Tunai">Tunai</option>
+                            <option value="Transfer Bank">Transfer Bank</option>
+                            <option value="Debit Card">Debit Card</option>
+                            <option value="BPJS">BPJS</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="fw-bold">Jumlah Bayar: <span class="text-danger">*</span></label>
+                        <input type="number" name="total_bayar" id="modal-bayar" class="form-control" step="0.01" required placeholder="Rp">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi-check-circle"></i> Konfirmasi Pembayaran
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const payModal = new bootstrap.Modal(document.getElementById('payModal'));
+    const paymentForm = document.getElementById('paymentForm');
+    
+    // Handle all "Bayar" buttons
+    document.querySelectorAll('.bayar-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            const no = this.dataset.no;
+            const nama = this.dataset.nama;
+            const norm = this.dataset.norm;
+            const total = parseFloat(this.dataset.total);
+            
+            // Populate modal
+            document.getElementById('modal-pasien').textContent = `${nama} (${norm})`;
+            document.getElementById('modal-notag').textContent = no;
+            document.getElementById('modal-total').textContent = `Rp ${total.toLocaleString('id-ID')}`;
+            document.getElementById('modal-bayar').min = total;
+            
+            // Set form action
+            paymentForm.action = `/kasir/process-payment/${id}`;
+            
+            // Show modal
+            payModal.show();
+        });
+    });
+});
+</script>
 @endsection

@@ -165,7 +165,7 @@
         @if(in_array($role, ['admin', 'kasir']))
         <li class="nav-heading">KEUANGAN</li>
         <li>
-            <a href="{{ url('/kasir') }}" class="nav-link {{ request()->is('kasir*') ? 'active' : '' }}">
+            <a href="{{ url('/kasir') }}" class="nav-link {{ request()->is('kasir') && !request()->is('kasir/*') ? 'active' : '' }}">
                 <i class="bi-cash-coin"></i>
                 <span>Kasir</span>
             </a>
