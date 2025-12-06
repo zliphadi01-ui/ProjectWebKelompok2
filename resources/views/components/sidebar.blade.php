@@ -153,11 +153,11 @@
                 <i class="bi-chevron-down ms-auto" style="font-size: 0.8rem;"></i>
             </a>
             <div class="collapse {{ $isGudang ? 'show' : '' }}" id="gudangMenu">
-                <a href="{{ url('/apotek') }}" class="nav-link {{ request()->is('apotek*') ? 'active' : '' }}">Apotek</a>
-                <a href="{{ url('/apotek-retail') }}" class="nav-link {{ request()->is('apotek-retail*') ? 'active' : '' }}">Apotek Retail</a>
-                <a href="{{ url('/master-obat') }}" class="nav-link {{ request()->is('master-obat*') ? 'active' : '' }}">Master Obat</a>
-                <a href="{{ url('/farmasi') }}" class="nav-link {{ request()->is('farmasi*') ? 'active' : '' }}">Farmasi</a>
+                <a href="{{ url('/apotek') }}" class="nav-link {{ request()->is('apotek') && !request()->is('apotek/*') ? 'active' : '' }}">Resep Pasien</a>
+                <a href="{{ url('/apotek/stok-obat') }}" class="nav-link {{ request()->is('apotek/stok-obat*') ? 'active' : '' }}">Stok Obat</a>
+                <a href="{{ url('/apotek/riwayat') }}" class="nav-link {{ request()->is('apotek/riwayat*') ? 'active' : '' }}">Riwayat Resep</a>
             </div>
+
         </li>
         @endif
 

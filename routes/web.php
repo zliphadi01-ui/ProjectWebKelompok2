@@ -75,11 +75,18 @@ Route::resource('rawat-inap', RawatInapController::class);
 Route::post('/rawat-inap/{id}/cppt', [App\Http\Controllers\RawatInapController::class, 'storeCppt'])->name('rawat-inap.cppt.store');
 Route::put('/rawat-inap/{id}/discharge', [App\Http\Controllers\RawatInapController::class, 'discharge'])->name('rawat-inap.discharge');
 
-// Additional generic pages used by sidebar
+// Pharmacy routes
 Route::get('/apotek', [PharmacyController::class, 'apotek'])->name('apotek');
-Route::get('/apotek-retail', [PharmacyController::class, 'apotekRetail'])->name('apotek.retail');
-Route::get('/master-obat', [PharmacyController::class, 'masterObat'])->name('master-obat');
-Route::get('/farmasi', [PharmacyController::class, 'farmasi'])->name('farmasi');
+Route::get('/apotek/stok-obat', [PharmacyController::class, 'stokObat'])->name('apotek.stok-obat');
+Route::get('/apotek/riwayat', [PharmacyController::class, 'riwayat'])->name('apotek.riwayat');
+
+// API for medication search (autocomplete)
+Route::get('/api/obat/search', [PharmacyController::class, 'searchObat'])->name('api.obat.search');
+
+// Pharmacy prescription routes
+Route::get('/apotek/resep/{id}', [PharmacyController::class, 'detailResep'])->name('apotek.resep.detail');
+Route::put('/apotek/resep/{id}/status', [PharmacyController::class, 'updateStatus'])->name('apotek.resep.updateStatus');
+
 Route::get('/poli-bpjs', [BpjsController::class, 'poliBpjs'])->name('poli-bpjs');
 Route::get('/riwayat-peserta-bpjs', [BpjsController::class, 'riwayatPesertaBpjs'])->name('riwayat-peserta-bpjs');
 Route::get('/cetak-rujukan-bpjs', [BpjsController::class, 'cetakRujukanBpjs'])->name('cetak-rujukan-bpjs');
@@ -91,7 +98,12 @@ Route::put('/pengaturan/password', [SettingsController::class, 'updatePassword']
 Route::get('/pengaturan-grup', [SettingsController::class, 'pengaturanGrup'])->name('pengaturan.grup');
 Route::get('/bypass', [SettingsController::class, 'bypass'])->name('bypass');
 Route::get('/whatsapp', [SettingsController::class, 'whatsapp'])->name('whatsapp');
+
+// Kasir & Billing routes
+Route::get('/kasir', [FinanceController::class, 'kasir'])->name('kasir');
+Route::post('/kasir/process-payment/{id}', [FinanceController::class, 'processPayment'])->name('kasir.process-payment');
 Route::get('/billing', [FinanceController::class, 'billing'])->name('billing');
+Route::get('/billing/{id}', [FinanceController::class, 'detailBilling'])->name('billing.detail');
 
 
 

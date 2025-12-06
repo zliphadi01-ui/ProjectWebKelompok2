@@ -199,7 +199,128 @@
                         <textarea name="plan" class="form-control" rows="3" placeholder="Rencana pengobatan & resep..." required>{{ old('plan') }}</textarea>
                     </div>
 
+                    {{-- PEMBERIAN OBAT --}}
+                    <div class="mb-3">
+                        <label class="fw-bold text-danger"><i class="bi-prescription2"></i> Pemberian Obat (Resep)</label>
+                        <div class="card border-danger">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm" id="obatTable">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th width="40%">Nama Obat</th>
+                                                <th width="25%">Dosis</th>
+                                                <th width="15%">Jumlah</th>
+                                                <th width="15%">Harga</th>
+                                                <th width="5%"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="obatTableBody">
+                                            <!-- Dynamic rows will be added here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-primary" id="addObatBtn">
+                                    <i class="bi-plus-circle"></i> Tambah Obat
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        let obatRowCounter = 0;
+
+                        // Add new row
+                        document.getElementById('addObatBtn').addEventListener('click', function() {
+                            obatRowCounter++;
+                            const tbody = document.getElementById('obatTableBody');
+                            const row = document.createElement('tr');
+                            row.id = `obat-row-${obatRowCounter}`;
+                            row.innerHTML = `
+                                <td>
+                                    <input type="hidden" name="obat[${obatRowCounter}][obat_id]" class="obat-id-input" required>
+                                    <input type="text" class="form-control form-control-sm obat-search" 
+                                           placeholder="Ketik nama obat..." 
+                                           data-row="${obatRowCounter}" 
+                                           autocomplete="off" required>
+                                    <div class="obat-results position-absolute bg-white border shadow-sm" 
+                                         id="obat-results-${obatRowCounter}" 
+                                         style="display: none; z-index: 1000; max-height: 150px; overflow-y: auto; width: 90%;"></div>
+                                </td>
+                                <td><input type="text" name="obat[${obatRowCounter}][dosis]" class="form-control form-control-sm" placeholder="3x1" required></td>
+                                <td><input type="number" name="obat[${obatRowCounter}][jumlah]" class="form-control form-control-sm" min="1" value="1" required></td>
+                                <td><input type="number" name="obat[${obatRowCounter}][harga_satuan]" class="form-control form-control-sm harga-input" readonly></td>
+                                <td><button type="button" class="btn btn-sm btn-danger delete-obat-btn" data-row="${obatRowCounter}"><i class="bi-trash"></i></button></td>
+                            `;
+                            tbody.appendChild(row);
+
+                            // Attach search event to the new row
+                            attachObatSearch(obatRowCounter);
+                            attachDeleteEvent(obatRowCounter);
+                        });
+
+                        // Search obat function
+                        function attachObatSearch(rowId) {
+                            const searchInput = document.querySelector(`[data-row="${rowId}"]`);
+                            const resultsDiv = document.getElementById(`obat-results-${rowId}`);
+                            const obatIdInput = searchInput.parentElement.querySelector('.obat-id-input');
+                            const hargaInput = searchInput.closest('tr').querySelector('.harga-input');
+
+                            searchInput.addEventListener('input', async function() {
+                                const query = this.value;
+                                if (query.length < 2) {
+                                    resultsDiv.style.display = 'none';
+                                    return;
+                                }
+
+                                try {
+                                    const res = await fetch(`/api/obat/search?q=${query}`);
+                                    const data = await res.json();
+                                    resultsDiv.innerHTML = '';
+                                    
+                                    if (data.length > 0) {
+                                        data.forEach(obat => {
+                                            const div = document.createElement('div');
+                                            div.classList.add('p-2', 'border-bottom', 'cursor-pointer');
+                                            div.style.cursor = 'pointer';
+                                            div.innerHTML = `<strong>${obat.nama_obat}</strong> <small class="text-muted">(Stok: ${obat.stok})</small><br><small>Rp ${obat.harga_jual}</small>`;
+                                            div.onclick = () => {
+                                                searchInput.value = obat.nama_obat;
+                                                obatIdInput.value = obat.id;
+                                                hargaInput.value = obat.harga_jual;
+                                                resultsDiv.style.display = 'none';
+                                            };
+                                            resultsDiv.appendChild(div);
+                                        });
+                                        resultsDiv.style.display = 'block';
+                                    } else {
+                                        resultsDiv.style.display = 'none';
+                                    }
+                                } catch (e) {
+                                    console.error('Error fetching obat:', e);
+                                }
+                            });
+
+                            // Hide results when clicking outside
+                            document.addEventListener('click', function(e) {
+                                if (!searchInput.contains(e.target) && !resultsDiv.contains(e.target)) {
+                                    resultsDiv.style.display = 'none';
+                                }
+                            });
+                        }
+
+                        // Delete row function
+                        function attachDeleteEvent(rowId) {
+                            const deleteBtn = document.querySelector(`[data-row="${rowId}"].delete-obat-btn`);
+                            deleteBtn.addEventListener('click', function() {
+                                const row = document.getElementById(`obat-row-${rowId}`);
+                                row.remove();
+                            });
+                        }
+                    </script>
+
                     {{-- TINDAK LANJUT --}}
+
                     <div class="card bg-light border-0 mb-3">
                         <div class="card-body">
                             <h6 class="fw-bold text-dark"><i class="bi-arrow-right-circle"></i> Tindak Lanjut</h6>

@@ -98,6 +98,38 @@ class PemeriksaanController extends Controller
             }
         }
 
+        // CREATE RESEP (if obat data exists)
+        if ($request->has('obat') && is_array($request->obat) && count($request->obat) > 0) {
+            // Create Resep header
+            $resep = \App\Models\Resep::create([
+                'pemeriksaan_id' => $pemeriksaan->id,
+                'pasien_id' => $validated['pasien_id'],
+                'dokter_id' => auth()->id(), // current logged in user
+                'status' => 'Menunggu',
+                'catatan' => null,
+            ]);
+
+            // Create Resep Details for each obat
+            foreach ($request->obat as $obatData) {
+                if (!empty($obatData['obat_id'])) {
+                    $obat = \App\Models\Obat::find($obatData['obat_id']);
+                    if ($obat) {
+                        $jumlah = $obatData['jumlah'] ?? 1;
+                        $hargaSatuan = $obatData['harga_satuan'] ?? $obat->harga_jual;
+                        
+                        \App\Models\ResepDetail::create([
+                            'resep_id' => $resep->id,
+                            'obat_id' => $obat->id,
+                            'jumlah' => $jumlah,
+                            'dosis' => $obatData['dosis'] ?? '',
+                            'harga_satuan' => $hargaSatuan,
+                            'subtotal' => $hargaSatuan * $jumlah,
+                        ]);
+                    }
+                }
+            }
+        }
+
         // LOGIKA TINDAK LANJUT
         if ($request->tindak_lanjut == 'Rawat Inap') {
             return redirect()->route('rawat-inap.create', ['pasien_id' => $validated['pasien_id']])
