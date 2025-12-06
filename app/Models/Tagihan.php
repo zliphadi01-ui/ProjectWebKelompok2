@@ -32,4 +32,14 @@ class Tagihan extends Model
     {
         return $this->belongsTo(Pendaftaran::class);
     }
+
+    public function resep()
+    {
+        return $this->belongsTo(Resep::class);
+    }
+
+    public function kasir()
+    {
+        return $this->belongsTo(User::class, 'kasir_id');
+    }
 }
