@@ -10,6 +10,7 @@ class Tagihan extends Model
         'no_tagihan',
         'pendaftaran_id',
         'pasien_id',
+        'resep_id',
         'total_biaya',
         'total_bayar',
         'kembalian',
