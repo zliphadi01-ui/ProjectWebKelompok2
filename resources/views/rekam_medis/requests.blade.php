@@ -112,80 +112,80 @@
                                                 data-bs-toggle="modal" data-bs-target="#rejectModal{{ $request->id }}">
                                             <i class="bi bi-x-circle me-1"></i>Tolak
                                         </button>
+
+                                        <!-- Approve Modal -->
+                                        <div class="modal fade" id="approveModal{{ $request->id }}" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Setujui Permintaan Akses</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <form method="POST" action="{{ route('rekam-medis.requests.approve', $request->id) }}">
+                                                        @csrf
+                                                        <div class="modal-body text-start">
+                                                            <div class="alert alert-info">
+                                                                <i class="bi bi-info-circle me-2"></i>
+                                                                Akses akan berlaku selama <strong>24 jam</strong> sejak persetujuan ini.
+                                                            </div>
+                                                            <p><strong>Dokter:</strong> {{ $request->dokter->name }}</p>
+                                                            <p><strong>Pasien:</strong> {{ $request->pasien->nama }} ({{ $request->pasien->no_rm }})</p>
+                                                            <p><strong>Alasan:</strong><br>{{ $request->keterangan }}</p>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                            <button type="submit" class="btn btn-success">
+                                                                <i class="bi bi-check-circle me-1"></i>Setujui Permintaan
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Reject Modal -->
+                                        <div class="modal fade" id="rejectModal{{ $request->id }}" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Tolak Permintaan Akses</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <form method="POST" action="{{ route('rekam-medis.requests.reject', $request->id) }}">
+                                                        @csrf
+                                                        <div class="modal-body text-start">
+                                                            <p><strong>Dokter:</strong> {{ $request->dokter->name }}</p>
+                                                            <p><strong>Pasien:</strong> {{ $request->pasien->nama }} ({{ $request->pasien->no_rm }})</p>
+                                                            <p><strong>Alasan Dokter:</strong><br>{{ $request->keterangan }}</p>
+                                                            <hr>
+                                                            <div class="mb-3">
+                                                                <label for="catatan_penolakan{{ $request->id }}" class="form-label fw-bold">
+                                                                    Alasan Penolakan <span class="text-danger">*</span>
+                                                                </label>
+                                                                <textarea 
+                                                                    class="form-control" 
+                                                                    id="catatan_penolakan{{ $request->id }}" 
+                                                                    name="catatan_penolakan" 
+                                                                    rows="3" 
+                                                                    required
+                                                                    placeholder="Jelaskan alasan penolakan permintaan ini..."></textarea>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                            <button type="submit" class="btn btn-danger">
+                                                                <i class="bi bi-x-circle me-1"></i>Tolak Permintaan
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
                                     @else
                                         <span class="text-muted small">-</span>
                                     @endif
                                 </td>
                             </tr>
-
-                            <!-- Approve Modal -->
-                            <div class="modal fade" id="approveModal{{ $request->id }}" tabindex="-1">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Setujui Permintaan Akses</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <form method="POST" action="{{ route('rekam-medis.requests.approve', $request->id) }}">
-                                            @csrf
-                                            <div class="modal-body">
-                                                <div class="alert alert-info">
-                                                    <i class="bi bi-info-circle me-2"></i>
-                                                    Akses akan berlaku selama <strong>24 jam</strong> sejak persetujuan ini.
-                                                </div>
-                                                <p><strong>Dokter:</strong> {{ $request->dokter->name }}</p>
-                                                <p><strong>Pasien:</strong> {{ $request->pasien->nama }} ({{ $request->pasien->no_rm }})</p>
-                                                <p><strong>Alasan:</strong><br>{{ $request->keterangan }}</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                <button type="submit" class="btn btn-success">
-                                                    <i class="bi bi-check-circle me-1"></i>Setujui Permintaan
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Reject Modal -->
-                            <div class="modal fade" id="rejectModal{{ $request->id }}" tabindex="-1">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Tolak Permintaan Akses</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                        </div>
-                                        <form method="POST" action="{{ route('rekam-medis.requests.reject', $request->id) }}">
-                                            @csrf
-                                            <div class="modal-body">
-                                                <p><strong>Dokter:</strong> {{ $request->dokter->name }}</p>
-                                                <p><strong>Pasien:</strong> {{ $request->pasien->nama }} ({{ $request->pasien->no_rm }})</p>
-                                                <p><strong>Alasan Dokter:</strong><br>{{ $request->keterangan }}</p>
-                                                <hr>
-                                                <div class="mb-3">
-                                                    <label for="catatan_penolakan{{ $request->id }}" class="form-label fw-bold">
-                                                        Alasan Penolakan <span class="text-danger">*</span>
-                                                    </label>
-                                                    <textarea 
-                                                        class="form-control" 
-                                                        id="catatan_penolakan{{ $request->id }}" 
-                                                        name="catatan_penolakan" 
-                                                        rows="3" 
-                                                        required
-                                                        placeholder="Jelaskan alasan penolakan permintaan ini..."></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                                <button type="submit" class="btn btn-danger">
-                                                    <i class="bi bi-x-circle me-1"></i>Tolak Permintaan
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
                         @empty
                             <tr>
                                 <td colspan="6" class="text-center py-5">
@@ -211,42 +211,4 @@
         </div>
     </div>
 </div>
-
-@push('scripts')
-<script>
-// Prevent modals from auto-showing on page load
-(function() {
-    'use strict';
-    
-    // Wait for DOM to be ready
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', cleanupModals);
-    } else {
-        cleanupModals();
-    }
-    
-    function cleanupModals() {
-        // Ensure all modals start hidden
-        const modals = document.querySelectorAll('.modal');
-        modals.forEach(function(modal) {
-            // Remove show class if accidentally added
-            modal.classList.remove('show');
-            modal.style.display = 'none';
-            modal.setAttribute('aria-hidden', 'true');
-        });
-        
-        // Remove any leftover backdrops
-        const backdrops = document.querySelectorAll('.modal-backdrop');
-        backdrops.forEach(function(backdrop) {
-            backdrop.remove();
-        });
-        
-        // Reset body
-        document.body.classList.remove('modal-open');
-        document.body.style.overflow = '';
-        document.body.style.paddingRight = '';
-    }
-})();
-</script>
-@endpush
 @endsection
