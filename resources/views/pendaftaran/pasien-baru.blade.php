@@ -163,11 +163,17 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label required">Nama Lengkap</label>
-                        <input type="text" name="nama" class="form-control" required placeholder="Nama sesuai KTP" value="{{ old('nama') }}">
+                        <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror" required placeholder="Nama sesuai KTP" value="{{ old('nama') }}">
+                        @error('nama')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-6">
                         <label class="form-label required">NIK</label>
-                        <input type="text" name="nik" class="form-control" required pattern="[0-9]{16}" maxlength="16" placeholder="16 digit NIK" value="{{ old('nik') }}">
+                        <input type="text" name="nik" class="form-control @error('nik') is-invalid @enderror" required pattern="[0-9]{16}" maxlength="16" placeholder="16 digit NIK" value="{{ old('nik') }}">
+                        @error('nik')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
@@ -178,15 +184,21 @@
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Tanggal Lahir</label>
-                        <input type="date" name="tanggal_lahir" class="form-control" value="{{ old('tanggal_lahir') }}">
+                        <input type="date" name="tanggal_lahir" class="form-control @error('tanggal_lahir') is-invalid @enderror" value="{{ old('tanggal_lahir') }}">
+                        @error('tanggal_lahir')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-4">
                         <label class="form-label required">Jenis Kelamin</label>
-                        <select name="jenis_kelamin" class="form-select" required>
+                        <select name="jenis_kelamin" class="form-select @error('jenis_kelamin') is-invalid @enderror" required>
                             <option value="">Pilih</option>
                             <option value="L" {{ old('jenis_kelamin') == 'L' ? 'selected' : '' }}>Laki-Laki</option>
                             <option value="P" {{ old('jenis_kelamin') == 'P' ? 'selected' : '' }}>Perempuan</option>
                         </select>
+                        @error('jenis_kelamin')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
@@ -225,11 +237,17 @@
                 <div class="row g-3 mt-1">
                     <div class="col-md-4">
                         <label class="form-label">Telepon/HP</label>
-                        <input type="text" name="telepon" class="form-control" placeholder="08xxxxxxxxxx" value="{{ old('telepon') }}">
+                        <input type="text" name="telepon" class="form-control @error('telepon') is-invalid @enderror" placeholder="08xxxxxxxxxx" value="{{ old('telepon') }}">
+                        @error('telepon')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Email</label>
-                        <input type="email" name="email" class="form-control" placeholder="email@example.com" value="{{ old('email') }}">
+                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="email@example.com" value="{{ old('email') }}">
+                        @error('email')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Kode Pos</label>
@@ -327,12 +345,15 @@
                 <div class="row g-3">
                     <div class="col-md-12">
                         <label class="form-label required">Poli Tujuan</label>
-                        <select name="poli" class="form-select" required>
+                        <select name="poli" class="form-select @error('poli') is-invalid @enderror" required>
                             <option value="">-- Pilih Poli --</option>
                             @foreach($poliList as $poli)
                                 <option value="{{ $poli }}" {{ old('poli') == $poli ? 'selected' : '' }}>{{ $poli }}</option>
                             @endforeach
                         </select>
+                        @error('poli')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
 
