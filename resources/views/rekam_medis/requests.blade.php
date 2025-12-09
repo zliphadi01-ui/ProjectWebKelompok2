@@ -214,26 +214,39 @@
 
 @push('scripts')
 <script>
-// Pastikan semua modal tertutup saat halaman load untuk mencegah flickering
-document.addEventListener('DOMContentLoaded', function() {
-    // Tutup semua modal yang mungkin terbuka
-    const modals = document.querySelectorAll('.modal');
-    modals.forEach(modal => {
-        const bsModal = bootstrap.Modal.getInstance(modal);
-        if (bsModal) {
-            bsModal.hide();
-        }
-    });
+// Prevent modals from auto-showing on page load
+(function() {
+    'use strict';
     
-    // Hapus semua backdrop yang tertinggal
-    const backdrops = document.querySelectorAll('.modal-backdrop');
-    backdrops.forEach(backdrop => backdrop.remove());
+    // Wait for DOM to be ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', cleanupModals);
+    } else {
+        cleanupModals();
+    }
     
-    // Pastikan body tidak punya class modal-open
-    document.body.classList.remove('modal-open');
-    document.body.style.removeProperty('overflow');
-    document.body.style.removeProperty('padding-right');
-});
+    function cleanupModals() {
+        // Ensure all modals start hidden
+        const modals = document.querySelectorAll('.modal');
+        modals.forEach(function(modal) {
+            // Remove show class if accidentally added
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+        });
+        
+        // Remove any leftover backdrops
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach(function(backdrop) {
+            backdrop.remove();
+        });
+        
+        // Reset body
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+    }
+})();
 </script>
 @endpush
 @endsection
