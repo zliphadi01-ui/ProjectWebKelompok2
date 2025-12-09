@@ -31,9 +31,10 @@
                         <div class="col-md-6">
                             <label class="form-label">Poli Tujuan</label>
                             <select class="form-select">
-                                <option>Poli Penyakit Dalam</option>
-                                <option>Poli Jantung</option>
-                                <option>Poli Mata</option>
+                                <option>Poli Umum</option>
+                                <option>Poli Gigi</option>
+                                <option>Poli Anak</option>
+                                <option>Poli Kandungan</option>
                             </select>
                         </div>
                         <div class="col-md-6">
