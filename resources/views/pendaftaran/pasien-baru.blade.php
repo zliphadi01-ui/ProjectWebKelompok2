@@ -371,28 +371,43 @@
 
 @push('scripts')
 <script>
-    // Conditional Payment Fields
-    document.querySelectorAll('[name="jenis_pembayaran"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            document.getElementById('bpjsFields').classList.remove('show');
-            document.getElementById('asuransiFields').classList.remove('show');
-
-            if (this.value === 'BPJS') {
-                document.getElementById('bpjsFields').classList.add('show');
-            } else if (this.value === 'Asuransi') {
-                document.getElementById('asuransiFields').classList.add('show');
-            }
-        });
-    });
-
-    // Initialize on page load if old value exists
     document.addEventListener('DOMContentLoaded', function() {
-        const selectedPayment = document.querySelector('[name="jenis_pembayaran"]:checked');
-        if (selectedPayment && selectedPayment.value === 'BPJS') {
-            document.getElementById('bpjsFields').classList.add('show');
-        } else if (selectedPayment && selectedPayment.value === 'Asuransi') {
-            document.getElementById('asuransiFields').classList.add('show');
+    const bpjsFields = document.getElementById('bpjsFields');
+    const asuransiFields = document.getElementById('asuransiFields');
+    const radioButtons = document.querySelectorAll('[name="jenis_pembayaran"]');
+    // Function to toggle payment fields dengan smooth transition
+    function togglePaymentFields() {
+        const selectedValue = document.querySelector('[name="jenis_pembayaran"]:checked')?.value;
+        
+        console.log('Jenis Pembayaran Terpilih:', selectedValue); // Untuk debugging
+        
+        // Reset semua field terlebih dahulu
+        bpjsFields.classList.remove('show');
+        asuransiFields.classList.remove('show');
+        
+        // Tampilkan field sesuai pilihan (REAL-TIME)
+        if (selectedValue === 'BPJS') {
+            bpjsFields.classList.add('show');
+            // Set field BPJS jadi required
+            document.querySelector('[name="no_bpjs"]').setAttribute('required', 'required');
+        } else if (selectedValue === 'Asuransi') {
+            asuransiFields.classList.add('show');
+            // Set field Asuransi jadi required
+            document.querySelector('[name="nama_asuransi"]').setAttribute('required', 'required');
+            document.querySelector('[name="no_bpjs"]')?.removeAttribute('required');
+        } else {
+            // Umum/Tunai - hapus semua required
+            document.querySelector('[name="no_bpjs"]')?.removeAttribute('required');
+            document.querySelector('[name="nama_asuransi"]')?.removeAttribute('required');
         }
+    }
+    // Pasang event listener ke semua radio button
+    radioButtons.forEach(radio => {
+        radio.addEventListener('change', togglePaymentFields);
     });
+    
+    // Inisialisasi saat halaman load (support old() value dari Laravel)
+    togglePaymentFields();
+});
 </script>
 @endpush
