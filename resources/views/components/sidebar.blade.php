@@ -71,13 +71,15 @@
         </li>
         @endif
 
-        {{-- Poliklinik & Pemeriksaan (Admin & Dokter) --}}
-        @if(in_array($role, ['admin', 'dokter']))
+        {{-- Poliklinik & Pemeriksaan (Admin & Dokter & Petugas Lab) --}}
+        @if(in_array($role, ['admin', 'dokter', 'petugas_lab']))
         <li class="nav-heading">MEDIS & KLINIS</li>
         @php
             $isPemeriksaan = request()->routeIs('pemeriksaan.*') || request()->is('pemeriksaan*');
             $isPoli = request()->is('poli/*');
         @endphp
+        
+        @if(in_array($role, ['admin', 'dokter']))
         <li>
             <a href="#poliMenu" class="nav-link {{ $isPoli ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ $isPoli ? 'true' : 'false' }}">
                 <i class="bi-hospital"></i>
@@ -106,18 +108,23 @@
                 <span>Pemeriksaan</span>
             </a>
         </li>
+        @endif
+
         <li>
             <a href="{{ url('/laboratorium') }}" class="nav-link {{ request()->is('laboratorium*') ? 'active' : '' }}">
                 <i class="bi-eyedropper"></i>
                 <span>Laboratorium</span>
             </a>
         </li>
+        
+        @if(in_array($role, ['admin', 'dokter']))
         <li>
             <a href="{{ url('/poned') }}" class="nav-link {{ request()->is('poned*') ? 'active' : '' }}">
                 <i class="bi-activity"></i>
                 <span>PONED</span>
             </a>
         </li>
+        @endif
         @endif
 
         {{-- Unit Layanan (Rawat Inap - Administrative) --}}
