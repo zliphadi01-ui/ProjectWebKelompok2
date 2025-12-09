@@ -46,7 +46,7 @@ class PendaftaranController extends Controller
     {
     $request->validate([
     'nama' => 'required|string|max:255',
-    'nik' => 'required|digits:16|unique:pasiens,nik',
+    'nik' => 'required|digits:16|unique:pasien,nik',
     'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
     'tanggal_lahir' => 'required|date|before:today',
     'telepon' => 'nullable|regex:/^[0-9]{10,13}$/',
