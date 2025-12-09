@@ -108,7 +108,7 @@
         </li>
         <li>
             <a href="{{ url('/laboratorium') }}" class="nav-link {{ request()->is('laboratorium*') ? 'active' : '' }}">
-                <i class="bi-microscope"></i>
+                <i class="bi-eyedropper"></i>
                 <span>Laboratorium</span>
             </a>
         </li>
