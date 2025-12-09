@@ -62,19 +62,15 @@
                 <ul class="list-group list-group-flush bg-transparent">
                     <li class="list-group-item bg-transparent d-flex justify-content-between">
                         <span>Total SEP Hari Ini</span>
-                        <span class="fw-bold">45</span>
+                        <span class="fw-bold">{{ $stats['total_sep'] ?? 0 }}</span>
                     </li>
                     <li class="list-group-item bg-transparent d-flex justify-content-between">
-                        <span>Menunggu Verifikasi</span>
-                        <span class="fw-bold text-warning">12</span>
+                        <span>Menunggu Pemeriksaan</span>
+                        <span class="fw-bold text-warning">{{ $stats['menunggu'] ?? 0 }}</span>
                     </li>
                     <li class="list-group-item bg-transparent d-flex justify-content-between">
-                        <span>Klaim Disetujui</span>
-                        <span class="fw-bold text-primary">30</span>
-                    </li>
-                    <li class="list-group-item bg-transparent d-flex justify-content-between">
-                        <span>Klaim Ditolak</span>
-                        <span class="fw-bold text-danger">3</span>
+                        <span>Sudah Selesai</span>
+                        <span class="fw-bold text-success">{{ $stats['selesai'] ?? 0 }}</span>
                     </li>
                 </ul>
             </div>
@@ -99,22 +95,31 @@
                 </tr>
             </thead>
             <tbody>
+                @forelse($sepHariIni as $sep)
                 <tr>
-                    <td>1301R0011123V00001</td>
-                    <td>0001234567890</td>
-                    <td>BUDI SANTOSO</td>
-                    <td>PENYAKIT DALAM</td>
-                    <td><span class="badge bg-primary">Terbit</span></td>
+                    <td>{{ $sep->no_daftar }}</td>
+                    <td>{{ $sep->pasien->no_bpjs ?? '-' }}</td>
+                    <td>{{ $sep->pasien->nama ?? $sep->nama }}</td>
+                    <td>{{ $sep->poli }}</td>
+                    <td>
+                        @if($sep->status == 'Menunggu')
+                            <span class="badge bg-warning">Menunggu</span>
+                        @elseif($sep->status == 'Selesai')
+                            <span class="badge bg-success">Selesai</span>
+                        @else
+                            <span class="badge bg-primary">{{ $sep->status }}</span>
+                        @endif
+                    </td>
                     <td><button class="btn btn-sm btn-outline-secondary"><i class="bi-printer"></i></button></td>
                 </tr>
+                @empty
                 <tr>
-                    <td>1301R0011123V00002</td>
-                    <td>0009876543210</td>
-                    <td>SITI AMINAH</td>
-                    <td>MATA</td>
-                    <td><span class="badge bg-primary">Terbit</span></td>
-                    <td><button class="btn btn-sm btn-outline-secondary"><i class="bi-printer"></i></button></td>
+                    <td colspan="6" class="text-center text-muted py-5">
+                        <i class="bi bi-inbox fs-3 d-block mb-2"></i>
+                        <p class="mb-0">Belum ada data SEP hari ini</p>
+                    </td>
                 </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

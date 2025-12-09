@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use App\Models\Pasien;
+use App\Models\Pendaftaran;
+use Carbon\Carbon;
 
 class BpjsController extends Controller
 {
@@ -34,12 +37,45 @@ class BpjsController extends Controller
 
     public function poliBpjs()
     {
-        return view('bpjs.poli');
+        // Ambil data pendaftaran BPJS hari ini
+        $sepHariIni = Pendaftaran::with('pasien')
+            ->whereHas('pasien', function($query) {
+                $query->where('jenis_pembayaran', 'BPJS');
+            })
+            ->whereDate('created_at', Carbon::today())
+            ->latest()
+            ->get();
+
+        // Hitung statistik
+        $stats = [
+            'total_sep' => $sepHariIni->count(),
+            'menunggu' => $sepHariIni->where('status', 'Menunggu')->count(),
+            'selesai' => $sepHariIni->where('status', 'Selesai')->count(),
+        ];
+
+        return view('bpjs.poli', compact('sepHariIni', 'stats'));
     }
 
-    public function riwayatPesertaBpjs()
+    public function riwayatPesertaBpjs(Request $request)
     {
-        return view('bpjs.riwayat');
+        $search = $request->input('search');
+        $riwayat = null;
+
+        if ($search) {
+            // Cari pasien BPJS berdasarkan No. BPJS atau NIK
+            $riwayat = Pendaftaran::with('pasien')
+                ->whereHas('pasien', function($query) use ($search) {
+                    $query->where('jenis_pembayaran', 'BPJS')
+                          ->where(function($q) use ($search) {
+                              $q->where('no_bpjs', 'like', "%$search%")
+                                ->orWhere('nik', 'like', "%$search%");
+                          });
+                })
+                ->latest()
+                ->get();
+        }
+
+        return view('bpjs.riwayat', compact('riwayat', 'search'));
     }
 
     public function cetakRujukanBpjs()

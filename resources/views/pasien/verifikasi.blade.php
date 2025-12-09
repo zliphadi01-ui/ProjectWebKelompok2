@@ -22,6 +22,8 @@
                             <th>No. RM</th>
                             <th>Nama</th>
                             <th>Tanggal Lahir</th>
+                            <th>Jenis Pembayaran</th>
+                            <th>No. BPJS</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                     </thead>
@@ -32,6 +34,22 @@
                                 <td class="fw-semibold">{{ $p->no_rm }}</td>
                                 <td>{{ $p->nama }}</td>
                                 <td>{{ $p->tanggal_lahir }}</td>
+                                <td>
+                                    @if($p->jenis_pembayaran == 'BPJS')
+                                        <span class="badge bg-success">BPJS</span>
+                                    @elseif($p->jenis_pembayaran == 'Asuransi')
+                                        <span class="badge bg-info">Asuransi</span>
+                                    @else
+                                        <span class="badge bg-secondary">Umum</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($p->jenis_pembayaran == 'BPJS' && $p->no_bpjs)
+                                        <span class="text-success fw-semibold"><i class="bi-shield-fill-check me-1"></i>{{ $p->no_bpjs }}</span>
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
+                                </td>
                                 <td class="text-center">
                                     <a href="{{ route('pasien.show', ['id' => $p->id]) }}" class="btn btn-sm btn-info btn-modern">Lihat</a>
                                     <a href="{{ route('pasien.edit', ['id' => $p->id]) }}" class="btn btn-sm btn-warning btn-modern">Edit</a>
@@ -44,7 +62,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center text-muted py-4">Tidak ada pasien untuk diverifikasi.</td>
+                                <td colspan="7" class="text-center text-muted py-4">Tidak ada pasien untuk diverifikasi.</td>
                             </tr>
                         @endforelse
                     </tbody>

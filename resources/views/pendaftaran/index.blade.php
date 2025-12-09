@@ -38,10 +38,18 @@
                                     @foreach($pasiens as $p)
                                     <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-3">
                                         <div>
-                                            <h5 class="mb-1 fw-bold text-dark">{{ $p->nama }}</h5>
+                                            <h5 class="mb-1 fw-bold text-dark">
+                                                {{ $p->nama }}
+                                                @if($p->jenis_pembayaran == 'BPJS')
+                                                    <span class="badge bg-success ms-2">BPJS</span>
+                                                @endif
+                                            </h5>
                                             <div class="text-muted small">
                                                 <span class="me-3"><i class="bi-card-heading me-1"></i> RM: {{ $p->no_rm }}</span>
                                                 <span class="me-3"><i class="bi-person-vcard me-1"></i> NIK: {{ $p->nik }}</span>
+                                                @if($p->jenis_pembayaran == 'BPJS' && $p->no_bpjs)
+                                                    <span class="me-3"><i class="bi-shield-fill-check me-1 text-success"></i> BPJS: {{ $p->no_bpjs }}</span>
+                                                @endif
                                                 <span><i class="bi-geo-alt me-1"></i> {{ $p->alamat ?? '-' }}</span>
                                             </div>
                                         </div>
