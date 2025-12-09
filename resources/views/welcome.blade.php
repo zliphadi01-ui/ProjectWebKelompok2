@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Rekam Medis Elektronik - Klinik Polije</title>
+    <title>Sistem Rekam Medis Elektronik - Klinik SIREMIK</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -15,7 +15,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Rekam Medis Elektronik - Klinik Polije</title>
+    <title>Sistem Rekam Medis Elektronik - Klinik SIREMIK</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -57,7 +57,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="{{ url('/') }}"><i class="bi-hospital-fill me-2"></i>RME Klinik POLIJE</a>
+            <a class="navbar-brand fw-bold text-primary" href="{{ url('/') }}"><i class="bi-hospital-fill me-2"></i>RME Klinik SIREMIK</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -166,7 +166,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold text-primary"><i class="bi-hospital-fill me-2"></i>RME KLINIK POLIJE</h5>
+                    <h5 class="fw-bold text-primary"><i class="bi-hospital-fill me-2"></i>RME KLINIK SIREMIK</h5>
                     <p class="text-muted">Sistem Informasi Manajemen Rumah Sakit Terintegrasi.</p>
                 </div>
                 <div class="col-md-2 offset-md-1 mb-4">
@@ -181,11 +181,11 @@
                     <h5 class="fw-bold">Kontak IT Support</h5>
                     <p class="text-muted mb-1"><i class="bi-geo-alt-fill me-2"></i>Gedung IT, Politeknik Negeri Jember</p>
                     <p class="text-muted mb-1"><i class="bi-telephone-fill me-2"></i>(0331) 123-456 ext. 2</p>
-                    <p class="text-muted mb-1"><i class="bi-envelope-fill me-2"></i>itsupport@klinikpolije.ac.id</p>
+                    <p class="text-muted mb-1"><i class="bi-envelope-fill me-2"></i>itsupport@kliniksiremik.ac.id</p>
                 </div>
             </div>
             <hr>
-            <p class="text-center text-muted mb-0">&copy; 2025 Divisi IT Klinik Polije. All Rights Reserved.</p>
+            <p class="text-center text-muted mb-0">&copy; 2025 Divisi IT Klinik SIREMIK. All Rights Reserved.</p>
         </div>
     </footer>
 
