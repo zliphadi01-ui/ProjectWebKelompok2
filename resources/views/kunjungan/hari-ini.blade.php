@@ -120,7 +120,7 @@
                         <td>{{ $k->created_at->format('H:i') }}</td>
                         <td>{{ $k->pasien->no_rm ?? '-' }}</td>
                         <td>{{ $k->pasien->nama ?? '-' }}</td>
-                        <td>{{ $k->poli_tujuan }}</td>
+                        <td>{{ $k->poli ?? '-' }}</td>
                         <td>
                             @if($k->status == 'Menunggu')
                                 <span class="badge bg-warning">Menunggu</span>
