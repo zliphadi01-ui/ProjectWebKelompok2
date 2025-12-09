@@ -60,16 +60,31 @@
             });
         });
 
-        // Sidebar Scroll Persistence
+        // Sidebar Scroll Persistence & Active Link Handling
         document.addEventListener("DOMContentLoaded", function () {
-            const sidebar = document.querySelector('.sidebar-wrapper');
+            // Target the actual scrollable element based on CSS (.sidebar-menu)
+            const sidebar = document.querySelector('.sidebar-menu'); 
+            
             if (sidebar) {
+                // 1. Restore scroll position from localStorage
                 const scrollPos = localStorage.getItem('sidebarScrollPos');
                 if (scrollPos) {
                     sidebar.scrollTop = parseInt(scrollPos, 10);
                 }
 
-                // Save scroll position before unloading the page
+                // 2. Ensure active link is visible (fallback if scroll restore isn't enough/perfect)
+                const activeLink = sidebar.querySelector('.nav-link.active');
+                if (activeLink) {
+                    // Check if active link is out of view
+                    const sidebarRect = sidebar.getBoundingClientRect();
+                    const linkRect = activeLink.getBoundingClientRect();
+
+                    if (linkRect.bottom > sidebarRect.bottom || linkRect.top < sidebarRect.top) {
+                        activeLink.scrollIntoView({ block: 'center', behavior: 'smooth' });
+                    }
+                }
+
+                // 3. Save scroll position before unloading
                 window.addEventListener('beforeunload', function () {
                     localStorage.setItem('sidebarScrollPos', sidebar.scrollTop);
                 });
