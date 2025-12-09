@@ -211,4 +211,29 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+// Pastikan semua modal tertutup saat halaman load untuk mencegah flickering
+document.addEventListener('DOMContentLoaded', function() {
+    // Tutup semua modal yang mungkin terbuka
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        const bsModal = bootstrap.Modal.getInstance(modal);
+        if (bsModal) {
+            bsModal.hide();
+        }
+    });
+    
+    // Hapus semua backdrop yang tertinggal
+    const backdrops = document.querySelectorAll('.modal-backdrop');
+    backdrops.forEach(backdrop => backdrop.remove());
+    
+    // Pastikan body tidak punya class modal-open
+    document.body.classList.remove('modal-open');
+    document.body.style.removeProperty('overflow');
+    document.body.style.removeProperty('padding-right');
+});
+</script>
+@endpush
 @endsection
