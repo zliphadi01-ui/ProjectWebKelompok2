@@ -141,7 +141,7 @@
                             <h6 class="fw-bold text-info mb-0">Pemeriksaan Lab</h6>
                             <small class="text-muted">{{ \Carbon\Carbon::parse($lab->created_at)->format('d M Y H:i') }}</small>
                         </div>
-                        <p class="mb-1"><strong>Jenis:</strong> {{ $lab->jenis_pemeriksaan }}</p>
+                        <p class="mb-1"><strong>Jenis:</strong> {{ implode(', ', $lab->jenis_pemeriksaan) }}</p>
                         <p class="mb-1"><strong>Status:</strong> <span class="badge bg-{{ $lab->status == 'completed' ? 'success' : 'secondary' }}">{{ $lab->status }}</span></p>
                         @if($lab->hasil)
                         <div class="bg-light p-2 rounded mt-2">
