@@ -10,9 +10,15 @@ class Pasien extends Model
     protected $table = 'pasien';
     protected $guarded = ['id', 'created_at', 'updated_at'];
     protected $fillable = [
-        'no_rm', 'nama', 'nik', 'jenis_kelamin', 'tanggal_lahir',
-        'telepon', 'email', 'alamat'
-    ];
+    'no_rm', 'nama', 'nik', 'jenis_kelamin', 
+    'tempat_lahir', 'tanggal_lahir',
+    'telepon', 'email', 'alamat',
+    'rt_rw', 'kelurahan', 'kecamatan', 'kota', 'provinsi', 'kode_pos',
+    'nama_keluarga', 'hubungan_keluarga', 'telepon_keluarga',
+    'jenis_pembayaran', 'no_bpjs', 'scan_bpjs',
+    'nama_asuransi', 'no_polis',
+    'alergi_obat', 'riwayat_penyakit'
+];
 
     /**
      * Scope untuk memfilter pasien berdasarkan nama atau no_rm.
