@@ -18,7 +18,7 @@
 <body onload="window.print()">
 
     <div class="header">
-        <h2>RUMAH SAKIT UMUM SIREMIK</h2>
+        <h2>POLIKLINIK SIREMIK POLIJE</h2>
         <p>Jl. Mastrip No. 123, Jember, Jawa Timur</p>
         <p>Telp: (0331) 123456 | Email: info@siremik-polije.com</p>
     </div>
