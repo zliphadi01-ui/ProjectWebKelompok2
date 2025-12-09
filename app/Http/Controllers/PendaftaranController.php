@@ -44,12 +44,15 @@ class PendaftaranController extends Controller
 
     public function storePasienBaru(Request $request)
     {
-        $request->validate([
-            'nama' => 'required',
-            'nik' => 'required|numeric|digits:16',
-            'jenis_kelamin' => 'required',
-            'poli' => 'required',
-        ]);
+    $request->validate([
+    'nama' => 'required|string|max:255',
+    'nik' => 'required|digits:16|unique:pasiens,nik',
+    'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+    'tanggal_lahir' => 'required|date|before:today',
+    'telepon' => 'nullable|regex:/^[0-9]{10,13}$/',
+    'email' => 'nullable|email',
+    'poli' => 'required',
+    ]);
 
         DB::beginTransaction();
         try {
