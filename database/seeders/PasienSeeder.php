@@ -11,7 +11,7 @@ class PasienSeeder extends Seeder
     {
         Pasien::insert([
             [
-                'no_rm' => 'RM-0001',
+                'no_rm' => '000001',
                 'nama' => 'Budi Santoso',
                 'nik' => '3201123456789001',
                 'jenis_kelamin' => 'L',
@@ -23,7 +23,7 @@ class PasienSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'no_rm' => 'RM-0002',
+                'no_rm' => '000002',
                 'nama' => 'Siti Aminah',
                 'nik' => '3201123456789002',
                 'jenis_kelamin' => 'P',
