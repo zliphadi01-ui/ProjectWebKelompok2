@@ -69,4 +69,9 @@ class LaboratoriumController extends Controller
 
         return redirect()->back()->with('success', 'Status Laboratorium diperbarui.');
     }
+    public function print($id)
+    {
+        $request = LabRequest::with(['pasien', 'dokter'])->findOrFail($id);
+        return view('pages.laboratorium_print', compact('request'));
+    }
 }

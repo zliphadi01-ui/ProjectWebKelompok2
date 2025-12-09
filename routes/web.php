@@ -69,6 +69,7 @@ Route::get('/laporan/diagnosa', [ReportController::class, 'diagnosa'])->name('la
 Route::get('/laboratorium', [App\Http\Controllers\LaboratoriumController::class, 'index'])->name('laboratorium.index');
 Route::post('/laboratorium', [App\Http\Controllers\LaboratoriumController::class, 'store'])->name('laboratorium.store');
 Route::put('/laboratorium/{id}', [App\Http\Controllers\LaboratoriumController::class, 'updateStatus'])->name('laboratorium.update');
+Route::get('/laboratorium/print/{id}', [App\Http\Controllers\LaboratoriumController::class, 'print'])->name('laboratorium.print');
 
 Route::get('/poned', [MedicalSupportController::class, 'poned'])->name('poned');
 // Rawat Inap resource (CRUD) - connected to DB

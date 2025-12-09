@@ -97,7 +97,9 @@
                                 <i class="bi-play-fill"></i> Proses
                             </button>
                             @else
-                            <button class="btn btn-sm btn-outline-primary"><i class="bi-printer"></i> Cetak</button>
+                            <a href="{{ route('laboratorium.print', $req->id) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                <i class="bi-printer"></i> Cetak
+                            </a>
                             @endif
                         </td>
                     </tr>
