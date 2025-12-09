@@ -47,7 +47,7 @@ class PendaftaranController extends Controller
     $request->validate([
     'nama' => 'required|string|max:255',
     'nik' => 'required|digits:16|unique:pasien,nik',
-    'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+    'jenis_kelamin' => 'required|in:L,P',
     'tanggal_lahir' => 'required|date|before:today',
     'telepon' => 'nullable|regex:/^[0-9]{10,13}$/',
     'email' => 'nullable|email',
@@ -101,7 +101,12 @@ class PendaftaranController extends Controller
     public function storePendaftaran(Request $request)
     {
         $request->validate([
-            'pasien_id' => 'required|exists:pasien,id',
+            'nama' => 'required|string|max:255',
+            'nik' => 'required|digits:16|unique:pasien,nik',
+            'jenis_kelamin' => 'required|in:L,P',
+            'tanggal_lahir' => 'nullable|date|before:today',
+            'telepon' => 'nullable|regex:/^[0-9]{10,13}$/',
+            'email' => 'nullable|email',
             'poli' => 'required',
         ]);
 

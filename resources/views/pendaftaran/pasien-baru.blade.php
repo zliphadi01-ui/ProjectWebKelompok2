@@ -135,8 +135,24 @@
         </div>
 
         <div class="card-body p-4">
+            {{-- Error dari session --}}
             @if(session('error'))
-                <div class="alert alert-danger shadow-sm">{{ session('error') }}</div>
+                <div class="alert alert-danger shadow-sm">
+                    <i class="bi-exclamation-triangle-fill me-2"></i>{{ session('error') }}
+                </div>
+            @endif
+
+            {{-- Error dari validasi --}}
+            @if($errors->any())
+                <div class="alert alert-danger shadow-sm">
+                    <i class="bi-exclamation-triangle-fill me-2"></i>
+                    <strong>Terdapat kesalahan pada form:</strong>
+                    <ul class="mb-0 mt-2">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
             @endif
 
             <form action="{{ route('pendaftaran.store-baru') }}" method="POST" enctype="multipart/form-data">
