@@ -48,10 +48,25 @@ class PendaftaranController extends Controller
         'nama' => 'required',
         'nik' => 'required|numeric|digits:16',
         'jenis_kelamin' => 'required',
-        'poli' => 'required',
+        'tanggal_lahir' => 'nullable|date|before:today',
+        'telepon' => 'nullable|regex:/^[0-9]{10,13}$/',
+        'email' => 'nullable|email',
         'jenis_pembayaran' => 'required',
         'no_bpjs' => 'required_if:jenis_pembayaran,BPJS', // Wajib jika pilih BPJS
         'nama_asuransi' => 'required_if:jenis_pembayaran,Asuransi',
+        'poli' => 'required',
+    ],[
+        // Custom messages dalam bahasa Indonesia
+        'nama.required' => 'Nama lengkap wajib diisi.',
+        'nik.required' => 'NIK wajib diisi.',
+        'nik.digits' => 'NIK harus 16 digit.',
+        'nik.numeric' => 'NIK harus berupa angka.',
+        'jenis_kelamin.required' => 'Jenis kelamin wajib dipilih.',
+        'tanggal_lahir.before' => 'Tanggal lahir harus sebelum hari ini.',
+        'tanggal_lahir.date' => 'Format tanggal lahir tidak valid.',
+        'telepon.regex' => 'Nomor telepon harus 10-13 digit angka.',
+        'email.email' => 'Format email tidak valid.',
+        'poli.required' => 'Poli tujuan wajib dipilih.',
     ]);
     DB::beginTransaction();
     try {
