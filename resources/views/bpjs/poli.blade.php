@@ -18,7 +18,7 @@
                         <div class="col-md-6">
                             <label class="form-label">No. Kartu BPJS</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="0001234567890">
+                            <input type="text" class="form-control" placeholder="0001234567890">
                                 <button class="btn btn-outline-primary" type="button">Cari Peserta</button>
                             </div>
                         </div>
