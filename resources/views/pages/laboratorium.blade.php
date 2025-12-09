@@ -93,7 +93,7 @@
                         </td>
                         <td>
                             @if($req->status != 'completed')
-                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalProcess{{ $req->id }}">
+                            <button class="btn btn-sm btn-primary" onclick="openProcessModal({{ $req->id }}, '{{ $req->pasien->nama ?? '-' }}', `{{ $req->hasil }}`)">
                                 <i class="bi-play-fill"></i> Proses
                             </button>
                             @else
@@ -101,33 +101,6 @@
                             @endif
                         </td>
                     </tr>
-
-                    {{-- Modal Process --}}
-                    <div class="modal fade" id="modalProcess{{ $req->id }}" tabindex="-1">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <form action="{{ route('laboratorium.update', $req->id) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Input Hasil Lab</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Pasien: <strong>{{ $req->pasien->nama ?? '-' }}</strong></p>
-                                        <div class="mb-3">
-                                            <label>Hasil Pemeriksaan</label>
-                                            <textarea name="hasil" class="form-control" rows="5" required>{{ $req->hasil }}</textarea>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                                        <button type="submit" class="btn btn-primary">Simpan Hasil</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
                     @empty
                     <tr>
                         <td colspan="7" class="text-center">Belum ada permintaan laboratorium.</td>
@@ -138,6 +111,43 @@
         </div>
     </div>
 </div>
+
+{{-- Generic Process Modal --}}
+<div class="modal fade" id="modalProcessLab" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="formProcessLab" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-header">
+                    <h5 class="modal-title">Input Hasil Lab</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Pasien: <strong id="labPasienName">-</strong></p>
+                    <div class="mb-3">
+                        <label>Hasil Pemeriksaan</label>
+                        <textarea name="hasil" id="labHasil" class="form-control" rows="5" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan Hasil</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openProcessModal(id, namaPasien, hasil) {
+        document.getElementById('formProcessLab').action = `/laboratorium/${id}`;
+        document.getElementById('labPasienName').innerText = namaPasien;
+        document.getElementById('labHasil').value = hasil || '';
+        
+        new bootstrap.Modal(document.getElementById('modalProcessLab')).show();
+    }
+</script>
 
 {{-- Modal Request Baru --}}
 <div class="modal fade" id="modalRequestLab" tabindex="-1">
