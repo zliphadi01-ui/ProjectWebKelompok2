@@ -60,6 +60,35 @@
             });
         });
     </script>
+
+    @if(Auth::check() && Auth::user()->role === 'rekam_medis')
+    <script>
+        // Real-time notification badge for pending requests
+        function updatePendingBadge() {
+            fetch('{{ route('rekam-medis.api.pending-count') }}')
+                .then(response => response.json())
+                .then(data => {
+                    const badge = document.getElementById('pendingBadge');
+                    if (badge) {
+                        if (data.count > 0) {
+                            badge.textContent = data.count;
+                            badge.style.display = 'inline-block';
+                        } else {
+                            badge.style.display = 'none';
+                        }
+                    }
+                })
+                .catch(error => console.error('Error fetching pending count:', error));
+        }
+
+        // Update immediately on load
+        updatePendingBadge();
+
+        // Update every 30 seconds
+        setInterval(updatePendingBadge, 30000);
+    </script>
+    @endif
+
     @stack('scripts')
 </body>
 </html>

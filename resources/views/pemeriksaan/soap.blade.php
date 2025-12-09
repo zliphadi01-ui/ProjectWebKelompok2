@@ -40,6 +40,9 @@
                     <tr><td class="text-muted">Alergi:</td><td class="text-danger fw-bold">{{ $pasien->alergi ?? 'Tidak Ada' }}</td></tr>
                     <tr><td class="text-muted">Alamat:</td><td>{{Str::limit($pasien->alamat ?? '-', 30)}}</td></tr>
                 </table>
+                <button type="button" class="btn btn-info btn-sm w-100 mt-2" data-bs-toggle="modal" data-bs-target="#medicalHistoryModal">
+                    <i class="bi bi-clock-history me-1"></i>Lihat Riwayat Rekam Medis
+                </button>
             </div>
         </div>
     </div>
@@ -356,4 +359,6 @@
         </form>
     </div>
 </div>
+
+@include('pemeriksaan._modal_history')
 @endsection

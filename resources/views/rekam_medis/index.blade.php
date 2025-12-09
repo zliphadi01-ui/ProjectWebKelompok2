@@ -6,7 +6,7 @@
 </div>
 
 <div class="row g-4 mb-4">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card border-0 shadow-sm text-white bg-primary">
             <div class="card-body">
                 <h6 class="text-uppercase mb-1 opacity-75">Total Pasien Terdaftar</h6>
@@ -14,7 +14,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card border-0 shadow-sm text-white bg-success">
             <div class="card-body">
                 <h6 class="text-uppercase mb-1 opacity-75">Kunjungan Hari Ini</h6>
@@ -22,11 +22,24 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="card border-0 shadow-sm text-white bg-warning">
             <div class="card-body">
                 <h6 class="text-uppercase mb-1 opacity-75">Pasien Rawat Inap Aktif</h6>
                 <h2 class="mb-0 fw-bold">{{ $rawatInapAktif }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card border-0 shadow-sm text-white bg-info">
+            <div class="card-body">
+                <h6 class="text-uppercase mb-1 opacity-75">Permintaan Akses Menunggu</h6>
+                <h2 class="mb-0 fw-bold">{{ $pendingRequestCount ?? 0 }}</h2>
+                @if(($pendingRequestCount ?? 0) > 0)
+                    <a href="{{ route('rekam-medis.requests', ['filter' => 'pending']) }}" class="btn btn-light btn-sm mt-2">
+                        <i class="bi bi-eye me-1"></i>Lihat Permintaan
+                    </a>
+                @endif
             </div>
         </div>
     </div>

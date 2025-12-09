@@ -16,6 +16,7 @@ use App\Http\Controllers\BpjsController;
 use App\Http\Controllers\MedicalSupportController;
 use App\Http\Controllers\RawatInapController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DokterRekamMedisController;
 
 use App\Http\Controllers\Icd10Controller;
 
@@ -122,6 +123,23 @@ Route::prefix('rekam-medis')->name('rekam-medis.')->group(function () {
     Route::get('/', [App\Http\Controllers\RekamMedisController::class, 'index'])->name('index');
     Route::get('/pasien', [App\Http\Controllers\RekamMedisController::class, 'pasien'])->name('pasien');
     Route::get('/riwayat/{id}', [App\Http\Controllers\RekamMedisController::class, 'riwayat'])->name('riwayat');
+    
+    // Access Request Management (for rekam_medis staff)
+    Route::get('/requests', [App\Http\Controllers\RekamMedisController::class, 'requestList'])->name('requests');
+    Route::post('/requests/{id}/approve', [App\Http\Controllers\RekamMedisController::class, 'approveRequest'])->name('requests.approve');
+    Route::post('/requests/{id}/reject', [App\Http\Controllers\RekamMedisController::class, 'rejectRequest'])->name('requests.reject');
+    Route::get('/api/pending-count', [App\Http\Controllers\RekamMedisController::class, 'getPendingCount'])->name('api.pending-count');
+});
+
+// Dokter - Rekam Medis Access Module  
+Route::prefix('dokter')->name('dokter.')->group(function () {
+    Route::get('/rekam-medis', [DokterRekamMedisController::class, 'index'])->name('rekam-medis.index');
+    Route::get('/rekam-medis/patients', [DokterRekamMedisController::class, 'patientList'])->name('rekam-medis.patients');
+    Route::get('/rekam-medis/request/{pasienId}', [DokterRekamMedisController::class, 'requestAccess'])->name('rekam-medis.request');
+    Route::post('/rekam-medis/request', [DokterRekamMedisController::class, 'submitRequest'])->name('rekam-medis.submit');
+    Route::get('/rekam-medis/my-requests', [DokterRekamMedisController::class, 'myRequests'])->name('rekam-medis.my-requests');
+    Route::get('/rekam-medis/view/{pasienId}', [DokterRekamMedisController::class, 'viewPatientRecord'])->name('rekam-medis.view');
+    Route::delete('/rekam-medis/cancel/{requestId}', [DokterRekamMedisController::class, 'cancelRequest'])->name('rekam-medis.cancel');
 });
 
 // Pendaftaran dengan Controller (Satu Pintu FIX)

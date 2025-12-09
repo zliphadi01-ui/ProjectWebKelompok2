@@ -85,7 +85,7 @@
                     <h5 class="fw-bold text-dark mb-0">Akses Cepat</h5>
                 </div>
                 <div class="row g-3">
-                    @if(in_array(Auth::user()->role, ['admin', 'pendaftaran', 'dokter']))
+                    @if(in_array(Auth::user()->role, ['admin', 'pendaftaran']))
                     <div class="col-md-3 col-6">
                         <a href="{{ route('pendaftaran.index') }}" class="card h-100 text-decoration-none hover-scale border-0 shadow-sm">
                             <div class="card-body text-center p-4">
@@ -93,7 +93,7 @@
                                     <i class="bi-search fs-3"></i>
                                 </div>
                                 <h6 class="fw-bold text-dark mb-0">Cari Pasien</h6>
-                                <small class="text-muted" style="font-size: 0.75rem;">Data Rekam Medis</small>
+                                <small class="text-muted" style="font-size: 0.75rem;">Pendaftaran Pasien</small>
                             </div>
                         </a>
                     </div>
@@ -108,6 +108,20 @@
                                 </div>
                                 <h6 class="fw-bold text-dark mb-0">Pemeriksaan</h6>
                                 <small class="text-muted" style="font-size: 0.75rem;">Input Medis</small>
+                            </div>
+                        </a>
+                    </div>
+                    @endif
+
+                    @if(Auth::user()->role == 'dokter')
+                    <div class="col-md-3 col-6">
+                        <a href="{{ route('dokter.rekam-medis.patients') }}" class="card h-100 text-decoration-none hover-scale border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <div class="avatar bg-info-subtle text-info rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 56px; height: 56px;">
+                                    <i class="bi-file-medical fs-3"></i>
+                                </div>
+                                <h6 class="fw-bold text-dark mb-0">Rekam Medis</h6>
+                                <small class="text-muted" style="font-size: 0.75rem;">Akses Riwayat Pasien</small>
                             </div>
                         </a>
                     </div>

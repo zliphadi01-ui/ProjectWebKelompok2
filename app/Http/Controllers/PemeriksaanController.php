@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Pemeriksaan;
 use App\Models\Pendaftaran;
 use App\Models\Pasien;
+use App\Models\RawatInap;
+use App\Models\LabRequest;
 use App\Events\DashboardStatsUpdated;
 use Carbon\Carbon;
 
@@ -39,7 +41,35 @@ class PemeriksaanController extends Controller
             $pasien->alamat = $pendaftaran->alamat;
         }
 
-        return view('pemeriksaan.soap', ['pasien' => $pasien, 'pendaftaran' => $pendaftaran]);
+        // Fetch patient medical history
+        $pemeriksaanHistory = [];
+        $rawatInapHistory = [];
+        $labHistory = [];
+
+        if ($pasien && $pasien->id) {
+            $pemeriksaanHistory = Pemeriksaan::where('pasien_id', $pasien->id)
+                ->orderBy('created_at', 'desc')
+                ->limit(10)
+                ->get();
+
+            $rawatInapHistory = RawatInap::where('pasien_id', $pasien->id)
+                ->orderBy('tanggal_masuk', 'desc')
+                ->limit(5)
+                ->get();
+
+            $labHistory = LabRequest::where('pasien_id', $pasien->id)
+                ->orderBy('created_at', 'desc')
+                ->limit(10)
+                ->get();
+        }
+
+        return view('pemeriksaan.soap', compact(
+            'pasien',
+            'pendaftaran',
+            'pemeriksaanHistory',
+            'rawatInapHistory',
+            'labHistory'
+        ));
     }
 
     // ==========================================================

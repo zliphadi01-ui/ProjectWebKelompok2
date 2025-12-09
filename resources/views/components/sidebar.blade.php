@@ -138,6 +138,24 @@
                 <span>Triase IGD</span>
             </a>
         </li>
+
+        {{-- Rekam Medis Access (Dokter Only) --}}
+        @if($role === 'dokter')
+        @php
+            $isRekamMedisDokter = request()->routeIs('dokter.rekam-medis.*');
+        @endphp
+        <li>
+            <a href="#rekamMedisDokterMenu" class="nav-link {{ $isRekamMedisDokter ? 'active' : '' }}" data-bs-toggle="collapse" role="button" aria-expanded="{{ $isRekamMedisDokter ? 'true' : 'false' }}">
+                <i class="bi-file-medical"></i>
+                <span>Rekam Medis</span>
+                <i class="bi-chevron-down ms-auto" style="font-size: 0.8rem;"></i>
+            </a>
+            <div class="collapse {{ $isRekamMedisDokter ? 'show' : '' }}" id="rekamMedisDokterMenu">
+                <a href="{{ route('dokter.rekam-medis.patients') }}" class="nav-link {{ request()->routeIs('dokter.rekam-medis.patients') || request()->routeIs('dokter.rekam-medis.request') || request()->routeIs('dokter.rekam-medis.view') ? 'active' : '' }}">Daftar Pasien</a>
+                <a href="{{ route('dokter.rekam-medis.my-requests') }}" class="nav-link {{ request()->routeIs('dokter.rekam-medis.my-requests') ? 'active' : '' }}">Permintaan Saya</a>
+            </div>
+        </li>
+        @endif
         @endif
 
         {{-- Gudang Obat (Admin & Apotek) --}}
@@ -224,6 +242,13 @@
             <a href="{{ route('rekam-medis.pasien') }}" class="nav-link {{ request()->routeIs('rekam-medis.pasien') || request()->routeIs('rekam-medis.riwayat') ? 'active' : '' }}">
                 <i class="bi-folder2-open"></i>
                 <span>Data Pasien (EMR)</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('rekam-medis.requests') }}" class="nav-link {{ request()->routeIs('rekam-medis.requests') ? 'active' : '' }}">
+                <i class="bi-clipboard-check"></i>
+                <span>Permintaan Akses</span>
+                <span class="badge bg-danger rounded-pill ms-auto" id="pendingBadge" style="display: none;">0</span>
             </a>
         </li>
         <li>
