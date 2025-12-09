@@ -59,6 +59,22 @@
                 }
             });
         });
+
+        // Sidebar Scroll Persistence
+        document.addEventListener("DOMContentLoaded", function () {
+            const sidebar = document.querySelector('.sidebar-wrapper');
+            if (sidebar) {
+                const scrollPos = localStorage.getItem('sidebarScrollPos');
+                if (scrollPos) {
+                    sidebar.scrollTop = parseInt(scrollPos, 10);
+                }
+
+                // Save scroll position before unloading the page
+                window.addEventListener('beforeunload', function () {
+                    localStorage.setItem('sidebarScrollPos', sidebar.scrollTop);
+                });
+            }
+        });
     </script>
 
     @if(Auth::check() && Auth::user()->role === 'rekam_medis')
