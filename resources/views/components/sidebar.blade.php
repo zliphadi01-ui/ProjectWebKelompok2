@@ -1,7 +1,7 @@
 <nav class="sidebar-wrapper">
     <div class="sidebar-brand">
         <i class="bi-hospital-fill me-2 text-primary"></i>
-        <span>RME POLIJE</span>
+        <span>SIREMIK POLIJE</span>
     </div>
 
     @php

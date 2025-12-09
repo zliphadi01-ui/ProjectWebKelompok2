@@ -3,19 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Rekam Medis Elektronik - Klinik SIREMIK</title>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Rekam Medis Elektronik - Klinik SIREMIK</title>
+    <title>SIREMIK POLIJE - Sistem Informasi Rekam Medis Elektronik</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -57,7 +45,7 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="{{ url('/') }}"><i class="bi-hospital-fill me-2"></i>RME Klinik SIREMIK</a>
+            <a class="navbar-brand fw-bold text-primary" href="{{ url('/') }}"><i class="bi-hospital-fill me-2"></i>SIREMIK POLIJE</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -75,8 +63,8 @@
     <!-- HERO (no image; gradient background) -->
     <header class="hero-section">
         <div class="container">
-            <h1 class="hero-title">Sistem Rekam Medis Elektronik</h1>
-            <p class="hero-lead">Akses dan kelola data medis pasien secara cepat, akurat, dan aman. Silakan masuk untuk memulai sesi Anda.</p>
+            <h1 class="hero-title">SIREMIK POLIJE</h1>
+            <p class="hero-lead">Sistem Informasi Rekam Medis Elekronik Klinik. Akses dan kelola data medis pasien secara cepat, akurat, dan aman.</p>
             <!-- Removed the two center CTAs per spec; navbar login will be used -->
         </div>
     </header>
@@ -166,8 +154,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 mb-4">
-                    <h5 class="fw-bold text-primary"><i class="bi-hospital-fill me-2"></i>RME KLINIK SIREMIK</h5>
-                    <p class="text-muted">Sistem Informasi Manajemen Rumah Sakit Terintegrasi.</p>
+                    <h5 class="fw-bold text-primary"><i class="bi-hospital-fill me-2"></i>SIREMIK POLIJE</h5>
+                    <p class="text-muted">Sistem Informasi Rekam Medis Elektronik Klinik.</p>
                 </div>
                 <div class="col-md-2 offset-md-1 mb-4">
                     <h5 class="fw-bold">Tautan Cepat</h5>
@@ -185,7 +173,7 @@
                 </div>
             </div>
             <hr>
-            <p class="text-center text-muted mb-0">&copy; 2025 Divisi IT Klinik SIREMIK. All Rights Reserved.</p>
+            <p class="text-center text-muted mb-0">&copy; 2025 Divisi IT SIREMIK POLIJE. All Rights Reserved.</p>
         </div>
     </footer>
 

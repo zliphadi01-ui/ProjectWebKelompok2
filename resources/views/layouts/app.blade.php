@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard RME - RS Polije</title>
+    <title>Dashboard - SIREMIK POLIJE</title>
     
     {{-- Fonts --}}
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -35,7 +35,7 @@
 
         {{-- Footer (Optional) --}}
         <footer class="mt-auto py-3 text-center text-muted small">
-            &copy; {{ date('Y') }} RME RS Polije. All rights reserved.
+            &copy; {{ date('Y') }} SIREMIK POLIJE. All rights reserved.
         </footer>
     </div>
 
