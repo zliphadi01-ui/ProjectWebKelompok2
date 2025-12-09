@@ -201,6 +201,7 @@ Route::prefix('pemeriksaan')->name('pemeriksaan.')->group(function () {
     Route::post('/store-print', [PemeriksaanController::class, 'storeAndPrint'])->name('store-print');
     Route::get('/print/{id}', [PemeriksaanController::class, 'print'])->name('print');
     Route::get('/riwayat/{no_rm}', [PemeriksaanController::class, 'riwayat'])->name('riwayat');
+    Route::put('/update/{id}', [PemeriksaanController::class, 'update'])->name('update');
 });
 
 // Master Data dengan Controller

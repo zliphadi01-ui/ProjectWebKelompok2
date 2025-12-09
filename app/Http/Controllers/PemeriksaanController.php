@@ -197,4 +197,32 @@ class PemeriksaanController extends Controller
     {
         return view('pemeriksaan.riwayat');
     }
+
+    // ==========================================================
+    // UPDATE DATA SOAP
+    // ==========================================================
+    public function update(Request $request, $id)
+    {
+        $pemeriksaan = Pemeriksaan::findOrFail($id);
+
+        // Simple authorization check: only allow if user is the creator OR admin
+        // For this context (doctor editing their own record or general edit allowed)
+        // You might want to restrict this further
+        if (auth()->user()->role !== 'admin' && auth()->user()->role !== 'dokter') {
+             abort(403, 'Unauthorized action.');
+        }
+
+        $validated = $request->validate([
+            'subjective'     => 'required|string',
+            'objective'      => 'required|string',
+            'assessment'     => 'nullable|string',
+            'plan'           => 'required|string',
+            'diagnosis'      => 'required|string',
+            'icd_code'       => 'nullable|string',
+        ]);
+
+        $pemeriksaan->update($validated);
+
+        return redirect()->back()->with('success', 'Data pemeriksaan berhasil diperbarui.');
+    }
 }

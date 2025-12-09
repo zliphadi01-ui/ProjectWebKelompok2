@@ -67,7 +67,12 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-2">
                             <h6 class="fw-bold text-primary mb-0">Kunjungan Poli</h6>
-                            <small class="text-muted">{{ \Carbon\Carbon::parse($p->created_at)->format('d M Y H:i') }}</small>
+                            <div class="d-flex align-items-center gap-2">
+                                <small class="text-muted">{{ \Carbon\Carbon::parse($p->created_at)->format('d M Y H:i') }}</small>
+                                <button type="button" class="btn btn-sm btn-outline-primary py-0" data-bs-toggle="modal" data-bs-target="#editSoapModal{{ $p->id }}">
+                                    <i class="bi bi-pencil-square me-1"></i> Edit
+                                </button>
+                            </div>
                         </div>
                         <p class="mb-1"><strong>Diagnosa:</strong> {{ $p->diagnosis }} ({{ $p->icd_code }})</p>
                         <div class="bg-light p-2 rounded small">
@@ -75,6 +80,58 @@
                             <div><strong class="text-success">O:</strong> {{ $p->objective }}</div>
                             <div><strong class="text-warning">A:</strong> {{ $p->assessment }}</div>
                             <div><strong class="text-danger">P:</strong> {{ $p->plan }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Edit SOAP -->
+                    <div class="modal fade" id="editSoapModal{{ $p->id }}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title fw-bold">Edit Rekam Medis ({{ \Carbon\Carbon::parse($p->created_at)->format('d M Y') }})</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="{{ route('pemeriksaan.update', $p->id) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Subjective (Keluhan)</label>
+                                            <textarea name="subjective" class="form-control" rows="3" required>{{ $p->subjective }}</textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Objective (Pemeriksaan Fisik)</label>
+                                            <textarea name="objective" class="form-control" rows="3" required>{{ $p->objective }}</textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Assessment (Diagnosa Kerja)</label>
+                                            <textarea name="assessment" class="form-control" rows="2">{{ $p->assessment }}</textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">Plan (Rencana/Terapi)</label>
+                                            <textarea name="plan" class="form-control" rows="3" required>{{ $p->plan }}</textarea>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">Diagnosa Utama</label>
+                                                    <input type="text" name="diagnosis" class="form-control" value="{{ $p->diagnosis }}" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label fw-bold">Kode ICD-10</label>
+                                                    <input type="text" name="icd_code" class="form-control" value="{{ $p->icd_code }}">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
