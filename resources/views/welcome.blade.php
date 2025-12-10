@@ -53,7 +53,7 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}">Portal</a></li>
                     <li class="nav-item"><a class="nav-link" href="#features">Panduan</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#contact">IT Support</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Kontak</a></li>
                 </ul>
                 <a href="{{ url('/login') }}" class="btn btn-primary ms-lg-3">Login</a>
             </div>
@@ -166,14 +166,14 @@
                     </ul>
                 </div>
                 <div class="col-md-4 offset-md-1 mb-4">
-                    <h5 class="fw-bold">Kontak IT Support</h5>
+                    <h5 class="fw-bold">Kontak SIREMIK</h5>
                     <p class="text-muted mb-1"><i class="bi-geo-alt-fill me-2"></i>Gedung IT, Politeknik Negeri Jember</p>
                     <p class="text-muted mb-1"><i class="bi-telephone-fill me-2"></i>(0331) 123-456 ext. 2</p>
-                    <p class="text-muted mb-1"><i class="bi-envelope-fill me-2"></i>itsupport@kliniksiremik.ac.id</p>
+                    <p class="text-muted mb-1"><i class="bi-envelope-fill me-2"></i>MIK@kliniksiremik.ac.id</p>
                 </div>
             </div>
             <hr>
-            <p class="text-center text-muted mb-0">&copy; 2025 Divisi IT SIREMIK POLIJE. All Rights Reserved.</p>
+            <p class="text-center text-muted mb-0">&copy; 2025 Divisi Manajemen Informasi Kesehatan SIREMIK POLIJE. All Rights Reserved.</p>
         </div>
     </footer>
 
