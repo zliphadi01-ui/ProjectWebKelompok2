@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         $this->call(Icd9Seeder::class);
         $this->call(BedSeeder::class);
         $this->call(PetugasLabSeeder::class);
+        $this->call(ResepSeeder::class);
         // User::factory(10)->create();
 
         // User::factory()->create([
